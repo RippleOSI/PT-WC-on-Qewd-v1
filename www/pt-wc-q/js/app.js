@@ -29,6 +29,7 @@ import {define_blank_page} from './blank-page.js';
 //import {define_users_page} from './users.js';
 //import {define_medications_page} from './medications.js'
 import {define_map_page} from './map.js';
+
 //import {define_d3_page} from './d3.js';
 
 import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
@@ -88,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 
     webComponents.addComponent('patients', crud_assembly(QEWD, patientsPageState));
-   
+
     webComponents.addComponent('contacts', crud_assembly(QEWD, contactsPageState));
     webComponents.addComponent('diagnosis', crud_assembly(QEWD, diagnosisPageState));
     webComponents.addComponent('medications', crud_assembly(QEWD, medicationsPageState));
@@ -97,9 +98,9 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('vitals', crud_assembly(QEWD, vitalsPageState));
     webComponents.addComponent('events', crud_assembly(QEWD, eventsPageState));
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
-/* 
-    */ 
-  
+/*
+    */
+
     // create the context for running the web components
 
     let context = {
@@ -146,9 +147,9 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('page404', webComponents.components.page_404);
     webComponents.register('blank', webComponents.components.blank_page);
     webComponents.register('users', webComponents.components.users);
-    
+
     webComponents.register('patients', webComponents.components.patients);
-   
+
 
     webComponents.register('contacts', webComponents.components.contacts);
     webComponents.register('medications', webComponents.components.medications);
@@ -175,11 +176,15 @@ document.addEventListener('DOMContentLoaded', function() {
       let modal = webComponents.getComponentByName('adminui-modal-root', 'modal-login');
       modal.show();
     });
-    
+
     // now load up the initial view
 
     webComponents.loadWebComponent('adminui-root', body, context, function(root) {
       let components = webComponents.components;
+      root.setState({
+        sidebar_colour: 'no-color'
+      })
+      root.sidebarTarget.classList.remove('sidebar-dark');
       webComponents.loadGroup(components.initial_sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.login_modal, body, context);
       webComponents.loadGroup(components.footer, root.footerTarget, context);
