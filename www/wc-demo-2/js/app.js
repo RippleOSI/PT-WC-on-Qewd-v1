@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let context = {
       paths: {
         adminui: './components/adminui/',
-        leaflet: './components/leaflet/'
+        leaflet: './components/leaflet/',
         //d3: './components/d3'
       },
       readyEvent: new Event('ready')
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //  let modal = webComponents.getComponentByName('adminui-modal-root', 'modal-login');
     //  modal.show();
     //});
-    
+
     // now load up the initial view
 
     webComponents.loadWebComponent('adminui-root', body, context, function(root) {

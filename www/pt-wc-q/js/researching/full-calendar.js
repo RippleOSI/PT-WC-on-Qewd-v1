@@ -1,27 +1,30 @@
-export function define_fullcalendar() {
-
+export function define_fullcalendar_page() {
+  console.log('start definition');
   let component = {
     componentName: 'adminui-content-page',
     state: {
-      name: 'map'
+      name: 'users',
+      crud_params: {
+        title: 'Users'
+      }
     },
     children: [
       {
         componentName: 'adminui-content-page-header',
         state: {
-          title: 'Map'
+          title: 'Fullcalendar'
         }
       },
       {
         componentName: 'adminui-content-card',
         state: {
-          name: 'map-card'
+          name: 'fullcalendar-card'
         },
         children: [
           {
             componentName: 'adminui-content-card-header',
             state: {
-              title: 'Map Card',
+              title: 'Fullcalendar Card',
               title_colour: 'warning'
             }
           },
@@ -34,7 +37,7 @@ export function define_fullcalendar() {
                   accessToken: 'pk.eyJ1Ijoicm9idHdlZWQiLCJhIjoiY2s4cjdtMzJ4MDZjYjNldGw0ZDJ6enFlYiJ9._wfDdoSZ2RGPbtJJIlbRfw',
                   height: '300px'
                 },
-                hooks: ['getMap']
+                hooks: ['getFullcalendar']
               }
             ]
           }
@@ -45,12 +48,12 @@ export function define_fullcalendar() {
 
   let hooks = {
     'fullcalendar-root': {
-      getMap: async function() {
-        await this.renderMap(51.505, -0.09, 13);
+      getFullcalendar: async function() {
+        await this.renderFullcalendar(51.505, -0.09, 13);
         this.setMarker(51.505, -0.09);
       }
     }
   };
-
+  console.log('enddefinition');
   return {component, hooks};
 };

@@ -29,7 +29,7 @@ import {define_blank_page} from './blank-page.js';
 //import {define_users_page} from './users.js';
 //import {define_medications_page} from './medications.js'
 import {define_map_page} from './map.js';
-import {define_fullcalendar} from "./researching/full-calendar.js";
+import {define_fullcalendar_page} from "./researching/full-calendar.js";
 //import {define_d3_page} from './d3.js';
 
 import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('blank_page', define_blank_page());
     webComponents.addComponent('map_page', define_map_page(QEWD));
    // webComponents.addComponent('d3_page', define_d3_page(QEWD));
+    webComponents.addComponent('fullcalendar_page',define_fullcalendar_page(QEWD))
 
       webComponents.addComponent('users', crud_assembly(QEWD, userPageState));
 // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
@@ -96,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
     webComponents.addComponent('vitals', crud_assembly(QEWD, vitalsPageState));
     webComponents.addComponent('events', crud_assembly(QEWD, eventsPageState));
-    webComponents.addComponent('full_calendar',define_fullcalendar(QEWD))
 
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 /*
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('vitals', webComponents.components.vitals);
     webComponents.register('events', webComponents.components.events);
     webComponents.register('map', webComponents.components.map_page);
-    webComponents.register('fullcalendar', webComponents.components.full_calendar);
+    webComponents.register('full_calendar', webComponents.components.fullcalendar_page);
 
     // webComponents.register('d3', webComponents.components.d3_page);
 
