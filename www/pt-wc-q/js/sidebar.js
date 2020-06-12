@@ -88,7 +88,7 @@ export function define_sidebar() {
             title: 'More components'
           },
           children: [
-            
+
             {
               componentName: 'adminui-sidebar-nav-menu-popup-option',
               state: {
@@ -139,13 +139,21 @@ export function define_sidebar() {
         title: 'Core'
       }
     },
- 
+
     {
       componentName: 'adminui-sidebar-nav-item',
       state: {
         title: 'Charts',
         icon: 'chart-area',
         contentPage: 'charts'
+      }
+    },
+    {
+      componentName: 'adminui-sidebar-nav-item',
+      state: {
+        title: 'Full Calendar',
+        icon: 'table',
+        contentPage: 'charts2'
       }
     },
     {

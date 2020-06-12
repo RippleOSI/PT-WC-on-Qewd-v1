@@ -1,27 +1,30 @@
 export function define_charts_page2(QEWD) {
-
+  console.log('start definition');
   let component = {
     componentName: 'adminui-content-page',
     state: {
-      name: 'charts2'
+      name: 'charts2',
+      crud_params: {
+        title: 'Users'
+      }
     },
     children: [
       {
         componentName: 'adminui-content-page-header',
         state: {
-          title: 'Charts2'
+          title: 'Fullcalendar'
         }
       },
       {
         componentName: 'adminui-content-card',
         state: {
-          name: 'charts-card'
+          name: 'fullcalendar-card'
         },
         children: [
           {
             componentName: 'adminui-content-card-header',
             state: {
-              title: 'Charts Card2',
+              title: 'Fullcalendar Card',
               title_colour: 'warning'
             }
           },
@@ -29,8 +32,12 @@ export function define_charts_page2(QEWD) {
             componentName: 'adminui-content-card-body',
             children: [
               {
-                componentName: 'adminui-chart',
-                hooks: ['getChartData']
+                componentName: 'fullcalendar-root',
+                state: {
+                  accessToken: 'pk.eyJ1Ijoicm9idHdlZWQiLCJhIjoiY2s4cjdtMzJ4MDZjYjNldGw0ZDJ6enFlYiJ9._wfDdoSZ2RGPbtJJIlbRfw',
+                  height: '300px'
+                },
+                hooks: ['getFullcalendar']
               }
             ]
           }
@@ -40,42 +47,12 @@ export function define_charts_page2(QEWD) {
   };
 
   let hooks = {
-    'adminui-chart': {
-      getChartData: function() {
-        let config = {
-          type: 'doughnut',
-          data: {
-            labels: ["Direct", "Referral", "Social"],
-            datasets: [{
-              data: [55, 30, 15],
-              backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-              hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
-              hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-          },
-          options: {
-            maintainAspectRatio: false,
-            tooltips: {
-              backgroundColor: "rgb(255,255,255)",
-              bodyFontColor: "#858796",
-              borderColor: '#dddfeb',
-              borderWidth: 1,
-              xPadding: 15,
-              yPadding: 15,
-              displayColors: false,
-              caretPadding: 10,
-            },
-            legend: {
-              display: false
-            },
-            cutoutPercentage: 80,
-          },
-        };
-
-        this.draw(config);
+    'fullcalendar-root': {
+      getFullcalendar: async function() {
+        await this.renderFullcalendar(51.505, -0.09, 13);
       }
     }
   };
-
+  console.log('enddefinition');
   return {component, hooks};
 };

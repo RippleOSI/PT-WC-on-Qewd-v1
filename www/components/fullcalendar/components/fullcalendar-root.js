@@ -31,7 +31,8 @@
 export function load() {
 
   let componentName = 'fullcalendar-root';
-
+  let count = 0;
+  let id_prefix = 'wer';
   customElements.define(componentName, class fullcalendar_root extends HTMLElement {
     constructor() {
       super();
@@ -69,10 +70,15 @@ export function load() {
       }
       if (prefix !== '' && prefix.slice(-1) !== '/') prefix = prefix + '/';
 
-      this.loadCSSFile(prefix + 'css/fullcalendar.css', function() {
-        _this.loadJSFile(prefix + 'js/fullcalendar.js', function() {
-          _this.fullcalendar = L;
-          _this.isReady();
+      this.loadCSSFile(prefix + 'core/main.css', function() {
+        _this.loadCSSFile(prefix + 'list/main.css', function() {
+          _this.loadJSFile(prefix + 'core/main.js', function () {
+            _this.loadJSFile(prefix + 'list/main.js', function () {
+              console.log('all files are loaded')
+              _this.fullcalendar = FullCalendar.Calendar;
+              _this.isReady();
+            });
+          });
         });
       });
     }
@@ -80,15 +86,12 @@ export function load() {
     renderMapCB(lat, long, zoom, callback) {
       let _this = this;
       let fn = function() {
-        _this.map = _this.fullcalendar.map(_this.rootElement.id).setView([lat, long], zoom);
-        _this.fullcalendar.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery � <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: 'mapbox/streets-v11',
-          tileSize: 512,
-          zoomOffset: -1,
-          accessToken: _this.accessToken
-        }).addTo(_this.map);
+        console.log(_this.rootElement.id);
+        _this.calendar = new _this.fullcalendar(_this.rootElement, {
+          plugins: [ 'list' ],
+          defaultView: 'listWeek'
+        });
+        _this.calendar.render();
         if (callback) callback.call(_this);
       }
       if (this.ready) {
@@ -112,46 +115,9 @@ export function load() {
       return await this.renderMapPromise(lat, long, zoom);
     }
 
-    setMarker(lat, long) {
-      if (this.map) {
-        return this.fullcalendar.marker([lat, long]).addTo(this.map);
-      }
-    }
 
-    setCircle(lat, long, params) {
-      if (this.map) {
 
-        /*
-          Example params:
 
-          {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            radius: 500
-          }
-        */
-
-        return this.fullcalendar.circle([lat, long], params).addTo(this.map);
-      }
-    }
-
-    setPolygon(params) {
-      if (this.map) {
-
-        /*
-          Example params:
-
-          [
-            [51.509, -0.08],
-            [51.503, -0.06],
-            [51.51, -0.047]
-          ]
-        */
-
-        return this.fullcalendar.polygon(params).addTo(this.map);
-      }
-    }
 
     addPopup(text, obj, open) {
       if (obj) {
@@ -164,14 +130,6 @@ export function load() {
       }
     }
 
-    setPopupAsLayer(lat, long, content) {
-      if (this.map) {
-        return this.fullcalendar.popup()
-            .setLatLng([lat, long])
-            .setContent(content)
-            .openOn(this.map);
-      }
-    }
 
     addEventHandler(fn, type) {
       type = type || 'click';
