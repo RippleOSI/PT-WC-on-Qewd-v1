@@ -153,7 +153,7 @@ export function define_sidebar() {
       state: {
         title: 'Full Calendar',
         icon: 'table',
-        contentPage: 'charts2'
+        contentPage: 'full_calendar_page'
       }
     },
     {

@@ -26,12 +26,10 @@ import {define_register_page} from './register-page.js';
 import {define_forgot_password_page} from './forgot-password-page.js';
 import {define_404_page} from './404-page.js';
 import {define_blank_page} from './blank-page.js';
-import {define_users_page2} from './researching/users.js';
 //import {define_medications_page} from './medications.js'
 import {define_map_page} from './map.js';
-import {define_fullcalendar_page} from "./researching/full-calendar.js";
 //import {define_d3_page} from './d3.js';
-import {define_charts_page2} from './researching/charts-page.js';
+import {define_full_calendar_page} from './researching/full-calendar.js';
 
 import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
 import {userPageState} from './user_state.js';
@@ -86,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
    // webComponents.addComponent('d3_page', define_d3_page(QEWD));
 
     webComponents.addComponent('users', crud_assembly(QEWD, userPageState));
-    webComponents.addComponent('charts2', define_charts_page2(QEWD));
+    webComponents.addComponent('full_calendar_page', define_full_calendar_page(QEWD));
 
 // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 
@@ -151,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('page404', webComponents.components.page_404);
     webComponents.register('blank', webComponents.components.blank_page);
     webComponents.register('users', webComponents.components.users);
-    webComponents.register('charts2', webComponents.components.charts2);
+    webComponents.register('full_calendar_page', webComponents.components.full_calendar_page);
 
     webComponents.register('patients', webComponents.components.patients);
 

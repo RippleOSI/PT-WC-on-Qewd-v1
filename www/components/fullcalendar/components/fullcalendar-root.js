@@ -83,13 +83,20 @@ export function load() {
       });
     }
 
-    renderMapCB(lat, long, zoom, callback) {
+    renderMapCB(eventData, callback) {
       let _this = this;
       let fn = function() {
+
+        let events = eventData.message.summary.map( (el) => { return {
+            title: el.name,
+            start: el.date,
+        }});
+        console.log(events);
         console.log(_this.rootElement.id);
         _this.calendar = new _this.fullcalendar(_this.rootElement, {
           plugins: [ 'list' ],
-          defaultView: 'listWeek'
+          defaultView: 'listWeek',
+          events: events,
         });
         _this.calendar.render();
         if (callback) callback.call(_this);
@@ -102,17 +109,17 @@ export function load() {
       }
     }
 
-    renderMapPromise(lat, long, zoom) {
+    renderMapPromise(eventData) {
       let _this = this;
       return new Promise((resolve) => {
-        _this.renderMapCB(lat, long, zoom, function() {
+        _this.renderMapCB(eventData, function() {
           resolve();
         });
       });
     }
 
-    async renderFullcalendar(lat, long, zoom) {
-      return await this.renderMapPromise(lat, long, zoom);
+    async renderFullcalendar(eventData) {
+      return await this.renderMapPromise(eventData);
     }
 
 

@@ -1,9 +1,10 @@
-export function define_fullcalendar_page() {
+export function define_full_calendar_page(QEWD) {
   console.log('start definition');
+  console.log(QEWD);
   let component = {
     componentName: 'adminui-content-page',
     state: {
-      name: 'users',
+      name: 'full_calendar_page',
       crud_params: {
         title: 'Users'
       }
@@ -49,8 +50,14 @@ export function define_fullcalendar_page() {
   let hooks = {
     'fullcalendar-root': {
       getFullcalendar: async function() {
-        await this.renderFullcalendar(51.505, -0.09, 13);
-        this.setMarker(51.505, -0.09);
+       let result = await  QEWD.reply({
+          type: 'getEvents',
+          params: {
+            properties: ['name', 'date'],
+           },
+        });
+       console.log(result);
+        await this.renderFullcalendar(result);
       }
     }
   };
