@@ -33,17 +33,16 @@ export function load() {
   let componentName = 'fullcalendar-root';
   let count = 0;
   let id_prefix = 'wer';
+
   customElements.define(componentName, class fullcalendar_root extends HTMLElement {
     constructor() {
       super();
 
       count++;
       let id = id_prefix + count;
-
       const html = `
 <div id="${id}" style="height: 180px;"></div>
       `;
-
       this.html = `${html}`;
     }
 
@@ -83,7 +82,7 @@ export function load() {
       });
     }
 
-    renderMapCB(eventData, callback) {
+    renderEvents(eventData, callback) {
       let _this = this;
       let fn = function() {
 
@@ -109,22 +108,18 @@ export function load() {
       }
     }
 
-    renderMapPromise(eventData) {
+    renderEventDataPromise(eventData) {
       let _this = this;
       return new Promise((resolve) => {
-        _this.renderMapCB(eventData, function() {
+        _this.renderEvents(eventData, function() {
           resolve();
         });
       });
     }
 
     async renderFullcalendar(eventData) {
-      return await this.renderMapPromise(eventData);
+      return await this.renderEventDataPromise(eventData);
     }
-
-
-
-
 
     addPopup(text, obj, open) {
       if (obj) {
@@ -137,11 +132,10 @@ export function load() {
       }
     }
 
-
     addEventHandler(fn, type) {
       type = type || 'click';
-      this.map.on(type, fn);
-      this.mapEvents.push({
+      this.calendar.on(type, fn);
+      this.calendarEvents.push({
         type: type,
         fn: fn
       });
@@ -166,14 +160,14 @@ export function load() {
       this.rootElement = this.getElementsByTagName('div')[0];
       this.childrenTarget = this.rootElement;
       this.name = componentName + '-' + count;
-      this.mapEvents = [];
+      this.calendarEvents = [];
     }
 
     disconnectedCallback() {
       if (this.onUnload) this.onUnload();
       let _this = this;
-      this.mapEvents.forEach(function(evnt) {
-        _this.map.off(evnt.type, evnt.fn);
+      this.calendarEvents.forEach(function(evnt) {
+        _this.calendar.off(evnt.type, evnt.fn);
       });
       if (this.removeOnReady) {
         this.removeOnReady();
