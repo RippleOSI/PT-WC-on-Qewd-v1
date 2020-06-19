@@ -1,3 +1,11 @@
+28th May
+
+working on patient ID and Allergies, matching allergies returned to the ptID passed
+got it working ok , then noted that need to find way to refresh browswer allergy page , as is cached , so need way to send trigger to get latest allergies for selected patient
+
+also worked on getting patient identity to the top bar panel for now
+
+
 
 27th May 2020
 remember not to use send() in qewd backend handlers unless sending an object 
@@ -37,4 +45,6 @@ but we set object to session data with
 session.data.$('sessionStarWarsWarrior').setDocument(data2session);  
 and get with
 session.data.$('sessionStarWarsWarrior').getDocument()
+
+
 

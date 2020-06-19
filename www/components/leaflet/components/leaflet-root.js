@@ -75,6 +75,7 @@ export function load() {
         _this.loadJSFile(prefix + 'js/leaflet.js', function() {
           _this.leaflet = L;
           _this.isReady();
+          console.log("loaded leaflet stuff");
         });
       });
     }
@@ -84,7 +85,7 @@ export function load() {
       let fn = function() {
         _this.map = _this.leaflet.map(_this.rootElement.id).setView([lat, long], zoom);
         _this.leaflet.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery ï¿½ <a href="https://www.mapbox.com/">Mapbox</a>',
           maxZoom: 18,
           id: 'mapbox/streets-v11',
           tileSize: 512,
@@ -111,6 +112,7 @@ export function load() {
     }
 
     async renderMap(lat, long, zoom) {
+      console.log("rendering Map");
       return await this.renderMapPromise(lat, long, zoom);
     }
 
@@ -185,6 +187,7 @@ export function load() {
     }
 
     onReady(fn) {
+      console.log("in OnReady")
       document.addEventListener('mapReady', fn);
       this.removeOnReady = function() {
         document.removeEventListener('mapReady', fn);
@@ -193,12 +196,17 @@ export function load() {
 
     isReady() {
       if (this.readyEvent) {
+        
         document.dispatchEvent(this.readyEvent);
       }
+      console.log("in IsReady")
+      console.log("this ready is this this:" );
+      console.log(this);
       this.ready = true;
     }
 
     connectedCallback() {
+      console.log("connected in - leaflet");
       this.innerHTML = this.html;
       this.rootElement = this.getElementsByTagName('div')[0];
       this.childrenTarget = this.rootElement;
@@ -215,6 +223,7 @@ export function load() {
       if (this.removeOnReady) {
         this.removeOnReady();
       }
+      console.log("disconnected out - leaflet");
     }
 
   });
