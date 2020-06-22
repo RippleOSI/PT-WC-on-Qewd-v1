@@ -32,6 +32,7 @@ import {define_map_page} from './map.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
 
 import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
+import {vitals_extended_crud} from "./extended/vitals.js";
 import {userPageState} from './user_state.js';
 
 import {patientsPageState} from './patients_page_state.js'
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('medications', crud_assembly(QEWD, medicationsPageState));
     webComponents.addComponent('allergies', crud_assembly(QEWD, allergiesPageState));
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
-    webComponents.addComponent('vitals', crud_assembly(QEWD, vitalsPageState));
+    webComponents.addComponent('vitals', vitals_extended_crud(QEWD, vitalsPageState));
     webComponents.addComponent('events', crud_assembly(QEWD, eventsPageState));
 
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
