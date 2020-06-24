@@ -5,30 +5,47 @@ let vitals_exteneded = {
     ...vitalsPageState,
 
 }
+function mergeDeep(...objects) {
+    const isObject = obj => obj && typeof obj === 'object';
+
+    return objects.reduce((prev, obj) => {
+        Object.keys(obj).forEach(key => {
+            const pVal = prev[key];
+            const oVal = obj[key];
+
+            if (Array.isArray(pVal) && Array.isArray(oVal)) {
+                prev[key] = pVal.concat(...oVal);
+            }
+            else if (isObject(pVal) && isObject(oVal)) {
+                prev[key] = mergeDeep(pVal, oVal);
+            }
+            else {
+                prev[key] = oVal;
+            }
+        });
+
+        return prev;
+    }, {});
+}
+
 
 export function vitals_extended_crud(QEWD) {
     let {component, hooks} = crud_assembly(QEWD, vitals_exteneded);
     let state = vitals_exteneded;
     component.hooks.push('addButton');
 
+
+
     let extendedHooks = {
         'adminui-content-page': {
             addButton: function () {
               //  let body = this.getParentComponent('adminui-content-card-body');
-
-                let assembly = {
-                    componentName: 'adminui-chart',
-                    hooks: ['getChartData']
-                };
-
-                this.loadGroup(assembly, this, this.context, function () {
-
-                });
+                let modal = this.getComponentByName('adminui-modal-root', 'adminui-row');
             }
         },
         'adminui-chart': {
             getChartData: async function () {
-
+                console.log('charts init');
                 let responseObj = await QEWD.reply({
                     type: state.summary.qewd.getSummary,
                     params: {
@@ -69,7 +86,7 @@ export function vitals_extended_crud(QEWD) {
                             callbacks: {
                                 label: function(tooltipItem, data) {
                                     var label = "Score: "+ data.score+"\r\n";
-                                    label+="Systolic BP"+ data.y+"\r\n";
+                                    label+="Systolic BP: "+ data.y+"\r\n";
                                     return label;
                                 }
                             }
@@ -85,6 +102,50 @@ export function vitals_extended_crud(QEWD) {
             }
         }
     };
+
+    let extendedComponent = {
+        children: [{
+            componentName: 'adminui-row',
+            children: [
+                {
+                    componentName: 'adminui-content-card',
+                    state: {
+                        name: state.name + '-chart-card'
+                    },
+                    children: [
+                        {
+                            componentName: 'adminui-content-card-header',
+                            children: [
+                                {
+                                    componentName: 'adminui-content-card-button-title',
+                                    state: {
+                                        title: 'Chart data',
+                                        title_colour: state.summary.titleColour,
+                                        icon: 'table',
+                                        buttonColour: state.summary.btnColour,
+                                        tooltip: state.summary.btnTooltip,
+                                        hideButton: false
+                                    },
+                                    hooks: ['showVitals']
+                                }
+                            ]
+                        },
+                        {
+                            componentName: 'adminui-content-card-body',
+                            children: [
+                                {
+                                    componentName: 'adminui-chart',
+                                    hooks: ['getChartData']
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+            ],
+        }]
+    };
+    component = mergeDeep(component, extendedComponent);
     hooks = Object.assign(hooks, extendedHooks);
 
     return {component, hooks};
