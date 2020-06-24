@@ -112,7 +112,7 @@ export function load() {
       let _this = this;
       return new Promise((resolve) => {
         _this.renderEvents(eventData, function() {
-          resolve();
+          resolve(_this);
         });
       });
     }
