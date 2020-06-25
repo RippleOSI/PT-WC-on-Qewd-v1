@@ -41,7 +41,7 @@ export function load() {
       count++;
       let id = id_prefix + count;
       const html = `
-<div id="${id}" style="height: 180px;"></div>
+<div id="${id}" style="height: 180px; min-height: 400px;"></div>
       `;
       this.html = `${html}`;
     }

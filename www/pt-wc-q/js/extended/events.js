@@ -41,7 +41,25 @@ export function events_extended_crud(QEWD) {
         },
         'adminui-chart': {
             getChartData: function () {
-               
+
+
+            }
+        },
+        'fullcalendar-root': {
+            getFullcalendar: function () {
+                let _this = this;
+                let result = QEWD.reply({
+                    type: 'getEvents',
+                    params: {
+                        properties: ['name', 'date'],
+                    },
+                }).then((responseObj) => {
+                    this.renderFullcalendar(responseObj).then((context) => {
+
+                    });
+
+                });
+
                 let card = this.getComponentByName('adminui-row', 'adminui-row-chart');
                 let card2 = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
                 console.log('there');
@@ -54,6 +72,9 @@ export function events_extended_crud(QEWD) {
                 console.log('table');
                 console.log(table);
                 $(table.table).on('init.dt', () => {
+                    console.log('init dt');
+                    let table = this.getComponentByName('adminui-datatables', state.name);
+
                     let button = document.createElement('button');
                     $(button).text('Show Chart');
 
@@ -69,21 +90,6 @@ export function events_extended_crud(QEWD) {
 
                     });
                     $(table).append(button);
-                });
-            }
-        },
-        'fullcalendar-root': {
-            getFullcalendar:  function() {
-                let result =  QEWD.reply({
-                    type: 'getEvents',
-                    params: {
-                        properties: ['name', 'date'],
-                    },
-                }).then((responseObj)=>{
-                    this.renderFullcalendar(responseObj).this((context)=>{
-
-                    });
-
                 });
                 console.log(result);
             }
