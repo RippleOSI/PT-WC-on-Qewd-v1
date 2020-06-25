@@ -26,12 +26,15 @@ import {define_register_page} from './register-page.js';
 import {define_forgot_password_page} from './forgot-password-page.js';
 import {define_404_page} from './404-page.js';
 import {define_blank_page} from './blank-page.js';
-//import {define_users_page} from './users.js';
 //import {define_medications_page} from './medications.js'
 import {define_map_page} from './map.js';
 //import {define_d3_page} from './d3.js';
+import {define_full_calendar_page} from './researching/full-calendar.js';
 
 import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
+import {vitals_extended_crud} from "./extended/vitals.js";
+import {events_extended_crud} from "./extended/events.js";
+
 import {userPageState} from './user_state.js';
 
 import {patientsPageState} from './patients_page_state.js'
@@ -60,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // add each component to the webComponents object
     //  this adds each component to webComponents.component
     //  and adds any hooks to webComponents.hooks
-
     webComponents.addComponent('login_modal', define_login_modal(QEWD));
     webComponents.addComponent('logout_modal', define_logout_modal(QEWD));
     webComponents.addComponent('initial_sidebar', define_initial_sidebar());
@@ -84,28 +86,32 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('map_page', define_map_page(QEWD));
    // webComponents.addComponent('d3_page', define_d3_page(QEWD));
 
-      webComponents.addComponent('users', crud_assembly(QEWD, userPageState));
+    webComponents.addComponent('users', crud_assembly(QEWD, userPageState));
+    webComponents.addComponent('full_calendar_page', define_full_calendar_page(QEWD));
+
 // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 
     webComponents.addComponent('patients', crud_assembly(QEWD, patientsPageState));
-   
+
     webComponents.addComponent('contacts', crud_assembly(QEWD, contactsPageState));
     webComponents.addComponent('diagnosis', crud_assembly(QEWD, diagnosisPageState));
     webComponents.addComponent('medications', crud_assembly(QEWD, medicationsPageState));
     webComponents.addComponent('allergies', crud_assembly(QEWD, allergiesPageState));
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
-    webComponents.addComponent('vitals', crud_assembly(QEWD, vitalsPageState));
-    webComponents.addComponent('events', crud_assembly(QEWD, eventsPageState));
+    webComponents.addComponent('vitals', vitals_extended_crud(QEWD, vitalsPageState));
+    webComponents.addComponent('events', events_extended_crud(QEWD, eventsPageState));
+
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
-/* 
-    */ 
-  
+/*
+    */
+
     // create the context for running the web components
 
     let context = {
       paths: {
         adminui: './components/adminui/',
-        leaflet: './components/leaflet/'//,
+        leaflet: './components/leaflet/',
+        fullcalendar:'./components/fullcalendar/'
        /// d3: './components/d3'
       },
       readyEvent: new Event('ready')
@@ -146,9 +152,10 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('page404', webComponents.components.page_404);
     webComponents.register('blank', webComponents.components.blank_page);
     webComponents.register('users', webComponents.components.users);
-    
+    webComponents.register('full_calendar_page', webComponents.components.full_calendar_page);
+
     webComponents.register('patients', webComponents.components.patients);
-   
+
 
     webComponents.register('contacts', webComponents.components.contacts);
     webComponents.register('medications', webComponents.components.medications);
@@ -158,7 +165,9 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('vitals', webComponents.components.vitals);
     webComponents.register('events', webComponents.components.events);
     webComponents.register('map', webComponents.components.map_page);
-   // webComponents.register('d3', webComponents.components.d3_page);
+    webComponents.register('full_calendar', webComponents.components.fullcalendar_page);
+
+    // webComponents.register('d3', webComponents.components.d3_page);
 
     // set up the initial display prior to login
 
@@ -175,11 +184,15 @@ document.addEventListener('DOMContentLoaded', function() {
       let modal = webComponents.getComponentByName('adminui-modal-root', 'modal-login');
       modal.show();
     });
-    
+
     // now load up the initial view
 
     webComponents.loadWebComponent('adminui-root', body, context, function(root) {
       let components = webComponents.components;
+      root.setState({
+        sidebar_colour: 'no-color'
+      })
+      root.sidebarTarget.classList.remove('sidebar-dark');
       webComponents.loadGroup(components.initial_sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.login_modal, body, context);
       webComponents.loadGroup(components.footer, root.footerTarget, context);
