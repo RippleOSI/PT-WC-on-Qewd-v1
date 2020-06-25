@@ -8,8 +8,8 @@ let vaccinationsPageState = {
       btnIcon: 'user-plus',
       btnColour: 'success',
       btnTooltip: 'Add a New Vaccine',
-      headers: ['Name', 'Dose'],
-      data_properties: ['name', 'dose'],
+      headers: ['Name', 'Date'],
+      data_properties: ['name', 'date'],
       qewd: {
         getSummary: 'getVaccines',
         getDetail: 'getVaccineInfo',
@@ -32,29 +32,47 @@ let vaccinationsPageState = {
         {
           name: 'name',
           data_property: 'name',
-          label: 'Name',
+          label: 'Vaccine Name',
           type: 'text',
           labelWidth: 4
         },
         {
-            name: 'dose',
-            data_property: 'dose',
-            label: 'Dose',
-            type: 'text',
-            labelWidth: 4
-        },
-        {
-          name: 'route',
-          data_property: 'route',
-          label: 'Route',
-          type: 'text',
+          name: 'date',
+          data_property: 'date',
+          label: 'Vaccine Date',
+          type: 'date',
           labelWidth: 4
-        },
+      },
+      {
+        name: 'series',
+        data_property: 'series',
+        label: 'Series',
+        type: 'text',
+        labelWidth: 4
+    },
+ 
         {
           name: 'comments',
           data_property: 'comments',
           label: 'Comments',
           type: 'textarea',
+          labelWidth: 4,
+          height: 6
+        },
+        
+        {
+          name: 'author',
+          data_property: 'author',
+          label: 'Author',
+          type: 'text',
+          labelWidth: 4,
+          height: 6
+        },
+        {
+          name: 'date_of_entry',
+          data_property: 'date_of_entry',
+          label: 'Date of Entry',
+          type: 'date',
           labelWidth: 4,
           height: 6
         }

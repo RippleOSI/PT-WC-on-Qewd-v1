@@ -95,6 +95,8 @@ export function define_map_page() {
   let hooks = {
     'leaflet-root': {
       getMap: async function() {
+      
+      console.log("in getMap hook");  
         let _this = this; // ? needed later?
 
       await this.renderMap(53.355, -6.29, 11);

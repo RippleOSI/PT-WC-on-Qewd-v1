@@ -49,6 +49,9 @@ module.exports = function(messageObj, session, send, finished) {
   doc.$(['by_id', id]).setDocument(messageObj.params);
   doc.$(['by_ptID', ptID, id]).setDocument(messageObj.params);
 
+  let doc4links = this.db.use('linkList');
+  doc4links.$(['pt_allergies', id, ptID ]).value = "";
+
   finished({ok: true});
 
 

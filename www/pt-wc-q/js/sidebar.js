@@ -183,20 +183,20 @@ export function define_sidebar() {
     {
       componentName: 'adminui-sidebar-nav-item',
       state: {
+        title: 'Problems/Diagnoses',
+        icon: 'users',
+        contentPage: 'diagnosis'
+      }
+    }, 
+    {
+      componentName: 'adminui-sidebar-nav-item',
+      state: {
         title: 'Medications',
         icon: 'users',
         contentPage: 'medications'
       }
     },
-    {
-      componentName: 'adminui-sidebar-nav-item',
-      state: {
-        title: 'Diagnosis',
-        icon: 'users',
-        contentPage: 'diagnosis'
-      }
-    },
-    {
+       {
       componentName: 'adminui-sidebar-nav-item',
       state: {
         title: 'Allergies',

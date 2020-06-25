@@ -8,8 +8,8 @@ let patientsPageState = {
       btnIcon: 'user-plus',
       btnColour: 'success',
       btnTooltip: 'Add a New Patient',
-      headers: ['Name', 'Email'],
-      data_properties: ['name', 'email'],
+      headers: ['ID', 'Name', 'DOB'],
+      data_properties: ['id_uniqueID','familyname', 'dob'],
       qewd: {
         getSummary: 'getPatients',
         getDetail: 'getPatientInfo',
@@ -27,33 +27,26 @@ let patientsPageState = {
       btnIcon: 'user-cog',
       btnColour: 'success',
       btnTooltip: 'Edit Patient Details',
-      title_data_property: 'name',
+      title_data_property: 'id_uniqueID',
       fields: [
         {
-          name: 'name',
-          data_property: 'name',
-          label: 'Name',
+          name: 'id_uniqueID',
+          data_property: 'id_uniqueID',
+          label: 'ID- Identifier',
           type: 'text',
           labelWidth: 4
         },
         {
-          name: 'email',
-          data_property: 'email',
-          label: 'Email',
+          name: 'firstname',
+          data_property: 'firstname',
+          label: 'First Name',
           type: 'text',
           labelWidth: 4
         },
         {
-          name: 'username',
-          data_property: 'username',
-          label: 'Username',
-          type: 'text',
-          labelWidth: 4
-        },
-        {
-          name: 'phone',
-          data_property: 'phone',
-          label: 'Telephone',
+          name: 'familyname',
+          data_property: 'familyname',
+          label: 'Family Name',
           type: 'text',
           labelWidth: 4
         },
@@ -70,50 +63,48 @@ let patientsPageState = {
           ]
         },
         {
-          name: 'userType',
-          data_property: 'userType',
-          label: 'Type of User',
-          type: 'radios',
-          radios: [
-            {text: 'Administrator', value: 'admin'},
-            {text: 'Public', value: 'public'},
-            {text: 'Not Specified', value: 'x'}
-          ]
+          name: 'dob',
+          data_property: 'dob',
+          label: 'Date of Birth',
+          type: 'date',
+          labelWidth: 4
         },
         {
-          name: 'roles',
-          data_property: 'roles',
-          label: 'Roles',
-          type: 'checkboxes',
-          checkboxes: [
-            {text: 'Doctor', value: 'doctor'},
-            {text: 'Patient', value: 'patient'},
-            {text: 'Carer', value: 'carer'},
-            {text: 'Consultant', value: 'consultant'}
-          ]
+          name: 'email',
+          data_property: 'email',
+          label: 'Email',
+          type: 'text',
+          labelWidth: 4
         },
         {
-          name: 'age',
-          data_property: 'age',
-          label: 'Age',
-          type: 'range',
-          labelWidth: 3,
-          min: 0,
-          max: 100,
-          marker: true
+          name: 'address',
+          data_property: 'address',
+          label: 'Address',
+          type: 'textarea',
+          labelWidth: 4
         },
         {
-          name: 'prevEmp',
-          data_property: 'prevEmp',
-          label: 'Previous Employers',
-          type: 'multiselect',
-          options: [
-            {text: 'NHS', value: 'nhs'},
-            {text: 'Private Hospital', value: 'private'},
-            {text: 'Community', value: 'community'},
-            {text: 'GP Practice', value: 'gp'}
-          ]
+          name: 'town',
+          data_property: 'town',
+          label: 'Town/City',
+          type: 'text',
+          labelWidth: 4
         },
+        {
+          name: 'postcode',
+          data_property: 'postcode',
+          label: 'PostCode',
+          type: 'text',
+          labelWidth: 4
+        },
+        {
+          name: 'phone',
+          data_property: 'phone',
+          label: 'Telephone',
+          type: 'text',
+          labelWidth: 4
+        },
+        
         {
           name: 'comments',
           data_property: 'comments',
