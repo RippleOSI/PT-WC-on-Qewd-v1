@@ -1,0 +1,9 @@
+start
+stop
+start_debug
+start_p
+yottadb/*
+package-lock.json
+.idea
+node_modules
+configuration
