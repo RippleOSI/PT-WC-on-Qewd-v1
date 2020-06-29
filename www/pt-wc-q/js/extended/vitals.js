@@ -45,57 +45,71 @@ export function vitals_extended_crud(QEWD) {
                 QEWD.reply({
                     type: state.summary.qewd.getSummary,
                     params: {
-                        properties: state.summary.data_properties
+                        properties: ['heartrate', 'resprate', 'systolic_bp', 'score']
                     }
                 })
                     .then((responseObj) => {
                         console.log(responseObj);
 
                         let data = responseObj.message.summary;
-                        let result = data.map(el => {
-                            return {
-                                x: parseInt(el.systolic_bp),
-                                y: el.id,
-                            }
-                        });
+                        let heartrate = [], resprate = [], systolic_rate = [];
 
+
+                        let result = data.forEach(el => {
+                            heartrate.push({
+                                x: el.id,
+                                y: el.heartrate,
+                            })
+                            resprate.push({
+                                x: el.id,
+                                y: el.resprate,
+                            })
+                            systolic_rate.push({
+                                x: el.id,
+                                y: el.systolic_bp,
+                            })
+                        });
+                        console.log(heartrate);
+                        console.log(resprate);
+                        console.log(systolic_rate);
                         let config = {
-                            type: 'line',
+                            type: 'scatter',
                             data: {
                                 datasets: [{
-                                    data: result,
-                                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
-                                    hoverBorderColor: "rgba(234, 236, 244, 1)",
-                                }],
-                            },
-                            options: {
-                                maintainAspectRatio: false,
-                                tooltips: {
-                                    backgroundColor: "rgb(255,255,255)",
-                                    bodyFontColor: "#858796",
-                                    borderColor: '#dddfeb',
-                                    borderWidth: 1,
-                                    xPadding: 15,
-                                    yPadding: 15,
-                                    displayColors: false,
-                                    caretPadding: 10,
-                                    callbacks: {
-                                        label: function (tooltipItem, data) {
-                                            var label = "Score: " + data.score + "\r\n";
-                                            label += "Systolic BP: " + data.y + "\r\n";
-                                            return label;
-                                        }
-                                    }
-                                },
-                                legend: {
-                                    display: false
-                                },
-                                cutoutPercentage: 80,
-                            },
-                        };
+                                    label: 'Heart Rate',
+                                    backgroundColor: 'rgba(226,57,57,0.5)',
+                                    borderColor: '#e23939',
+                                    fill: false,
+                                    showLine: true,
 
+                                    data: heartrate,
+                                }, {
+                                    label: 'Resp Rate',
+                                    backgroundColor: 'rgba(57,171,226,0.5)',
+                                    borderColor: '#39abe2',
+                                    fill: false,
+                                    showLine: true,
+
+                                    data: resprate,
+                                }, {
+                                    label: 'Systolic Rate',
+                                    backgroundColor: 'rgba(226,57,220,0.5)',
+                                    borderColor: '#e239dc',
+                                    fill: false,
+                                    showLine: true,
+
+                                    data: systolic_rate,
+                                }],
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false
+
+                                },
+                            }
+                        };
+                        this.canvas.height = '500px';
                         this.draw(config);
+
                     });
 
                 let card = this.getComponentByName('adminui-row', 'adminui-row-chart');
