@@ -38,32 +38,36 @@ export function events_extended_crud(QEWD) {
             addButton: function () {
                 $(document).on('init.dt', () => {
 
-                    let card =  this.getComponentByName('adminui-content-card',  state.name + '-chart-card');
-                    let card2 = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
-                    console.log('there');
-                    console.log(card2);
-                    card.setState({
-                        cls: 'd-none'
-                    });
-                    let table = this.getComponentByName('adminui-datatables', state.name);
+                        let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
+                        let card2 = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
+                        console.log('there');
+                        console.log(card2);
+                        card.setState({
+                            cls: 'd-none'
+                        });
+                        let table = this.getComponentByName('adminui-datatables', state.name);
+                        if (!$(table).find('.this-show-button').length) {
 
-                    let button = document.createElement('button');
-                    $(button).text('Show Chart');
+                            let button = document.createElement('button');
+                            $(button).text('Show Chart');
+                            $(button).addClass('this-show-button');
 
-                    $(button).click(() => {
-
-
-                        card.rootElement.classList.remove('d-none');
-                        card.rootElement.classList.add('d-flex');
+                            $(button).click(() => {
 
 
-                        card2.rootElement.classList.remove('d-flex');
-                        card2.rootElement.classList.add('d-none');
-                        window.dispatchEvent(new Event('resize'));
+                                card.rootElement.classList.remove('d-none');
+                                card.rootElement.classList.add('d-flex');
 
-                    });
-                    $(table).append(button);
-                });
+
+                                card2.rootElement.classList.remove('d-flex');
+                                card2.rootElement.classList.add('d-none');
+                                window.dispatchEvent(new Event('resize'));
+
+                            });
+                            $(table).append(button);
+                        }
+                    }
+                );
                 console.log(result);
             }
         },
@@ -104,7 +108,7 @@ export function events_extended_crud(QEWD) {
                 let fn = function () {
                     console.log('there5');
 
-                    let card =  _this.getComponentByName('adminui-content-card',  state.name + '-chart-card');
+                    let card = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                     let card2 = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
                     card.setState({
                         cls: 'd-none',

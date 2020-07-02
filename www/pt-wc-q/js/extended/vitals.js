@@ -49,23 +49,24 @@ export function vitals_extended_crud(QEWD) {
                     let table = this.getComponentByName('adminui-datatables', state.name);
                     console.log('table');
                     console.log(table);
+                    if(! $(table).find('.this-show-button').length) {
+
+                        let button = document.createElement('button');
+                        $(button).text('Show Chart');
+                        $(button).addClass('this-show-button');
+                        $(button).click(() => {
 
 
-                    let button = document.createElement('button');
-                    $(button).text('Show Chart');
-
-                    $(button).click(() => {
+                            card.rootElement.classList.remove('d-none');
+                            card.rootElement.classList.add('d-block');
 
 
-                        card.rootElement.classList.remove('d-none');
-                        card.rootElement.classList.add('d-block');
+                            card2.rootElement.classList.remove('d-flex');
+                            card2.rootElement.classList.add('d-none');
 
-
-                        card2.rootElement.classList.remove('d-flex');
-                        card2.rootElement.classList.add('d-none');
-
-                    });
-                    $(table).append(button);
+                        });
+                        $(table).append(button);
+                    }
                 });
                 //  let body = this.getParentComponent('adminui-content-card-body');
             }
@@ -144,10 +145,7 @@ export function vitals_extended_crud(QEWD) {
                     });
 
                 let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
-           /*
-                card.setState({
-                    cls: 'd-none'
-                });*/
+
             }
         },
 
