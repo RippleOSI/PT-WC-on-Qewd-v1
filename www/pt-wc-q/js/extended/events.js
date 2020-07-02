@@ -31,11 +31,27 @@ export function events_extended_crud(QEWD) {
     let {component, hooks} = crud_assembly(QEWD, events_exteneded);
     let state = events_exteneded;
     component.hooks.push('addButton');
-
+    let calendarObj = null;
 
     let extendedHooks = {
         'adminui-content-page': {
             addButton: function () {
+                $(document).on('draw.dt', () => {
+                    console.log('table redraw');
+                    if (calendarObj) {
+                        let result = QEWD.reply({
+                            type: 'getEvents',
+                            params: {
+                                properties: ['name', 'date'],
+                            },
+                        }).then((responseObj) => {
+                            calendarObj.renderFullcalendar(responseObj).then((context) => {
+
+                            });
+                        });
+
+                    }
+                });
                 $(document).on('init.dt', () => {
 
                         let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
@@ -80,6 +96,9 @@ export function events_extended_crud(QEWD) {
         'fullcalendar-root': {
             getFullcalendar: function () {
                 let _this = this;
+                if (!calendarObj) {
+                    calendarObj = this;
+                }
                 let result = QEWD.reply({
                     type: 'getEvents',
                     params: {
@@ -104,12 +123,11 @@ export function events_extended_crud(QEWD) {
 
             showevents: function () {
                 let _this = this;
-                console.log('there4');
                 let fn = function () {
-                    console.log('there5');
 
                     let card = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                     let card2 = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
+
                     card.setState({
                         cls: 'd-none',
                     });
