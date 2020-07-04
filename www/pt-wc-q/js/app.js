@@ -32,8 +32,10 @@ import {define_map_page} from './map.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
 
 import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
+
 import {vitals_extended_crud} from "./extended/vitals.js";
 import {events_extended_crud} from "./extended/events.js";
+import {patients_extended_crud} from "./extended/patients.js";
 
 import {userPageState} from './user_state.js';
 
@@ -51,7 +53,7 @@ import {contentPage} from './content-page.js';
 
 
 document.addEventListener('DOMContentLoaded', function() {
-
+  console.log(QEWD);
   QEWD.on('ewd-registered', function() {
 
     QEWD.log = true;
@@ -91,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 
-    webComponents.addComponent('patients', crud_assembly(QEWD, patientsPageState));
+    webComponents.addComponent('patients', patients_extended_crud(QEWD));
 
     webComponents.addComponent('contacts', crud_assembly(QEWD, contactsPageState));
     webComponents.addComponent('diagnosis', crud_assembly(QEWD, diagnosisPageState));
