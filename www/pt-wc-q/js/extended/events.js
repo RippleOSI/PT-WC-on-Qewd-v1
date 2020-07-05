@@ -254,7 +254,7 @@ export function events_extended_crud(QEWD) {
 
 
                 responseObj.message.summary.forEach(function (record) {
-                    if (context.selectedPatient && record.patient_id) {
+                    if (context.selectedPatient  ) {
                         if (context.selectedPatient.id !== record.patient_id) {
                             return true; // SKIP BY FILTER
                         }
