@@ -116,7 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
         fullcalendar:'./components/fullcalendar/'
        /// d3: './components/d3'
       },
-      readyEvent: new Event('ready')
+      readyEvent: new Event('ready'),
+      selectedPatient: null,
+
     };
 
     // this mainview function will be used by the login hook - it will pick it up

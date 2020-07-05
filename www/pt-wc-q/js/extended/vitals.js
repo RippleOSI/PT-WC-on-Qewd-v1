@@ -101,9 +101,6 @@ export function vitals_extended_crud(QEWD) {
                                 y: el.systolic_bp,
                             })
                         });
-                        console.log(heartrate);
-                        console.log(resprate);
-                        console.log(systolic_rate);
                         let config = {
                             type: 'scatter',
                             data: {

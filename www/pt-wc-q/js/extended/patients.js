@@ -32,13 +32,42 @@ export function patients_extended_crud(QEWD) {
     let state = patients_extended;
 
     let extendedHooks = {
+        'adminui-datatables': {
+            patientDatatableExtendHook: function () {
+                let table = this.table;
+                let context = this.context;
+                $(table).on('draw.dt', ()=>{
+                    $(table).on('click','adminui-button',function(){
+                        let id_str = this.parentNode.id;
+                        console.log(context);
 
+                        if(id_str && id_str.includes('patients-record-')){
+                            let id = this.parentNode.id.split('record-')[1];
+                            QEWD.reply({
+                                type: state.summary.qewd.getDetail,
+                                params: {
+                                    id: id
+                                }
+                            }).then((res)=>{
+                                let obj = res.message.record ;
+                                context.selectedPatient = obj;
+                            }).catch((err)=>{
+
+                            });
+                        }
+                    })
+                });
+            }
+        }
     };
 
 
+    let adminui_row = component.children[1];
+    let datatable = adminui_row.children[0].children[1].children[0];
+    datatable.hooks.push('patientDatatableExtendHook');
 
-    let adminui_row = component.children[1]
-    adminui_row.children.unshift();
+
+//    adminui_row.children.unshift();
 
     //Merge whole data block
     hooks = mergeDeep(hooks, extendedHooks);

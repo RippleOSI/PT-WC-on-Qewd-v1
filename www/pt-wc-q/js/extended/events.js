@@ -36,6 +36,7 @@ export function events_extended_crud(QEWD) {
     let extendedHooks = {
         'adminui-content-page': {
             addButton: function () {
+                console.log(this.context);
                 $(document).on('draw.dt', () => {
                     console.log('table redraw');
                     if (calendarObj) {
