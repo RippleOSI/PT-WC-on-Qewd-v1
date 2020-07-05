@@ -36,31 +36,30 @@ export function patients_extended_crud(QEWD) {
             patientDatatableExtendHook: function () {
                 let table = this.table;
                 let context = this.context;
-                $(table).on('draw.dt', ()=>{
-                    $(table).on('click','adminui-button',function(){
+                $(table).on('draw.dt', () => {
+                    $(table).on('click', 'adminui-button', function () {
                         let id_str = this.parentNode.id;
                         console.log(context);
 
-                        if(id_str && id_str.includes('patients-record-')){
+                        if (id_str && id_str.includes('patients-record-')) {
                             let id = this.parentNode.id.split('record-')[1];
                             QEWD.reply({
                                 type: state.summary.qewd.getDetail,
                                 params: {
                                     id: id
                                 }
-                            }).then((res)=>{
-                                let obj = res.message.record ;
+                            }).then((res) => {
+                                let obj = res.message.record;
                                 context.selectedPatient = obj;
-                            }).catch((err)=>{
+                            }).catch((err) => {
 
                             });
                         }
                     })
                 });
             }
-        }
-    };
-
+        },
+    }
 
     let adminui_row = component.children[1];
     let datatable = adminui_row.children[0].children[1].children[0];
