@@ -42,7 +42,16 @@ export function crud_assembly(QEWD, state) {
      */
   state.patientIdDepends = state.patientIdDepends || true;
   state.summary.headers = state.summary.headers || [];
+
+
   state.summary.data_properties = state.summary.data_properties || [];
+
+  if(state.patientIdDepends){
+    this.summary.headers.push('Patient ID');
+    this.summary.data_properties.push('patient_id');
+  }
+
+
   if (state.summary.headers.length === state.summary.data_properties.length) {
     state.summary.headers.push('Select');
   };
