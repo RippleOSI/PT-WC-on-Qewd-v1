@@ -31,7 +31,7 @@ import {define_map_page} from './map.js';
 //import {define_d3_page} from './d3.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
 
-import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
+import {crud_assembly} from '../../components/adminui-custom/components/adminui-crud.js';
 
 import {vitals_extended_crud} from "./extended/vitals.js";
 import {events_extended_crud} from "./extended/events.js";
