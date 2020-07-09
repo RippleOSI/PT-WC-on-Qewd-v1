@@ -47,8 +47,8 @@ export function crud_assembly(QEWD, state) {
   state.summary.data_properties = state.summary.data_properties || [];
 
   if(state.patientIdDepends){
-    this.summary.headers.push('Patient ID');
-    this.summary.data_properties.push('patient_id');
+    state.summary.headers.push('Patient ID');
+    state.summary.data_properties.push('patient_id');
   }
 
 
@@ -378,6 +378,8 @@ export function crud_assembly(QEWD, state) {
 
       retrieveRecordSummary: async function() {
         let table = this;
+        let context = this.context;
+
         /*
         QEWD.send({
           type: state.summary.qewd.getSummary,
