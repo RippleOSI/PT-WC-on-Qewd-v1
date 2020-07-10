@@ -263,6 +263,20 @@ export function crud_assembly(QEWD, state) {
           // add modal for confirming record deletions
           this.loadGroup(confirmDeleteModal, document.getElementsByTagName('body')[0], this.context);
         }
+
+        let table = this.getComponentByName('adminui-datatables', state.name);
+        let target = table.getParentComponent('adminui-content-card-body');
+        table.datatable.destroy();
+        table.remove();
+        let assembly = {
+          componentName: 'adminui-datatables',
+          assemblyName: state.assemblyName,
+          state: {
+            name: state.name
+          },
+          hooks: ['retrieveRecordSummary']
+        };
+        this.loadGroup(assembly, target, this.context);
       }
     },
 
@@ -398,6 +412,7 @@ export function crud_assembly(QEWD, state) {
             table.data = {};
             let data = [];
             responseObj.message.summary.forEach(function(record) {
+              console.log('there234');
               if ( context.selectedPatient && state.patientIdDepends) {
                 if ( context.selectedPatient.id !== record.patient_id ) {
                   return true; // SKIP BY FILTER
@@ -427,9 +442,9 @@ export function crud_assembly(QEWD, state) {
               data: data,
               columns: columns
             };
+    //        if (table.datatable) this.datatable.destroy();
 
             table.render(obj);
-
             table.datatable.rows().every(function(index, element) {
               let row = $(this.node());
               let td = row.find('td').eq(noOfCols - 1)[0];
