@@ -54,7 +54,8 @@ export function define_topbar(QEWD) {
             text: 'My Application',
             colour: 'warning',
             name: 'header-text',
-          }
+          },
+          hooks: ['updateTopBar1']
         },
         {
           componentName: 'adminui-topbar-divider'
@@ -121,6 +122,39 @@ export function define_topbar(QEWD) {
           }, function(responseObj) {
           });
         };
+        this.addHandler(fn, this.aTag);
+      }
+    },
+    'adminui-topbar-text': {
+      updateTopBar1: function(state) {
+        let _this = this;
+        let fn = function() {
+        //  QEWD.send({
+         //   type: 'getMenuDetail',
+         //   ref: state.ref,
+         //   itemId: state.itemId
+         // }, function(responseObj) {
+         // });
+         console.log("In top bar hook");
+         let div = _this.getComponentByName('adminui-topbar-text');
+         //div.setState({text: 'added by event - from click from ' + cell.data()});
+         QEWD.send({
+          type: 'getSetPatientID',
+          msg: "Please set it"
+        }, function(responseObj) {
+          console.log("response is " + JSON.stringify(responseObj));
+          if (responseObj.message.ptback){
+          console.log("email is " + responseObj.message.ptback.email);
+          div.setState({text: 'Pt-email : ' +  responseObj.message.ptback.email});
+          }
+        });
+
+         //div.setState({text: 'Clicked the AppBar'});
+         
+
+
+        };
+       
         this.addHandler(fn, this.aTag);
       }
     }

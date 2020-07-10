@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/calendar2.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js" integrity="sha256-5oApc/wMda1ntIEK4qoWJ4YItnV4fBHMwywunj8gPqc=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js" integrity="sha256-GBryZPfVv8G3K1Lu2QwcqQXAO4Szv4xlY4B/ftvyoMI=" crossorigin="anonymous"></script>      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js" integrity="sha256-FT1eN+60LmWX0J8P25UuTjEEE0ZYvpC07nnU6oFKFuI=" crossorigin="anonymous"></script>
+        
+        <style>
+
+            html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+            font-size: 14px;
+            }
+
+            #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+            }
+
+        </style>
+
+<script >
+  
+  var isAllowToClose = false;
+
+$(".addtask").on('click', function() {
+    alert("task added!");
+});
+
+$(document).ready(function() {
+  $('#scheduler').fullCalendar({
+  themeSystem: 'bootstrap3',
+  		eventRender: function(event, element, view) {
+        var theDate = event.start
+        var endDate = event.dowend;
+				var startDate = event.dowstart;
+        var excludedDate = event.excludedDate;
+        var excludedDates = event.excludedDates;
+        //console.log(event);
+        if (theDate >= endDate) {
+                return false;
+        }
+
+        if (theDate <= startDate) {
+          return false;
+        }
+         
+         var excludedTomorrrow = new Date(excludedDate);
+         
+        if( theDate > excludedDate && theDate < excludedTomorrrow.setDate(excludedTomorrrow.getDate() + 1) ) {
+        	return false;
+        }
+          
+      },
+  editable: true,
+droppable: true, // this allows things to be dropped onto the calendar
+  businessHours: {
+    // days of week. an array of zero-based day of week integers (0=Sunday)
+    dow: [ 1, 2, 3, 4, 5 ], // Monday - Friday
+
+    start: '09:00', // a start time (09am in this example)
+    end: '18:00', // an end time (6pm in this example)
+},
+scrollTime: '8:00',  //scroll pane initially scrolled down at...
+        defaultView: 'agendaWeek',
+        locale: 'en-US',
+        dragOpacity: 0.4,
+        header: {
+            left: 'prev,next today',
+  center: 'title',
+  right: 'month,agendaWeek,agendaDay'
+        },
+        defaultDate: '2017-08-29T16:00:00',
+        allDaySlot:false,
+        eventClick:  function(event, jsEvent, view) {
+            $('#modalTitle').html(event.title);
+            $('#modalBody').html("id:" + event.id + "<br/>" + event.description);
+            $('#fullCalModal').modal();
+        },
+        drop: function( date, jsEvent, ui, resourceId ) {
+        //console.log("this", this);
+        var evtName = $(this).data('event').title;
+    var evtID = $(this).attr('id').toString();
+    
+        },
+        //The following constraints prevents the user from adding/updating/deleting events that are before the current date
+//The end date is required.  So, you can't add events over a year away from the current date
+eventConstraint: {
+    start: moment().startOf('day'),
+    end: moment(moment().startOf('day'), 'MM-DD-YYY').add(365, 'days')
+},
+selectConstraint: {
+    start: moment().startOf('day'),
+    end: moment(moment().startOf('day'), 'MM-DD-YYY').add(365, 'days')
+},
+        eventReceive: function(event, delta, revertFunc) {
+        console.log("event", event);
+        console.log("event.title", event.title);
+        console.log("event.color", event.color);
+        console.log(event.start.format());
+        console.log(event._id);
+            var defaultDuration = moment.duration($('#scheduler').fullCalendar('option', 'defaultTimedEventDuration')); // get the default and convert it to proper type
+            var end = event.end || event.start.clone().add(defaultDuration); // If there is no end, compute it
+            console.log('end is ' + end.format());
+
+            //alert(event.title + " was dropped on " + event.start.format());
+        },
+       events: [{
+       			id: 1,
+            title:"Washdishing",
+            start: '10:00', 
+            end: '13:00', 
+            dow: [1, 4],
+            dowstart: new Date('2017/7/14'),
+            dowend: new Date('2017/9/29'),
+            excludedDate: new Date('2017/8/14'),
+            excludedDates: [new Date('2017/8/14'), new Date('2017/8/24')]
+       },
+       {
+       			id: 10,
+            title:"Front Desk",
+            description: "Attend customers on front desk",
+            start: '09:00', 
+            end: '11:00', 
+            dow: [2, 5],
+            dowstart: new Date('2017/8/10'),
+            dowend: new Date('2017/9/20'),
+            color: '#f8a4a5'
+       },
+        {
+        id: 3,
+        title:"Overnight working",
+            start: '2017-08-29T23:00:00',
+            end: '2017-08-30T02:00:00',
+            color:'red'
+        }
+    ]
+  }
+
+           )
+           
+           
+           
+           
+           /**********SELECT2******************/
+           var list = $('.sel-task').select2({
+/*tags: true,
+  createTag: function (params) {
+    return {
+      id: params.term,
+      text: params.term,
+      newOption: true
+    }
+  },*/
+placeholder: "Select a Task",
+allowClear: true,
+sorter: function(data) {
+    return data.sort(function (a, b) {
+        if (a.text > b.text) {
+            return 1;
+        }
+        if (a.text < b.text) {
+            return -1;
+        }
+        return 0;
+    });
+},
+  "language": {
+       "noResults": function(){
+           return "No Tasks Found <a href='javascript:void(0)' class='addtask'  id='btnAddTask'>Add Task</a>";
+       }
+   },
+    escapeMarkup: function (markup) {
+        return markup;
+    },
+  closeOnSelect: false,
+  templateResult: function (data) {
+    var $result = $("<span></span>");
+
+    $result.text(data.text);
+
+    if (data.newOption) {
+      $result.append(" <em>(new)</em>");
+    }
+    
+    return $result;
+  }
+}).on("select2:closing", function(e) {
+	if(!isAllowToClose) {
+  	e.preventDefault();
+  }
+}).on("select2:closed", function(e) {
+if(!isAllowToClose) {
+  list.select2("open");
+  }
+});
+
+var listColor = $('.sel-color').select2({
+placeholder: "Select a Color",
+allowClear: true,
+minimumResultsForSearch: -1,
+templateResult: formatColor,
+templateSelection: formatColor,
+//closeOnSelect: false,
+}).on("select2:closing", function(e) {
+  //e.preventDefault();
+}).on("select2:closed", function(e) {
+  //listColor.select2("open");
+}).on("select2:selecting", function (e) {
+//console.log(e);
+});
+
+var listEmp = $('.sel-emp').select2({
+placeholder: "All Employees",
+allowClear: true,
+minimumResultsForSearch: 5
+}).on("select2:closing", function(e) {
+  $('.div-emp-container').css('height', '38px');
+}).on("select2:closed", function(e) {
+  //listColor.select2("open");
+}).on("select2:opening", function (e) {
+//isAllowToClose = true;
+//list.select2("close");
+$('.div-emp-container').css('height', '300px');
+}).on("select2:open", function (e) {
+//console.log(e);
+});
+
+//listColor.select2("open");
+list.select2("open");
+
+function formatColor (state) {
+  if (!state.id) { return state.text; }
+  var $state = $(
+    '<span class="sq" style="background-color:' + state.element.value + '">&nbsp</span>&nbsp<span>' + state.text + '</span>');
+  return $state;
+};
+
+
+/**********SELECT2***********************/
+
+
+$('.select2-results__option').each(function() {
+			$(this).data('event', {
+				title: $.trim($(this).text()), // use the element's text as the event title
+				stick: true, // maintain when user navigates (see docs on the renderEvent method)
+        color: 'green' //$(this).data('color')
+			});
+
+			// make the event draggable using jQuery UI
+			$(this).draggable({
+      	//appendTo: 'body',
+containment: 'body',
+scroll: false,
+//color: $(this).data('color'),
+//helper: 'clone',
+helper: function() {
+        //provide extra data to event
+       var $select = $(".sel-color").parent().find("select"); // it's <select> element
+var value = $select.val(); 
+
+        $(this).data('event', {
+				title: $.trim($(this).text()), // use the element's text as the event title
+				stick: false, // maintain when user navigates (see docs on the renderEvent method)
+        color: value //$(this).data('color')
+			});
+        return $("<div class='fc-event drag-task cucu' data-event='{\"title\":\"my event\"}' data-color=\"orange\"  data-duration='01:00'>" + $(this).text() + "</div>");
+       
+      
+        },
+start: function(event, ui) {
+      //Provide color to draggable item
+        var $select = $(".sel-color").parent().find("select"); // it's <select> element
+var value = $select.val(); 
+ui.helper.css('background-color', value);
+//ui.helper.attr('data-color', 'red');
+//console.log("ui.helper", ui.helper);
+    },
+				zIndex: 999,
+				revert: true,// will cause the event to go back to its
+				revertDuration: 0 //  original position after the drag
+			});
+
+		});
+    
+});
+
+
+
+
+          </script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <div class="container">
+          <div class="pane">
+          <div>
+           Employee Name
+          </div>
+          <div class="div-emp-container" style="height:38px;">
+            <select size="8" class="sel-emp" id="sel-task" style="width: 300px;">
+              <option value="1">John Doe</option>
+              <option value="2">Cristian Sanderson</option>
+              <option value="3">Raul Welsh</option>
+              <option value="4">Ema Truman</option>
+              <option value="5">Carl Simpson</option>
+              <option value="6">Rober Donahue</option>
+              <option value="7">Albert Dolin</option>
+              <option value="8">Alessandra Mineli</option>
+              <option value="9">Sarah Jones</option>
+          </select>
+          </div>
+          
+          <div>
+           Task
+          </div>
+          <div style="height:285px;">
+            <select size="8" class="sel-task" id="sel-task" style="width: 300px;">
+              <option value="1">Washdishing</option>
+              <option value="2">Cashier</option>
+              <option value="3">Waiter</option>
+              <option value="4">Restaurant Office</option>
+              <option value="5">Hotel Reception</option>
+              <option value="6">Housekeeping</option>
+              <option value="7">Kitchen</option>
+              <option value="8">Bellboy</option>
+              <option value="9">Front Desk</option>
+              <option value="10">Event Coordinator</option>
+          </select>
+          </div>
+          
+            <div>
+           Task Color
+          </div>
+          <div style="height:40px;">
+          <select size="8" class="sel-color" style="width: 300px">
+            <option value="#5698ef" selected="selected">Blue</option>
+            <option value="#56af98">Green</option>
+            <option value="#ef8648">Orange</option>
+            <option value="#df4628">Red</option>
+            <option value="#ffa6b8">Pink</option>
+            <option value="#af5648">Brown</option>
+        </select>
+        </div>
+          
+          </div>
+          <div id='scheduler'></div>
+        </div>
+        
+        
+        
+        
+        <div id="fullCalModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                        <h4 id="modalTitle" class="modal-title"></h4>
+                    </div>
+                    <div id="modalBody" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </body>
+</html>

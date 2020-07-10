@@ -8,8 +8,8 @@ let diagnosisPageState = {
       btnIcon: 'user-plus',
       btnColour: 'success',
       btnTooltip: 'Add a New Diagnosis',
-      headers: ['Name', 'Code'],
-      data_properties: ['name', 'code'],
+      headers: ['Name'],
+      data_properties: ['name'],
       qewd: {
         getSummary: 'getDiagnoses',
         getDetail: 'getDiagnosisInfo',
@@ -32,10 +32,33 @@ let diagnosisPageState = {
         {
           name: 'name',
           data_property: 'name',
-          label: 'Name',
+          label: 'Problem/Diagnosis Name',
           type: 'text',
           labelWidth: 4
         },
+           {
+          name: 'description',
+          data_property: 'description',
+          label: 'Description',
+          type: 'textarea',
+          labelWidth: 4
+        },
+        {
+          name: 'date_of_onset',
+          data_property: 'date_of_onset',
+          label: 'Date of Onset',
+          type: 'date',
+          labelWidth: 4
+      },
+        
+     
+         {
+          name: 'terminology',
+          data_property: 'terminology',
+          label: 'Terminology',
+          type: 'text',
+          labelWidth: 4
+      },
         {
             name: 'code',
             data_property: 'code',
@@ -44,20 +67,20 @@ let diagnosisPageState = {
             labelWidth: 4
         },
         {
-          name: 'description',
-          data_property: 'description',
-          label: 'Description',
+          name: 'author',
+          data_property: 'author',
+          label: 'Author',
           type: 'text',
           labelWidth: 4
         },
         {
-          name: 'comments',
-          data_property: 'comments',
-          label: 'Comments',
-          type: 'textarea',
-          labelWidth: 4,
-          height: 6
-        }
+          name: 'date_of_entry',
+          data_property: 'date_of_entry',
+          label: 'Date of Entry',
+          type: 'date',
+          labelWidth: 4
+        },
+
       ]
     },
     update: {

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<!-- jsCalendar v1.4.3 Javascript and CSS from jsdelivr npm cdn -->
+<script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.js" integrity="sha384-JqNLUzAxpw7zEu6rKS/TNPZ5ayCWPUY601zaig7cUEVfL+pBoLcDiIEkWHjl07Ot" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.css" integrity="sha384-+OB2CadpqXIt7AheMhNaVI99xKH8j8b+bHC8P5m2tkpFopGBklD3IRvYjPekeWIJ" crossorigin="anonymous">
+
+<script>
+
+</script>
+
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+<!-- my calendar -->
+<div class="auto-jsCalendar classic-theme" data-month-format="month YYYY"></div>
+<!---->
+<!-- Button -->
+<button id="my-button">Goto</button>
+<button id="my-reset-button">Reset</button>
+<!-- My calendar element -->
+<div id="my-calendar"></div>
+<!-- Dynamic create it -->
+<script type="text/javascript">
+
+   
+   // Get the element
+    var element = document.getElementById("my-calendar");
+    // Create the calendar
+    var TSCalendar = jsCalendar.new(element, new Date(), {
+        monthFormat : "month YYYY",
+        dayFormat : "DDD",
+    });
+
+    var newCal = function renderCal(dayFormatChoice, dateToGoTo){
+ jsCalendar.new(element, dateToGoTo,{
+     monthFormat: "month YYYY",
+     dayFormat: dayFormatChoice
+ });
+ //jsCalendar.goto(dateToGoTo);
+    }
+
+ newCal("DDD", "12/06/1970" );
+ newCal("D", "1/1/2000");
+
+    var button1 = document.getElementById("my-button");
+    // Add a button event
+    button1.addEventListener("click", function(){
+        // Goto
+        TSCalendar.goto("30/01/2017");
+    }, false);
+
+    var buttonReset = document.getElementById("my-reset-button");
+    // Add a button event
+    buttonReset.addEventListener("click", function(){
+        // Reset
+        TSCalendar.reset();
+    }, false);
+
+</script>
+
+
+</body>
+</html> 

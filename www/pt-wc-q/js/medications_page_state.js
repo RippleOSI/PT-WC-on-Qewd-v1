@@ -36,6 +36,13 @@ let medicationsPageState = {
           type: 'text',
           labelWidth: 4
         },
+         {
+          name: 'route',
+          data_property: 'route',
+          label: 'Route',
+          type: 'text',
+          labelWidth: 4
+        },
         {
             name: 'dose',
             data_property: 'dose',
@@ -44,20 +51,43 @@ let medicationsPageState = {
             labelWidth: 4
         },
         {
-          name: 'route',
-          data_property: 'route',
-          label: 'Route',
+          name: 'timing',
+          data_property: 'timing',
+          label: 'Timing',
           type: 'text',
           labelWidth: 4
-        },
+      },
+      
         {
-          name: 'comments',
-          data_property: 'comments',
-          label: 'Comments',
+          name: 'description',
+          data_property: 'description',
+          label: 'Description',
           type: 'textarea',
           labelWidth: 4,
-          height: 6
-        }
+          height: 2
+        },
+        {
+          name: 'date_start',
+          data_property: 'date_start',
+          label: 'Start Date',
+          type: 'date',
+          labelWidth: 4
+      },
+      {
+        name: 'author',
+        data_property: 'author',
+        label: 'Author',
+        type: 'text',
+        labelWidth: 4
+    },
+    {
+      name: 'date_of_entry',
+      data_property: 'date_of_entry',
+      label: 'Date of Entry',
+      type: 'date',
+      labelWidth: 4
+  },
+    
       ]
     },
     update: {
