@@ -92,6 +92,9 @@ export function load() {
         }});
         console.log(events);
         console.log(_this.rootElement.id);
+        if(_this.calendar){
+          _this.calendar.destroy();
+        }
         _this.calendar = new _this.fullcalendar(_this.rootElement, {
           plugins: [ 'list' ],
           defaultView: 'listWeek',

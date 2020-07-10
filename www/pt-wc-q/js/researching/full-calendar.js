@@ -56,6 +56,7 @@ export function define_full_calendar_page(QEWD) {
             properties: ['name', 'date'],
            },
         });
+
        console.log(result);
         await this.renderFullcalendar(result);
       }

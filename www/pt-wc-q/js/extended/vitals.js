@@ -36,6 +36,38 @@ export function vitals_extended_crud(QEWD) {
     let extendedHooks = {
         'adminui-content-page': {
             addButton: function () {
+                $(document).on('init.dt', () => {
+
+                    let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
+                    let card2 = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
+                    console.log('there');
+                    console.log(card2);
+                    card.setState({
+                        cls: 'd-none'
+                    });
+
+                    let table = this.getComponentByName('adminui-datatables', state.name);
+                    console.log('table');
+                    console.log(table);
+                    if(! $(table).find('.this-show-button').length) {
+
+                        let button = document.createElement('button');
+                        $(button).text('Show Chart');
+                        $(button).addClass('this-show-button');
+                        $(button).click(() => {
+
+
+                            card.rootElement.classList.remove('d-none');
+                            card.rootElement.classList.add('d-block');
+
+
+                            card2.rootElement.classList.remove('d-flex');
+                            card2.rootElement.classList.add('d-none');
+
+                        });
+                        $(table).append(button);
+                    }
+                });
                 //  let body = this.getParentComponent('adminui-content-card-body');
             }
         },
@@ -69,9 +101,6 @@ export function vitals_extended_crud(QEWD) {
                                 y: el.systolic_bp,
                             })
                         });
-                        console.log(heartrate);
-                        console.log(resprate);
-                        console.log(systolic_rate);
                         let config = {
                             type: 'scatter',
                             data: {
@@ -112,34 +141,8 @@ export function vitals_extended_crud(QEWD) {
 
                     });
 
-                let card = this.getComponentByName('adminui-row', 'adminui-row-chart');
-                let card2 = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
-                console.log('there');
-                console.log(card2);
-                card.setState({
-                    cls: 'd-none'
-                });
+                let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
 
-                let table = this.getComponentByName('adminui-datatables', state.name);
-                console.log('table');
-                console.log(table);
-                $(table.table).on('init.dt', () => {
-                    let button = document.createElement('button');
-                    $(button).text('Show Chart');
-
-                    $(button).click(() => {
-
-
-                        card.rootElement.classList.remove('d-none');
-                        card.rootElement.classList.add('d-block');
-
-
-                        card2.rootElement.classList.remove('d-flex');
-                        card2.rootElement.classList.add('d-none');
-
-                    });
-                    $(table).append(button);
-                });
             }
         },
 
@@ -151,7 +154,7 @@ export function vitals_extended_crud(QEWD) {
                 let fn = function () {
                     console.log('there5');
 
-                    let card = _this.getComponentByName('adminui-row', 'adminui-row-chart');
+                    let card = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                     let card2 = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
                     card.setState({
                         cls: 'd-none',
@@ -169,51 +172,47 @@ export function vitals_extended_crud(QEWD) {
             },
         }
     };
-
-    let extendedComponent = {
-        children: [{
-            componentName: 'adminui-row',
-            state: {
-                name: 'adminui-row-chart',
-            },
-            children: [
-                {
-                    componentName: 'adminui-content-card',
-                    state: {
-                        name: state.name + '-chart-card'
-                    },
-                    children: [
-                        {
-                            componentName: 'adminui-content-card-header',
-                            children: [
-                                {
-                                    componentName: 'adminui-content-card-button-title',
-                                    state: {
-                                        title: 'Chart data',
-                                        title_colour: state.summary.titleColour,
-                                        icon: 'table',
-                                        buttonColour: state.summary.btnColour,
-                                        tooltip: 'Show CRUD',
-                                        hideButton: false
-                                    },
-                                    hooks: ['showVitals']
-                                }
-                            ]
+    let vitalsGraph = {
+        componentName: 'adminui-content-card',
+        state: {
+            name: state.name + '-chart-card'
+        },
+        children: [
+            {
+                componentName: 'adminui-content-card-header',
+                children: [
+                    {
+                        componentName: 'adminui-content-card-button-title',
+                        state: {
+                            title: 'Chart data',
+                            title_colour: state.summary.titleColour,
+                            icon: 'table',
+                            buttonColour: state.summary.btnColour,
+                            tooltip: 'Show CRUD',
+                            hideButton: false
                         },
-                        {
-                            componentName: 'adminui-content-card-body',
-                            children: [
-                                {
-                                    componentName: 'adminui-chart',
-                                    hooks: ['getChartData']
-                                }
-                            ]
-                        }
-                    ]
-                },
+                        hooks: ['showVitals']
+                    }
+                ]
+            },
+            {
+                componentName: 'adminui-content-card-body',
+                children: [
+                    {
+                        componentName: 'adminui-chart',
+                        hooks: ['getChartData']
+                    }
+                ]
+            }
+        ]
+    };
+    let adminui_row = component.children[1]
+    adminui_row.children.unshift(vitalsGraph);
 
-            ],
-        }]
+    console.log('there123');
+    console.log(component);
+    let extendedComponent = {
+
     };
 
     //Merge whole data block

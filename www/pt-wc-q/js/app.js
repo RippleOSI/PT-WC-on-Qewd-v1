@@ -31,9 +31,11 @@ import {define_map_page} from './map.js';
 //import {define_d3_page} from './d3.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
 
-import {crud_assembly} from '../../components/adminui/components/adminui-crud.js';
+import {crud_assembly} from '../../components/adminui-custom/components/adminui-crud.js';
+
 import {vitals_extended_crud} from "./extended/vitals.js";
 import {events_extended_crud} from "./extended/events.js";
+import {patients_extended_crud} from "./extended/patients.js";
 
 import {userPageState} from './user_state.js';
 
@@ -51,7 +53,7 @@ import {contentPage} from './content-page.js';
 
 
 document.addEventListener('DOMContentLoaded', function() {
-
+  console.log(QEWD);
   QEWD.on('ewd-registered', function() {
 
     QEWD.log = true;
@@ -91,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 
-    webComponents.addComponent('patients', crud_assembly(QEWD, patientsPageState));
+    webComponents.addComponent('patients', patients_extended_crud(QEWD));
 
     webComponents.addComponent('contacts', crud_assembly(QEWD, contactsPageState));
     webComponents.addComponent('diagnosis', crud_assembly(QEWD, diagnosisPageState));
@@ -114,7 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
         fullcalendar:'./components/fullcalendar/'
        /// d3: './components/d3'
       },
-      readyEvent: new Event('ready')
+      readyEvent: new Event('ready'),
+      selectedPatient: null,
+
     };
 
     // this mainview function will be used by the login hook - it will pick it up
@@ -192,7 +196,19 @@ document.addEventListener('DOMContentLoaded', function() {
       root.setState({
         sidebar_colour: 'no-color'
       })
+      /*
+        Forgot about already loaded pages everytime
+       */
+      let contentPageHandler = {
+        get(target, prop) {
+          return null;
+        }
+      };
+      let pagesList = {};
+      let proxy = new Proxy(pagesList,contentPageHandler);
+      root.contentPages = proxy;
       root.sidebarTarget.classList.remove('sidebar-dark');
+
       webComponents.loadGroup(components.initial_sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.login_modal, body, context);
       webComponents.loadGroup(components.footer, root.footerTarget, context);

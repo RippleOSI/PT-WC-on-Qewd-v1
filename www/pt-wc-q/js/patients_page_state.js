@@ -2,6 +2,7 @@ let patientsPageState = {
     assemblyName: 'patients',
     name: 'patients',
     title: 'Patients',
+    patientIdDepends: false,
     summary: {
       title: 'Patients',
       titleColour: 'info',

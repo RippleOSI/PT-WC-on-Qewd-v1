@@ -52,7 +52,8 @@ export function define_topbar(QEWD) {
           componentName: 'adminui-topbar-text',
           state: {
             text: 'My Application',
-            colour: 'warning'
+            colour: 'warning',
+            name: 'header-text',
           },
           hooks: ['updateTopBar1']
         },
