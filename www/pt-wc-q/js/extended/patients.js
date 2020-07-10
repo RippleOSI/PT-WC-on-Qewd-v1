@@ -1,5 +1,5 @@
 import {patientsPageState} from '../patients_page_state.js'
-import {crud_assembly} from '../../../components/adminui-custom/components/adminui-crud.js';
+import {crud_assembly} from '../../../components/adminui-custom/components/adminui-crud-custom.js';
 
 let patients_extended = {
     ...patientsPageState,
