@@ -53,7 +53,7 @@ export function patients_extended_crud(QEWD) {
                             }).then((res) => {
                                 let obj = res.message.record;
                                 component.setState({
-                                    text: 'Patient: ' + obj.name + ',' + obj.age,
+                                    text: 'Patient: ' + obj.firstname +' ' + obj.familyname + ',' + obj.dob,
                                 });
                                 context.selectedPatient = obj;
                             }).catch((err) => {
