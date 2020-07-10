@@ -1,5 +1,5 @@
 import {vitalsPageState} from '../vitals_page_state.js'
-import {crud_assembly} from '../../../components/adminui/components/adminui-crud.js';
+import {crud_assembly} from '../../../components/adminui-custom/components/adminui-crud.js';
 
 let vitals_exteneded = {
     ...vitalsPageState,
