@@ -196,7 +196,19 @@ document.addEventListener('DOMContentLoaded', function() {
       root.setState({
         sidebar_colour: 'no-color'
       })
+      /*
+        Forgot about already loaded pages everytime
+       */
+      let contentPageHandler = {
+        get(target, prop) {
+          return null;
+        }
+      };
+      let pagesList = {};
+      let proxy = new Proxy(pagesList,contentPageHandler);
+      root.contentPages = proxy;
       root.sidebarTarget.classList.remove('sidebar-dark');
+
       webComponents.loadGroup(components.initial_sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.login_modal, body, context);
       webComponents.loadGroup(components.footer, root.footerTarget, context);
