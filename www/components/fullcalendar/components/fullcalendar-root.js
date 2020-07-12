@@ -82,14 +82,11 @@ export function load() {
       });
     }
 
-    renderEvents(eventData, callback) {
+    renderEvents(events, callback) {
       let _this = this;
       let fn = function() {
 
-        let events = eventData.message.summary.map( (el) => { return {
-            title: el.name,
-            start: el.date,
-        }});
+
         console.log(events);
         console.log(_this.rootElement.id);
         if(_this.calendar){

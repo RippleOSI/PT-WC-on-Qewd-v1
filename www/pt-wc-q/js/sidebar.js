@@ -178,7 +178,8 @@ export function define_sidebar() {
         title: 'Contacts',
         icon: 'users',
         contentPage: 'contacts'
-      }
+      },
+      hooks: ['navItemHook'],
     },
     {
       componentName: 'adminui-sidebar-nav-item',
@@ -195,7 +196,7 @@ export function define_sidebar() {
         icon: 'users',
         contentPage: 'diagnosis'
       }
-    }, 
+    },
     {
       componentName: 'adminui-sidebar-nav-item',
       state: {
@@ -333,6 +334,15 @@ export function define_sidebar() {
     }
   ];
 
-  return {component};
+  let hooks = {
+    'adminui-sidebar-nav-item': {
+        navItemHook: function (){
+          var root = document.getElementsByTagName('adminui-root')[0];
+          root.switchToPage('patients');
+          console.log('patients234');
+        }
+    },
+  }
+  return {component, hooks};
 
 };

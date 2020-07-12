@@ -30,6 +30,7 @@ function mergeDeep(...objects) {
 export function patients_extended_crud(QEWD) {
     let {component, hooks} = crud_assembly(QEWD, patients_extended);
     let state = patients_extended;
+    state.patientIdDepends = false;
 
     let extendedHooks = {
         'adminui-datatables': {
@@ -38,7 +39,9 @@ export function patients_extended_crud(QEWD) {
                 let context = this.context;
                 let _this = this;
                 $(table).on('draw.dt', () => {
-                    $(table).on('click', 'adminui-button', function () {
+                   // console.log('sdfsdf');
+
+                    $(document).on('click', 'adminui-button', function () {
                         let id_str = this.parentNode.id;
                         console.log(context);
                         let component = _this.getComponentByName('adminui-topbar-text');

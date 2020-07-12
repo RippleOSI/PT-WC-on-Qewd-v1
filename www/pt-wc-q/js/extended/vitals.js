@@ -73,19 +73,28 @@ export function vitals_extended_crud(QEWD) {
         },
         'adminui-chart': {
             getChartData: function () {
+                let context = this.context;
                 console.log('charts init');
                 QEWD.reply({
                     type: state.summary.qewd.getSummary,
                     params: {
-                        properties: ['heartrate', 'resprate', 'systolic_bp', 'score']
+                        properties: ['heartrate', 'resprate', 'systolic_bp', 'score','patient_id']
                     }
                 })
                     .then((responseObj) => {
                         console.log(responseObj);
 
-                        let data = responseObj.message.summary;
+                        let data =[] ;
                         let heartrate = [], resprate = [], systolic_rate = [];
 
+                        responseObj.message.summary.forEach(function(record) {
+                            if (context.selectedPatient && state.patientIdDepends) {
+                                if (context.selectedPatient.id !== record.patient_id) {
+                                    return true; // SKIP BY FILTER
+                                }
+                            }
+                            data.push(record);
+                        });
 
                         let result = data.forEach(el => {
                             heartrate.push({

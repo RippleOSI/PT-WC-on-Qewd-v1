@@ -51,18 +51,38 @@ export function events_extended_crud(QEWD) {
         'adminui-content-page': {
             addButton: function () {
                 console.log(this.context);
+                let _this = this;
                 $(document).on('draw.dt', () => {
                     console.log('table redraw');
+
                     if (calendarObj) {
                         let result = QEWD.reply({
                             type: 'getEvents',
                             params: {
-                                properties: ['name', 'date'],
+                                properties: ['name', 'date','patient_id'],
                             },
                         }).then((responseObj) => {
-                            calendarObj.renderFullcalendar(responseObj).then((context) => {
-
+                            let data = [];
+                            let context = this.context;
+                            console.log(context);
+                            responseObj.message.summary.forEach(function(record) {
+                                if (context.selectedPatient && state.patientIdDepends) {
+                                    if (context.selectedPatient.id !== record.patient_id) {
+                                        return true; // SKIP BY FILTER
+                                    }
+                                }else{
+                                    console.log('contextmiss');
+                                }
+                                data.push(record);
                             });
+                            let events = data.map( (el) => { return {
+                                title: el.name,
+                                start: el.date,
+                            }});
+                            console.log(events);
+
+                            console.log(events);
+                            calendarObj.renderFullcalendar(events);
                         });
 
                     }
@@ -111,18 +131,17 @@ export function events_extended_crud(QEWD) {
         'fullcalendar-root': {
             getFullcalendar: function () {
                 let _this = this;
+                let context = this.context;
                 if (!calendarObj) {
                     calendarObj = this;
                 }
                 let result = QEWD.reply({
                     type: 'getEvents',
                     params: {
-                        properties: ['name', 'date'],
+                        properties: ['name', 'date','patient_id'],
                     },
                 }).then((responseObj) => {
-                    this.renderFullcalendar(responseObj).then((context) => {
 
-                    });
 
                 });
 

@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
       let components = webComponents.components;
       webComponents.loadGroup(components.sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.topbar, root.topbarTarget, context);
-      webComponents.loadGroup(components.dashboard_page, root.contentTarget, context);
+      webComponents.loadGroup(components.patients, root.contentTarget, context);
       webComponents.loadGroup(components.logout_modal, body, context);
     }
     context.loadMainView = loadMainView;
@@ -196,6 +196,18 @@ document.addEventListener('DOMContentLoaded', function() {
       root.setState({
         sidebar_colour: 'no-color'
       })
+
+      let cachedFunction = root.switchToPage;
+      cachedFunction = cachedFunction.bind(root);
+
+      root.switchToPage = function (option) {
+        console.log(option);
+        if(option !=='patients' && !context.selectedPatient){
+          cachedFunction('patients');
+        }else{
+          cachedFunction(option);
+        }
+      }
       /*
         Forgot about already loaded pages everytime
        */
