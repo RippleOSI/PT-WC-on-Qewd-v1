@@ -6,10 +6,48 @@ export function define_topbar(QEWD) {
     {
       componentName: 'adminui-topbar-toggler'
     },
-
+    {
+      componentName: 'adminui-topbar-search',
+      state: {
+        placeholder: 'enter search..'
+      },
+      hooks: ['search']
+    },
     {
       componentName: 'adminui-topbar-navbar',
       children: [
+        {
+          componentName: 'adminui-topbar-navbar-dropdown',
+          state: {
+            ref: 'alerts',
+            icon: 'bell',
+            title: 'Your Alerts'
+          },
+          hooks: ['getMessages']
+        },
+        {
+          componentName: 'adminui-topbar-navbar-dropdown',
+          state: {
+            ref: 'messages',
+            icon: 'envelope',
+            title: 'Your Messages'
+          },
+          hooks: ['getMessages']
+        },
+        {
+          componentName: 'adminui-topbar-divider'
+        },
+        {
+          componentName: 'adminui-topbar-navbar-menu',
+          state: {
+            ref: 'topmenu',
+            title: 'Your Options'
+          },
+          hooks: ['getOptions']
+        },
+        {
+          componentName: 'adminui-topbar-divider'
+        },
         {
           componentName: 'adminui-topbar-text',
           state: {
@@ -19,6 +57,9 @@ export function define_topbar(QEWD) {
           },
           hooks: ['updateTopBar1']
         },
+        {
+          componentName: 'adminui-topbar-divider'
+        }
       ]
     }
   ];

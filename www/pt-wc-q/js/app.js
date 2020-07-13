@@ -113,7 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
       paths: {
         adminui: './components/adminui/',
         leaflet: './components/leaflet/',
-        fullcalendar:'./components/fullcalendar/'
+        fullcalendar:'./components/fullcalendar/',
+        ptwq: './components/ptwq/',
        /// d3: './components/d3'
       },
       readyEvent: new Event('ready'),

@@ -181,7 +181,14 @@ export function crud_assembly(QEWD, state) {
             ]
           }
         ]
-      }
+      },
+      {
+        componentName: 'ptwq-breadcumps',
+        state: {
+          title: state.title,
+          name: 'asd',
+        }
+      },
     ]
   };
 
