@@ -113,8 +113,14 @@ export function summary_assembly(QEWD, state_array) {
                     });
 
                     let obj = {
+
                         data: data,
-                        columns: columns
+                        columns: columns,
+                        searching: false,
+                        bLengthChange: false,
+                        paging: false,
+                        bInfo : false
+
                     };
 
                     table.render(obj);
