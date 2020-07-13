@@ -25,12 +25,15 @@ function build_summary_card(state) {
                 componentName: 'adminui-content-card-body',
                 children: [
                     {
-                        componentName: 'adminui-datatables',
+                        componentName: 'ptwq-datatables',
                         state: {
                             name: state.name,
-                            qewdRequest: state.summary.qewd.getSummary,
-                            headers: state.summary.headers,
-                            data_properties: state.summary.data_properties
+                            options: {
+                                qewdRequest: state.summary.qewd.getSummary,
+                                headers: state.summary.headers,
+                                data_properties: state.summary.data_properties
+                            },
+
                         },
                         hooks: ['retrieveRecordSummary']
                     }
@@ -49,40 +52,44 @@ function build_summary_card(state) {
 export function summary_assembly(QEWD, state_array) {
 
     let componentBlocks = [];
-    state_array.forEach((key,value)=>{
+
+    state_array.forEach((value,key)=>{
        componentBlocks.push(build_summary_card(value));
     });
+
     let component = {
         componentName: 'adminui-content-page',
-        assemblyName: state.assemblyName,
+        assemblyName: 'psummary',
         state: {
-            name: state.name
+            name: 'psummary'
         },
-        hooks: ['loadModal'],
         children: [
             {
                 componentName: 'adminui-content-page-header',
                 state: {
-                    title: state.title
+                    title: 'Summary'
                 }
             },
             {
                 componentName: 'adminui-row',
-                children: state_array,
+                children: componentBlocks,
             }
         ]
 
     };
+
     let hooks = {
-        'adminui-datatables': {
+        'ptwq-datatables': {
 
             retrieveRecordSummary: async function() {
                 let table = this;
+                console.log('load hooks');
+                console.log(this.options);
 
                 let responseObj = await QEWD.reply({
-                    type: state.summary.qewd.getSummary,
+                    type: this.options.qewdRequest,
                     params: {
-                        properties: state.summary.data_properties
+                        properties: this.options.data_properties
                     }
                 });
                 if (!responseObj.message.error) {
@@ -91,24 +98,20 @@ export function summary_assembly(QEWD, state_array) {
                     responseObj.message.summary.forEach(function(record) {
                         table.data[record.id] = record;
                         let row = [];
-                        state.summary.data_properties.forEach(function(property) {
+                        table.options.data_properties.forEach(function(property) {
                             row.push(record[property]);
                         });
                         row.push(record.id);
-                        if (state.summary.enableDelete) {
-                            row.push('');
-                        }
+
                         data.push(row);
                     });
                     let columns = [];
-                    let noOfCols = state.summary.headers.length;
+                    let noOfCols = table.options.headers.length;
 
-                    state.summary.headers.forEach(function(header) {
+                    table.options.headers.forEach(function(header) {
                         columns.push({title: header});
                     });
-                    if (state.summary.enableDelete) {
-                        columns.push({title: 'Delete'});
-                    }
+
                     let obj = {
                         data: data,
                         columns: columns
@@ -121,53 +124,16 @@ export function summary_assembly(QEWD, state_array) {
                         let td = row.find('td').eq(noOfCols - 1)[0];
                         let id = td.textContent;
                         table.row = table.data[id];
-                        td.id = state.name + '-record-' + id;
+                        td.id = table.name + '-record-' + id;
                         td.textContent = '';
-                        if (state.summary.enableDelete) {
-                            td = row.find('td').eq(noOfCols)[0];
-                            td.id = state.name + '-delete-' + id;
-                            let confirmTextFn = state.summary.deleteConfirmText;
-                            let confirmText;
-                            if (typeof confirmTextFn === 'function') {
-                                confirmText = confirmTextFn.call(table);
-                            }
-                            else {
-                                let name_td = row.find('td').eq(0)[0];
-                                confirmText = name_td.textContent;
-                            }
-                            td.setAttribute('data-confirm', confirmText);
-                        }
+
                     });
 
                     table.datatable.rows({page: 'current'}).every(function(index, element) {
                         let row = $(this.node());
                         let td = row.find('td').eq(noOfCols - 1)[0];
-                        table.loadGroup(showRecordBtn, td, table.context);
-                        if (state.summary.enableDelete) {
-                            td = row.find('td').eq(noOfCols)[0];
-                            table.loadGroup(deleteBtn, td, table.context);
-                        }
                     });
 
-                    table.datatable.on('draw', function() {
-                        table.datatable.rows({page: 'current'}).every(function(index, element) {
-                            let row = $(this.node());
-                            let td = row.find('td').eq(2)[0];
-                            let btn = td.querySelector('adminui-button');
-                            if (btn) {
-                                td.removeChild(btn);
-                            }
-                            table.loadGroup(showRecordBtn, td, table.context);
-                            if (state.summary.enableDelete) {
-                                td = row.find('td').eq(3)[0];
-                                btn = td.querySelector('adminui-button');
-                                if (btn) {
-                                    td.removeChild(btn);
-                                }
-                                table.loadGroup(deleteBtn, td, table.context);
-                            }
-                        });
-                    });
                 }
                 //});
             }

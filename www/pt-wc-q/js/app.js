@@ -32,7 +32,7 @@ import {define_map_page} from './map.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
 
 import {crud_assembly} from '../../components/adminui-custom/components/adminui-crud-custom.js';
-
+import {summary_assembly} from '../../components/ptwq/assembly/ptwq-summary-assembly.js';
 import {vitals_extended_crud} from "./extended/vitals.js";
 import {events_extended_crud} from "./extended/events.js";
 import {patients_extended_crud} from "./extended/patients.js";
@@ -102,6 +102,13 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
     webComponents.addComponent('vitals', vitals_extended_crud(QEWD, vitalsPageState));
     webComponents.addComponent('events', events_extended_crud(QEWD, eventsPageState));
+      webComponents.addComponent('psummary', summary_assembly(QEWD,
+          [
+              vitalsPageState,
+              eventsPageState,
+              allergiesPageState,
+              medicationsPageState
+          ]));
 
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 /*
@@ -171,6 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('events', webComponents.components.events);
     webComponents.register('map', webComponents.components.map_page);
     webComponents.register('full_calendar', webComponents.components.fullcalendar_page);
+    webComponents.register('psummary', webComponents.components.psummary);
+
 
     // webComponents.register('d3', webComponents.components.d3_page);
 

@@ -224,6 +224,14 @@ export function define_sidebar() {
     {
       componentName: 'adminui-sidebar-nav-item',
       state: {
+        title: 'PSummary',
+        icon: 'users',
+        contentPage: 'psummary'
+      }
+    },
+    {
+      componentName: 'adminui-sidebar-nav-item',
+      state: {
         title: 'Vitals',
         icon: 'users',
         contentPage: 'vitals'
