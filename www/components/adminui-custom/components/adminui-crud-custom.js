@@ -76,6 +76,13 @@ export function crud_assembly(QEWD, state) {
     hooks: ['loadModal'],
     children: [
       {
+        componentName: 'ptwq-topheader',
+        state: {
+          title: state.title,
+          name: 'top-header-patient',
+        }
+      },
+      {
         componentName: 'adminui-content-page-header',
         state: {
           title: state.title
@@ -182,15 +189,9 @@ export function crud_assembly(QEWD, state) {
           }
         ]
       },
-      {
-        componentName: 'ptwq-breadcumps',
-        state: {
-          title: state.title,
-          name: 'asd',
-        }
-      },
     ]
   };
+
 
   let showRecordBtn = {
     componentName: 'adminui-button',

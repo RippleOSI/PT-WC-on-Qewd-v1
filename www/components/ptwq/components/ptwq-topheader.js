@@ -30,7 +30,7 @@
 
 export function load() {
 
-  let componentName = 'ptwq_topheader';
+  let componentName = 'ptwq-topheader';
 
   class ptwq_topheader extends HTMLElement {
     constructor() {

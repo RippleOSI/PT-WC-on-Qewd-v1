@@ -2,7 +2,7 @@
 
 import {webComponents} from '../../mg-webComponents.js';
 import {QEWD} from '../../qewd-client.js';
-
+import {cSchemaLookup} from "./utils/cSchemaLookup.js";
 // import the individual component configuration files
 //   they can be maintained independently as a result
 
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       readyEvent: new Event('ready'),
       selectedPatient: null,
-
+      schemaLookup: cSchemaLookup,
     };
 
     // this mainview function will be used by the login hook - it will pick it up

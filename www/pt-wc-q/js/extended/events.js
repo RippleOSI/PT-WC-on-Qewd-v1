@@ -1,5 +1,6 @@
 import {eventsPageState} from '../events_page_state.js'
 import {crud_assembly} from '../../../components/adminui-custom/components/adminui-crud-custom.js';
+import {cSchemaLookup} from "../utils/cSchemaLookup.js";
 
 let events_exteneded = {
     ...eventsPageState,
@@ -219,7 +220,7 @@ export function events_extended_crud(QEWD) {
 
         ]
     };
-    let adminui_row = component.children[1]
+    let adminui_row = cSchemaLookup(component,'adminui-row');
     adminui_row.children.unshift(eventsBlock);
 
     //Merge whole data block

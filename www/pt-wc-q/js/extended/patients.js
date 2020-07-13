@@ -1,5 +1,6 @@
 import {patientsPageState} from '../patients_page_state.js'
 import {crud_assembly} from '../../../components/adminui-custom/components/adminui-crud-custom.js';
+import {cSchemaLookup} from "../utils/cSchemaLookup.js";
 
 let patients_extended = {
     ...patientsPageState,
@@ -68,8 +69,8 @@ export function patients_extended_crud(QEWD) {
             }
         },
     }
-
-    let adminui_row = component.children[1];
+    console.log(this);
+    let adminui_row = cSchemaLookup(component,'adminui-row');
     let datatable = adminui_row.children[0].children[1].children[0];
     datatable.hooks.push('patientDatatableExtendHook');
 

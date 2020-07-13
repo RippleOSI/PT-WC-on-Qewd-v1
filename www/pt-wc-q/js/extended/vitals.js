@@ -1,5 +1,6 @@
 import {vitalsPageState} from '../vitals_page_state.js'
 import {crud_assembly} from '../../../components/adminui-custom/components/adminui-crud-custom.js';
+import {cSchemaLookup} from "../utils/cSchemaLookup.js";
 
 let vitals_exteneded = {
     ...vitalsPageState,
@@ -215,7 +216,7 @@ export function vitals_extended_crud(QEWD) {
             }
         ]
     };
-    let adminui_row = component.children[1]
+    let adminui_row = cSchemaLookup(component,'adminui-row');
     adminui_row.children.unshift(vitalsGraph);
 
     console.log('there123');
