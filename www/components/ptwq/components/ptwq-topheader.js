@@ -37,7 +37,9 @@ export function load() {
       super();
 
       const html = `
-<div class="row"></div>
+<div class="d-sm-flex align-items-center justify-content-between mb-4 bg-white">
+  <h1 class="h3 mb-0 text-gray-800">Undefined Header</h1>
+</div>
       `;
 
       this.html = `${html}`;
@@ -47,9 +49,15 @@ export function load() {
       if (state.name) {
         this.name = state.name;
       }
+      if(state.title){
+        this.headerElement.textContext = state.title;
+      }
       if (state.cls) {
         let _this = this;
+        this.rootElement.className = '';
+
         state.cls.split(' ').forEach(function(cls) {
+
           _this.rootElement.classList.add(cls);
         });
       }
@@ -58,6 +66,8 @@ export function load() {
     connectedCallback() {
       this.innerHTML = this.html;
       this.rootElement = this.getElementsByTagName('div')[0];
+      this.headerElement = this.rootElement.querySelector('h1');
+
       this.childrenTarget = this.rootElement;
     }
 
