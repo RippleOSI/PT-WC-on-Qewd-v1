@@ -45,7 +45,7 @@ export function patients_extended_crud(QEWD) {
                     $(document).on('click', 'adminui-button', function () {
                         let id_str = this.parentNode.id;
                         console.log(context);
-                        let component = _this.getComponentByName('adminui-topbar-text');
+                        let component = _this.getComponentByName('ptwq-topheader','top-header-patient');
                         console.log(component);
                         if (id_str && id_str.includes('patients-record-')) {
                             let id = this.parentNode.id.split('record-')[1];
@@ -59,7 +59,11 @@ export function patients_extended_crud(QEWD) {
                                 component.setState({
                                     title: 'Patient: ' + obj.firstname +' ' + obj.familyname + ',' + obj.dob,
                                 });
+
                                 context.selectedPatient = obj;
+
+                                var root = document.getElementsByTagName('adminui-root')[0];
+                                root.switchToPage('psummary');
                             }).catch((err) => {
 
                             });

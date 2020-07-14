@@ -37,8 +37,8 @@ export function load() {
       super();
 
       const html = `
-<div class="d-sm-flex align-items-center justify-content-between mb-4 bg-white">
-  <h1 class="h3 mb-0 text-gray-800">Undefined Header</h1>
+<div class="align-items-center justify-content-between mb-4 bg-white d-none">
+  <h4 class="h5 mb-0 text-gray-800 pt-5 pb-5 pr-1 pl-1">Undefined Header</h4>
 </div>
       `;
 
@@ -50,7 +50,9 @@ export function load() {
         this.name = state.name;
       }
       if(state.title){
-        this.headerElement.textContext = state.title;
+        this.headerElement.textContent = state.title;
+        this.rootElement.classList.remove('d-none');
+        this.rootElement.classList.add('d-sm-flex');
       }
       if (state.cls) {
         let _this = this;
@@ -66,7 +68,7 @@ export function load() {
     connectedCallback() {
       this.innerHTML = this.html;
       this.rootElement = this.getElementsByTagName('div')[0];
-      this.headerElement = this.rootElement.querySelector('h1');
+      this.headerElement = this.rootElement.querySelector('h4');
 
       this.childrenTarget = this.rootElement;
     }

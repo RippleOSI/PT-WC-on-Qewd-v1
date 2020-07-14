@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('initial_sidebar', define_initial_sidebar());
     webComponents.addComponent('sidebar', define_sidebar());
     webComponents.addComponent('topbar', define_topbar(QEWD));
+
     webComponents.addComponent('footer', define_footer());
     webComponents.addComponent('dashboard_page', define_dashboard_page(QEWD));
     webComponents.addComponent('charts_page', define_charts_page(QEWD));

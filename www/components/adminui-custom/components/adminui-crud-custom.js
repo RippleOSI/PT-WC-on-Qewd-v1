@@ -78,7 +78,6 @@ export function crud_assembly(QEWD, state) {
       {
         componentName: 'ptwq-topheader',
         state: {
-          title: state.title,
           name: 'top-header-patient',
         }
       },

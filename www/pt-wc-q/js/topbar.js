@@ -61,7 +61,7 @@ export function define_topbar(QEWD) {
           componentName: 'adminui-topbar-divider'
         }
       ]
-    }
+    },
   ];
 
   let hooks = {
