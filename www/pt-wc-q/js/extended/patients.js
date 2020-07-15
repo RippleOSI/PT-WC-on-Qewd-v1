@@ -56,42 +56,13 @@ export function patients_extended_crud(QEWD) {
                                 }
                             }).then((res) => {
                                 let obj = res.message.record;
-                                var html = `
-  <div class="row">
-  <div class="col-sm-8">
-    <div class="h4">
-    ${obj.firstname}  ${obj.familyname}
-    </div>
-    <div>
-      ${obj.address}
-    </div>
-  </div>
-  <div class="col-sm-2">
-    <div>
-      DOB.: ${obj.dob}
-    </div>
-    <div>
-      Phone: ${obj.phone}
-    </div>
-  </div>
-  <div class="col-sm-2">
-    <div>
-      Gender: ${obj.gender}
-    </div>
-    <div>
-      IHI No. ${obj.id_uniqueID}
-    </div>
-  </div>
-</div>
-
-`;
                                 component.setState({
-                                    html:html
+                                    patient:obj
                                 });
 
                                 context.selectedPatient = obj;
 
-                                var root = document.getElementsByTagName('adminui-root')[0];
+                                var root = document.getElementsByTagName('ptwq-root')[0];
                                 root.switchToPage('psummary');
                             }).catch((err) => {
 

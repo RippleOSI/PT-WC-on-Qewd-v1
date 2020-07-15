@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
     webComponents.addComponent('vitals', vitals_extended_crud(QEWD, vitalsPageState));
     webComponents.addComponent('events', events_extended_crud(QEWD, eventsPageState));
-      webComponents.addComponent('psummary', summary_assembly(QEWD,
+    webComponents.addComponent('psummary', summary_assembly(QEWD,
           [
               vitalsPageState,
               eventsPageState,
@@ -141,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
       webComponents.loadGroup(components.sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.topbar, root.topbarTarget, context);
       webComponents.loadGroup(components.selected_patient, root.subheaderTarget, context);
-
       webComponents.loadGroup(components.patients, root.contentTarget, context);
       webComponents.loadGroup(components.logout_modal, body, context);
     }
