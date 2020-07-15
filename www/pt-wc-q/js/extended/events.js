@@ -49,7 +49,7 @@ export function events_extended_crud(QEWD) {
 
 
     let extendedHooks = {
-        'adminui-content-page': {
+        'ptwq-content-page': {
             addButton: function () {
                 console.log(this.context);
                 let _this = this;

@@ -35,7 +35,7 @@ export function vitals_extended_crud(QEWD) {
 
 
     let extendedHooks = {
-        'adminui-content-page': {
+        'ptwq-content-page': {
             addButton: function () {
                 $(document).on('init.dt', () => {
 

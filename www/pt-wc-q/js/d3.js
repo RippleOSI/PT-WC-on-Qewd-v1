@@ -9,7 +9,7 @@ export function define_d3_page(QEWD) {
   let hooks = nodeComponent.hooks;
 
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     state: {
       name: 'd3'
     },

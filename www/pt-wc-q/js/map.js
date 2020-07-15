@@ -1,7 +1,7 @@
 export function define_map_page() {
 
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     state: {
       name: 'map'
     },

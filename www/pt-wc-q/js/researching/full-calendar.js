@@ -2,7 +2,7 @@ export function define_full_calendar_page(QEWD) {
   console.log('start definition');
   console.log(QEWD);
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     state: {
       name: 'full_calendar_page',
       crud_params: {
