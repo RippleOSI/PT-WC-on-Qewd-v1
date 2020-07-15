@@ -210,17 +210,17 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebar_colour: 'no-color'
       })
 
-      let cachedFunction = root.switchToPage;
-      cachedFunction = cachedFunction.bind(root);
 
-      root.switchToPage = function (option) {
-        console.log(option);
-        if(option !=='patients' && !context.selectedPatient){
-          cachedFunction('patients');
-        }else{
-          cachedFunction(option);
-        }
-      }
+      root.registerMiddleware(
+          'WHOLE_WEBSITE',
+          'redirect_to_patient_if_patient_not_selected',
+          function(pageName){
+            if(pageName !=='patients' && !context.selectedPatient){
+              return 'patients';
+            }else{
+              return pageName;
+            }
+          });
 
       root.sidebarTarget.classList.remove('sidebar-dark');
 

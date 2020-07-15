@@ -102,12 +102,6 @@ export function load() {
             }
         }
         setLine(classname, contents){
-            console.log(classname);
-            console.log( this.rootElement
-                .querySelector(
-                    '.topheader-patient-'
-                    + classname
-                ));
             this.rootElement
                 .querySelector(
                     '.topheader-patient-'
@@ -115,6 +109,7 @@ export function load() {
                 ).textContent = contents;
             return;
         }
+
         connectedCallback() {
             this.innerHTML = this.html;
             this.rootElement = this.getElementsByTagName('div')[0];

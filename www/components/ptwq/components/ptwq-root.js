@@ -94,6 +94,30 @@ export function load() {
     }
 
     switchToPage(pageName) {
+      if(this.middlewareArray['WHOLE_WEBSITE']){
+        for (const [key, callback] of Object.entries(this.middlewareArray['WHOLE_WEBSITE'])) {
+
+          // Set ptwq-root as main context for middleware
+          callback.bind(this);
+          console.log(key);
+
+          // Keep exists ptwq-root or change goal page name
+          pageName = callback(pageName);
+        }
+      }
+
+      if(this.middlewareArray[pageName]){
+        for (const [key, callback] of Object.entries(this.middlewareArray[pageName])) {
+
+          // Set ptwq-root as main context for middleware
+          callback.bind(this);
+          console.log(key);
+
+          // Keep exists ptwq-root or change goal page name
+          pageName = callback(pageName);
+        }
+      }
+
       let config = this.getInstanceFromRegistry(pageName);
       if (config) {
         this.loadGroup(config, this.contentTarget, this.context);
@@ -196,9 +220,33 @@ export function load() {
       this.subheaderTarget = this.rootElement.querySelector('#subheader-content');
       this.contentTarget = this.rootElement.querySelector('#pageContent');
       this.footerTarget = this.rootElement.querySelector('#footerContent');
-      this.name = 'root'
+      this.middlewareArray = [];
+      this.name = 'root';
 
     }
+
+    /**
+     * Register middleware for page swap checking
+     * @param page
+     * @param uniqueName
+     * @param callback function with parameters
+     * @param parameters
+     */
+    registerMiddleware(page, uniqueName , callback, parameters){
+        if(!this.middlewareArray[page]){
+            this.middlewareArray[page] = [];
+        }
+        this.middlewareArray[page][uniqueName] = callback;
+    }
+
+    removeMiddleware(page, uniqueName){
+      if(this.middlewareArray[page] &&
+          this.middlewareArray[page][uniqueName]){
+        this.middlewareArray[page][uniqueName] = null;
+      }
+    }
+
+
 
     disconnectedCallback() {
       if (this.onUnload) this.onUnload();
