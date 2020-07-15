@@ -94,17 +94,10 @@ export function load() {
     }
 
     switchToPage(pageName) {
-      if (!this.contentPages[pageName]) {
-        let config = this.getInstanceFromRegistry(pageName);
-        if (config) {
-          this.loadGroup(config, this.contentTarget, this.context);
-          this.contentPages[pageName] = true;
-          // setPageActive will get triggered when page config is loaded
-        }
-      }
-      else {
-        // already attached
-        this.setPageActive(pageName);
+      let config = this.getInstanceFromRegistry(pageName);
+      if (config) {
+        this.loadGroup(config, this.contentTarget, this.context);
+        // setPageActive will get triggered when page config is loaded
       }
     }
 
@@ -203,7 +196,6 @@ export function load() {
       this.subheaderTarget = this.rootElement.querySelector('#subheader-content');
       this.contentTarget = this.rootElement.querySelector('#pageContent');
       this.footerTarget = this.rootElement.querySelector('#footerContent');
-      this.contentPages = {};
       this.name = 'root'
 
     }
