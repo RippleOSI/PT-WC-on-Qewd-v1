@@ -30,7 +30,7 @@ import {define_blank_page} from './blank-page.js';
 import {define_map_page} from './map.js';
 //import {define_d3_page} from './d3.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
-
+import {define_selected_patient_bar} from "./selected-patient-bar.js";
 import {crud_assembly} from '../../components/adminui-custom/components/adminui-crud-custom.js';
 import {summary_assembly} from '../../components/ptwq/assembly/ptwq-summary-assembly.js';
 import {vitals_extended_crud} from "./extended/vitals.js";
@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('initial_sidebar', define_initial_sidebar());
     webComponents.addComponent('sidebar', define_sidebar());
     webComponents.addComponent('topbar', define_topbar(QEWD));
+    webComponents.addComponent('selected_patient', define_selected_patient_bar(QEWD));
 
     webComponents.addComponent('footer', define_footer());
     webComponents.addComponent('dashboard_page', define_dashboard_page(QEWD));
@@ -135,10 +136,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function loadMainView() {
       let body = document.getElementsByTagName('body')[0];
-      let root = webComponents.getComponentByName('adminui-root', 'root');
+      let root = webComponents.getComponentByName('ptwq-root', 'root');
       let components = webComponents.components;
       webComponents.loadGroup(components.sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.topbar, root.topbarTarget, context);
+      webComponents.loadGroup(components.selected_patient, root.subheaderTarget, context);
+
       webComponents.loadGroup(components.patients, root.contentTarget, context);
       webComponents.loadGroup(components.logout_modal, body, context);
     }
@@ -202,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // now load up the initial view
 
-    webComponents.loadWebComponent('adminui-root', body, context, function(root) {
+    webComponents.loadWebComponent('ptwq-root', body, context, function(root) {
       let components = webComponents.components;
       root.setState({
         sidebar_colour: 'no-color'

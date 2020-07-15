@@ -30,55 +30,57 @@
 
 export function load() {
 
-  let componentName = 'ptwq-topheader';
+  let counter = -1;
+  let componentName = 'ptwq-content-page';
+  let id_prefix = componentName + '-';
 
-  class ptwq_topheader extends HTMLElement {
+  class ptwq_content_page extends HTMLElement {
     constructor() {
       super();
 
-      const html = `
-<div class="align-items-center justify-content-between mb-4 bg-white d-none">
-  <div id="contents" style="width: 100%">Undefined Header</div>
-</div>
-      `;
+      counter++;
+      let id = id_prefix + counter;
 
+      const html = `
+<div class="collapse multi-collapse" id="${id}"></div>
+      `;
       this.html = `${html}`;
+    }
+
+    onLoaded() {
+      console.log(this.name + ' page loaded!');
+      var root = document.getElementsByTagName('ptwq-root')[0];
+      root.setPageActive(this.name);
     }
 
     setState(state) {
       if (state.name) {
         this.name = state.name;
       }
-      if(state.html){
-        this.headerElement.innerHTML = state.html;
-        this.rootElement.classList.remove('d-none');
-        this.rootElement.classList.add('d-sm-flex');
-      }
-      if (state.cls) {
-        let _this = this;
-        this.rootElement.className = '';
-
-        state.cls.split(' ').forEach(function(cls) {
-
-          _this.rootElement.classList.add(cls);
+      if (state.show && !this.rootElement.classList.contains('show')) {
+        let children = [...this.parentNode.childNodes];
+        children.forEach(function(child) {
+          if (child.tagName === 'PTWQ-CONTENT-PAGE') {
+            child.rootElement.classList.remove('show');
+          }
         });
+        this.rootElement.classList.add('show');
       }
     }
 
     connectedCallback() {
       this.innerHTML = this.html;
       this.rootElement = this.getElementsByTagName('div')[0];
-      this.headerElement = this.rootElement.querySelector('#contents');
-
       this.childrenTarget = this.rootElement;
+      this.name = id_prefix + counter;
     }
 
     disconnectedCallback() {
-      console.log('*** row component was removed!');
+      console.log('*** page component was removed!');
       if (this.onUnload) this.onUnload();
     }
   }
 
-  customElements.define(componentName, ptwq_topheader);
+  customElements.define(componentName, ptwq_content_page);
 
 }

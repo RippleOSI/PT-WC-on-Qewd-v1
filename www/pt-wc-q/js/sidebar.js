@@ -8,7 +8,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Dashboard',
         icon: 'tachometer-alt',
@@ -141,7 +141,7 @@ export function define_sidebar() {
     },
 
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Charts',
         icon: 'chart-area',
@@ -149,7 +149,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Full Calendar',
         icon: 'table',
@@ -157,7 +157,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Tables',
         icon: 'table',
@@ -165,7 +165,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Patients',
         icon: 'users',
@@ -173,7 +173,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Contacts',
         icon: 'users',
@@ -182,7 +182,7 @@ export function define_sidebar() {
       hooks: ['navItemHook'],
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Events',
         icon: 'users',
@@ -190,7 +190,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Problems/Diagnoses',
         icon: 'users',
@@ -198,7 +198,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Medications',
         icon: 'users',
@@ -206,7 +206,7 @@ export function define_sidebar() {
       }
     },
        {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Allergies',
         icon: 'users',
@@ -214,7 +214,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Vaccinations',
         icon: 'users',
@@ -222,7 +222,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'PSummary',
         icon: 'users',
@@ -230,7 +230,7 @@ export function define_sidebar() {
       }
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Vitals',
         icon: 'users',
@@ -327,7 +327,7 @@ export function define_sidebar() {
       componentName: 'adminui-sidebar-divider',
     },
     {
-      componentName: 'adminui-sidebar-nav-item',
+      componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Logout',
         icon: 'power-off',
@@ -343,7 +343,7 @@ export function define_sidebar() {
   ];
 
   let hooks = {
-    'adminui-sidebar-nav-item': {
+    'ptwq-sidebar-nav-item': {
         navItemHook: function (){
           var root = document.getElementsByTagName('adminui-root')[0];
           root.switchToPage('patients');

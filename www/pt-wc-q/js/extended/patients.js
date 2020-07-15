@@ -40,12 +40,12 @@ export function patients_extended_crud(QEWD) {
                 let context = this.context;
                 let _this = this;
                 $(table).on('draw.dt', () => {
-                   // console.log('sdfsdf');
+                    // console.log('sdfsdf');
 
                     $(document).on('click', 'adminui-button', function () {
                         let id_str = this.parentNode.id;
                         console.log(context);
-                        let component = _this.getComponentByName('ptwq-topheader','top-header-patient');
+                        let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
                         console.log(component);
                         if (id_str && id_str.includes('patients-record-')) {
                             let id = this.parentNode.id.split('record-')[1];
@@ -56,8 +56,37 @@ export function patients_extended_crud(QEWD) {
                                 }
                             }).then((res) => {
                                 let obj = res.message.record;
+                                var html = `
+  <div class="row">
+  <div class="col-sm-8">
+    <div class="h4">
+    ${obj.firstname}  ${obj.familyname}
+    </div>
+    <div>
+      ${obj.address}
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <div>
+      DOB.: ${obj.dob}
+    </div>
+    <div>
+      Phone: ${obj.phone}
+    </div>
+  </div>
+  <div class="col-sm-2">
+    <div>
+      Gender: ${obj.gender}
+    </div>
+    <div>
+      IHI No. ${obj.id_uniqueID}
+    </div>
+  </div>
+</div>
+
+`;
                                 component.setState({
-                                    title: 'Patient: ' + obj.firstname +' ' + obj.familyname + ',' + obj.dob,
+                                    html:html
                                 });
 
                                 context.selectedPatient = obj;
@@ -74,7 +103,7 @@ export function patients_extended_crud(QEWD) {
         },
     }
     console.log(this);
-    let adminui_row = cSchemaLookup(component,'adminui-row');
+    let adminui_row = cSchemaLookup(component, 'adminui-row');
     let datatable = adminui_row.children[0].children[1].children[0];
     datatable.hooks.push('patientDatatableExtendHook');
 

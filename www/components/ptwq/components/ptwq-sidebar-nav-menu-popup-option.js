@@ -26,59 +26,60 @@
 
  8 March 2020
 
-*/
+ */
 
 export function load() {
 
-  let componentName = 'ptwq-topheader';
+  let componentName = 'ptwq-sidebar-nav-menu-popup-option';
 
-  class ptwq_topheader extends HTMLElement {
+  class ptwq_sidebar_nav_menu_popup_option extends HTMLElement {
     constructor() {
       super();
 
       const html = `
-<div class="align-items-center justify-content-between mb-4 bg-white d-none">
-  <div id="contents" style="width: 100%">Undefined Header</div>
-</div>
+<a class="collapse-item" href="#">Undefined Option</a>
       `;
 
       this.html = `${html}`;
     }
 
-    setState(state) {
-      if (state.name) {
-        this.name = state.name;
-      }
-      if(state.html){
-        this.headerElement.innerHTML = state.html;
-        this.rootElement.classList.remove('d-none');
-        this.rootElement.classList.add('d-sm-flex');
-      }
-      if (state.cls) {
-        let _this = this;
-        this.rootElement.className = '';
-
-        state.cls.split(' ').forEach(function(cls) {
-
-          _this.rootElement.classList.add(cls);
-        });
-      }
-    }
-
     connectedCallback() {
       this.innerHTML = this.html;
-      this.rootElement = this.getElementsByTagName('div')[0];
-      this.headerElement = this.rootElement.querySelector('#contents');
+      this.rootElement = this.getElementsByTagName('a')[0];
+    }
 
-      this.childrenTarget = this.rootElement;
+    getParentMenuComponent() {
+      function findParent(node) {
+        node = node.parentNode;
+        if (node.tagName === 'ADMINUI-SIDEBAR-NAV-COLLAPSE-MENU') return node;
+        return findParent(node);
+      }
+      return findParent(this);
+    }
+
+    setState(state) {
+      var rootElement = this.rootElement;
+      if (state.text) rootElement.textContent = state.text;
+      if (state.contentPage) {
+        let _this = this;
+        this.pageSelect = function() {
+          console.log('switch to page ' + state.contentPage);
+          var root = document.getElementsByTagName('ptwq-root')[0];
+          root.switchToPage(state.contentPage);
+          var menu = _this.getParentMenuComponent();
+          menu.setState({show: false});
+        };
+        this.rootElement.addEventListener('click', this.pageSelect);
+      }
     }
 
     disconnectedCallback() {
-      console.log('*** row component was removed!');
+      console.log('*** nav-collapse-menu-popup-option was removed!');
+      if (this.pageSelect) this.rootElement.addEventListener('click', this.pageSelect);
       if (this.onUnload) this.onUnload();
     }
   }
 
-  customElements.define(componentName, ptwq_topheader);
+  customElements.define(componentName, ptwq_sidebar_nav_menu_popup_option);
 
 }

@@ -68,7 +68,7 @@ export function crud_assembly(QEWD, state) {
   }
 
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     assemblyName: state.assemblyName,
     state: {
       name: state.name
@@ -262,7 +262,7 @@ export function crud_assembly(QEWD, state) {
 
   let hooks = {
 
-    'adminui-content-page': {
+    'ptwq-content-page': {
 
       loadModal: function() {
         let modal = this.getComponentByName('adminui-modal-root', 'confirm-delete-' + state.name);

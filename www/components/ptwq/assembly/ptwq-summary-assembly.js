@@ -58,7 +58,7 @@ export function summary_assembly(QEWD, state_array) {
     });
 
     let component = {
-        componentName: 'adminui-content-page',
+        componentName: 'ptwq-content-page',
         assemblyName: 'psummary',
         state: {
             name: 'psummary'
