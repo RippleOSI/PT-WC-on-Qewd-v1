@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       readyEvent: new Event('ready'),
       selectedPatient: null,
+      user: null,
       schemaLookup: cSchemaLookup,
     };
 
@@ -143,6 +144,9 @@ document.addEventListener('DOMContentLoaded', function() {
       webComponents.loadGroup(components.selected_patient, root.subheaderTarget, context);
       webComponents.loadGroup(components.patients, root.contentTarget, context);
       webComponents.loadGroup(components.logout_modal, body, context);
+
+
+
     }
     context.loadMainView = loadMainView;
 

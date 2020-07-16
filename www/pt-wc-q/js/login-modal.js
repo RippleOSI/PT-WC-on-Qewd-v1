@@ -94,6 +94,12 @@ export function define_login_modal(QEWD) {
             modal.hide();
             modal.remove();
             _this.context.loadMainView();
+
+            let user = responseObj.message.response;
+
+            _this.context.user  = user;
+
+            console.log(_this.context);
           }
         };
         this.addHandler(fn);
