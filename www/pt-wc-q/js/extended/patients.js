@@ -40,26 +40,58 @@ export function patients_extended_crud(QEWD) {
                 let context = this.context;
                 let _this = this;
                 /**
-                 * Reset state of the layout when we open patients list again 
+                 * Reset state of the layout when we open patients list again
                  * @type {Element}
                  */
                 var root = document.getElementsByTagName('ptwq-root')[0];
+
                 root.sidebarTarget.classList.add('d-none');
                 context.selectedPatient = null;
 
                 let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
+
                 component.setState({
-                    patient:null
+                    patient: null
                 });
+
+                if (
+                    _this.context.user
+                    &&
+                    _this.context.user.role
+                    &&
+                    context.user.role === 'patient'
+                ) {
+                    console.log('role is set');
+                    QEWD.reply({
+                        type: state.summary.qewd.getDetail,
+                        params: {
+                            id: '1',
+                        }
+                    }).then((res) => {
+
+                        let obj = res.message.record;
+                        context.selectedPatient = obj;
+
+                        let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
+
+                        component.setState({
+                            patient: obj
+                        });
+
+                        var root = document.getElementsByTagName('ptwq-root')[0];
+                        root.sidebarTarget.classList.remove('d-none');
+
+                        root.switchToPage('psummary');
+
+                    });
+                }
 
                 $(table).on('draw.dt', () => {
                     // console.log('sdfsdf');
 
                     $(document).on('click', 'adminui-button', function () {
                         let id_str = this.parentNode.id;
-                        console.log(context);
                         let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
-                        console.log(component);
 
 
                         if (id_str && id_str.includes('patients-record-')) {
@@ -71,8 +103,9 @@ export function patients_extended_crud(QEWD) {
                                 }
                             }).then((res) => {
                                 let obj = res.message.record;
+
                                 component.setState({
-                                    patient:obj
+                                    patient: obj
                                 });
 
                                 context.selectedPatient = obj;

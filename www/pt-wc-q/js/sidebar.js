@@ -12,7 +12,8 @@ export function define_sidebar() {
       state: {
         title: 'Close Patient',
         icon: 'users',
-        contentPage: 'patients'
+        contentPage: 'patients',
+        role: ['admin','staff'],
       }
     },
     {
@@ -34,7 +35,9 @@ export function define_sidebar() {
       state: {
         title: 'Patients',
         icon: 'users',
-        contentPage: 'patients'
+        contentPage: 'patients',
+        role: ['admin','staff'],
+
       }
     },
     {

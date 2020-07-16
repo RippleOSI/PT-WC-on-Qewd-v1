@@ -105,6 +105,15 @@ export function load() {
         if (modalRoot) this.rootElement.setAttribute('data-target', '#' + modalRoot.rootElement.id);
         if (this.pageSelect) this.rootElement.removeEventListener('click', this.pageSelect);
       }
+
+      if(state.role){
+        this.role = state.role;
+        let user = this.context.user;
+
+        if(!state.role.includes(user.role)){
+          this.rootElement.parentElement.remove();
+        }
+      }
     }
 
     disconnectedCallback() {

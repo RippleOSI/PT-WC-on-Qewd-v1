@@ -25,6 +25,7 @@ module.exports = function(messageObj, session, send, finished) {
       password: '1234',
       name: 'Custom Patient',
       role: 'patient',
+      patient_id: '10',
     },
     {
       username: 'staff',

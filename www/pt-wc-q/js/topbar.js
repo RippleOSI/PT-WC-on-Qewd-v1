@@ -133,7 +133,8 @@ export function define_topbar(QEWD) {
 
         applicationName.setState({
           text: this.context.user.name,
-        });}
+        });
+      }
     }
   };
 
