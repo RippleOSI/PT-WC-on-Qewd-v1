@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
 
       root.sidebarTarget.classList.remove('sidebar-dark');
-
+      root.sidebarTarget.classList.add('d-none');
       webComponents.loadGroup(components.initial_sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.login_modal, body, context);
       webComponents.loadGroup(components.footer, root.footerTarget, context);

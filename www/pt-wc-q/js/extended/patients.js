@@ -63,6 +63,8 @@ export function patients_extended_crud(QEWD) {
                                 context.selectedPatient = obj;
 
                                 var root = document.getElementsByTagName('ptwq-root')[0];
+                                root.sidebarTarget.classList.add('d-flex');
+
                                 root.switchToPage('psummary');
                             }).catch((err) => {
 
