@@ -39,6 +39,19 @@ export function patients_extended_crud(QEWD) {
                 let table = this.table;
                 let context = this.context;
                 let _this = this;
+                /**
+                 * Reset state of the layout when we open patients list again 
+                 * @type {Element}
+                 */
+                var root = document.getElementsByTagName('ptwq-root')[0];
+                root.sidebarTarget.classList.add('d-none');
+                context.selectedPatient = null;
+
+                let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
+                component.setState({
+                    patient:null
+                });
+
                 $(table).on('draw.dt', () => {
                     // console.log('sdfsdf');
 
@@ -47,6 +60,8 @@ export function patients_extended_crud(QEWD) {
                         console.log(context);
                         let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
                         console.log(component);
+
+
                         if (id_str && id_str.includes('patients-record-')) {
                             let id = this.parentNode.id.split('record-')[1];
                             QEWD.reply({
@@ -63,7 +78,7 @@ export function patients_extended_crud(QEWD) {
                                 context.selectedPatient = obj;
 
                                 var root = document.getElementsByTagName('ptwq-root')[0];
-                                root.sidebarTarget.classList.add('d-flex');
+                                root.sidebarTarget.classList.remove('d-none');
 
                                 root.switchToPage('psummary');
                             }).catch((err) => {

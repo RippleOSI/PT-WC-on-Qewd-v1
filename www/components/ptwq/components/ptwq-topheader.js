@@ -90,6 +90,10 @@ export function load() {
                 this.setLine('gender', 'Gender: ' + ptn.gender);
                 this.setLine('ihi', 'IHI No.: ' + ptn.id_uniqueID);
 
+            }else{
+                this.rootElement.classList.add('d-none');
+                this.rootElement.classList.remove('d-sm-flex');
+
             }
             if (state.cls) {
                 let _this = this;

@@ -10,6 +10,20 @@ export function define_sidebar() {
     {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
+        title: 'Close Patient',
+        icon: 'users',
+        contentPage: 'patients'
+      }
+    },
+    {
+      componentName: 'adminui-sidebar-divider',
+      state: {
+        isTop: true
+      }
+    },
+    {
+      componentName: 'ptwq-sidebar-nav-item',
+      state: {
         title: 'Summary',
         icon: 'users',
         contentPage: 'psummary'
