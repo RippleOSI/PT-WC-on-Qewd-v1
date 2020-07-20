@@ -28,6 +28,7 @@ import {define_404_page} from './404-page.js';
 import {define_blank_page} from './blank-page.js';
 //import {define_medications_page} from './medications.js'
 import {define_map_page} from './map.js';
+import {define_conference_page} from "./conference.js";
 //import {define_d3_page} from './d3.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
 import {define_selected_patient_bar} from "./selected-patient-bar.js";
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('sidebar', define_sidebar());
     webComponents.addComponent('topbar', define_topbar(QEWD));
     webComponents.addComponent('selected_patient', define_selected_patient_bar(QEWD));
+    webComponents.addComponent('conference', define_conference_page(QEWD));
 
     webComponents.addComponent('footer', define_footer());
     webComponents.addComponent('dashboard_page', define_dashboard_page(QEWD));
@@ -172,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('blank', webComponents.components.blank_page);
     webComponents.register('users', webComponents.components.users);
     webComponents.register('full_calendar_page', webComponents.components.full_calendar_page);
+    webComponents.register('conference', webComponents.components.conference);
 
     webComponents.register('patients', webComponents.components.patients);
 

@@ -60,6 +60,14 @@ export function define_sidebar() {
     {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
+        title: 'Conference',
+        icon: 'users',
+        contentPage: 'conference'
+      }
+    },
+    {
+      componentName: 'ptwq-sidebar-nav-item',
+      state: {
         title: 'Problems/Diagnoses',
         icon: 'users',
         contentPage: 'diagnosis'
