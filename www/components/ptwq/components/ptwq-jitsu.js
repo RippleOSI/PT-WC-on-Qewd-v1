@@ -11,13 +11,7 @@ export function load() {
 <div class="row">
     <div id="jitsu-meet-window"></div>
 
-    <button id="jitsu-meet-configure">
-      Configure 
-    </button>
-
-    <button id="jitsu-meet-start">
-      Login
-    </button>
+   
 </div>
       `;
 

@@ -48,15 +48,11 @@ export function define_conference_page(QEWD){
 
     let hooks = {
         'ptwq-jitsu': {
-            getJitsu: async function() {
-                let result = await  QEWD.reply({
-                    type: 'getEvents',
-                    params: {
-                        properties: ['name', 'date'],
-                    },
-                });
+            getJitsu: function() {
+               let user = this.context.user;
 
-                await this.renderJitsuMeet(result).then((res)=>{
+
+                this.renderJitsuMeet({}).then((res)=>{
                     console.log('console back');
 
 
@@ -98,6 +94,7 @@ export function define_conference_page(QEWD){
                         }
                     };
                     const api = new JitsiMeetExternalAPI(domain, options);
+                    api.executeCommand('displayName', user.name);
 
                     api.executeCommand("subject", "Private Telehealth Session");
 
