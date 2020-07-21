@@ -37,7 +37,12 @@ export function load() {
       super();
 
       const html = `
-<div class="row">fdffdf</div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" id="homePage"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" id="currentPage" aria-current="page">Library</li>
+  </ol>
+</nav>
       `;
 
       this.html = `${html}`;
@@ -53,12 +58,26 @@ export function load() {
           _this.rootElement.classList.add(cls);
         });
       }
+      if (state.currentPage) {
+          this.currentPage.textContent = state.currentPage;
+
+
+      }
     }
 
     connectedCallback() {
       this.innerHTML = this.html;
       this.rootElement = this.getElementsByTagName('div')[0];
+      this.homePage = this.querySelector('#homePage');
+      this.currentPage = this.querySelector('#currentPage');
+
       this.childrenTarget = this.rootElement;
+
+      this.homePage.addEventListener('click',function (){
+        console.log('link click');
+        var root = document.getElementsByTagName('ptwq-root')[0];
+        root.switchToPage('psummary');
+      });
     }
 
     disconnectedCallback() {

@@ -66,13 +66,14 @@ export function define_conference_page(QEWD){
                             .toString(36)
                             .substring(2, 8);
                     console.log("randomID =" + randomID);
-
+                    let block = document.querySelector("#jitsu-meet-window");
+                    block.innerHTML = '';
                     const domain = "meet.jit.si";
                     const options = {
                         roomName: "OS-Clinic-Care-SessionID-" + randomID,
                         width: 500,
                         height: 500,
-                        parentNode: document.querySelector("#jitsu-meet-window"),
+                        parentNode: block,
                         interfaceConfigOverwrite: {
                             HIDE_INVITE_MORE_HEADER: true,
                             TOOLBAR_BUTTONS: [

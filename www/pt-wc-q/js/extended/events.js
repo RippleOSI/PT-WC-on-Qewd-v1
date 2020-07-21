@@ -92,11 +92,12 @@ export function events_extended_crud(QEWD) {
 
                         let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                         let card2 = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
-                        console.log('there');
-                        console.log(card2);
+
+
                         card.setState({
                             cls: 'd-none'
                         });
+
                         let table = this.getComponentByName('adminui-datatables', state.name);
                         if (!$(table).find('.this-show-button').length) {
 
@@ -110,9 +111,11 @@ export function events_extended_crud(QEWD) {
                                 card.rootElement.classList.remove('d-none');
                                 card.rootElement.classList.add('d-flex');
 
+                                console.log(card2.rootElement.classList);
 
                                 card2.rootElement.classList.remove('d-flex');
                                 card2.rootElement.classList.add('d-none');
+
                                 window.dispatchEvent(new Event('resize'));
 
                             });
@@ -146,10 +149,6 @@ export function events_extended_crud(QEWD) {
 
                 });
 
-                let card = this.getComponentByName('adminui-row', 'adminui-row-chart');
-                card.setState({
-                    cls: 'd-none'
-                });
 
                 console.log(result);
             }
@@ -162,10 +161,6 @@ export function events_extended_crud(QEWD) {
 
                     let card = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                     let card2 = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
-
-                    card.setState({
-                        cls: 'd-none',
-                    });
 
                     card.rootElement.classList.remove('d-flex');
                     card.rootElement.classList.add('d-none');

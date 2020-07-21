@@ -75,10 +75,18 @@ export function crud_assembly(QEWD, state) {
     },
     hooks: ['loadModal'],
     children: [
+
       {
         componentName: 'ptwq-topheader',
         state: {
           name: 'top-header-patient',
+        }
+      },
+      {
+        componentName: 'ptwq-breadcumps',
+        state: {
+          name: 'breadcumps-patient',
+          currentPage: state.title,
         }
       },
       {

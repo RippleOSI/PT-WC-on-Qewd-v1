@@ -8,8 +8,8 @@ let eventsPageState = {
       btnIcon: 'user-plus',
       btnColour: 'success',
       btnTooltip: 'Add a New Event',
-      headers: ['Name', 'Date','Patient ID'],
-      data_properties: ['name', 'date', 'patient_id'],
+      headers: ['Name', 'Date'],
+      data_properties: ['name', 'date'],
       qewd: {
         getSummary: 'getEvents',
         getDetail: 'getEventInfo',
