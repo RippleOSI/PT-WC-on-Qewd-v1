@@ -107,7 +107,11 @@ export function patients_extended_crud(QEWD) {
     let adminui_row = cSchemaLookup(component, 'adminui-row');
     let datatable = adminui_row.children[0].children[1].children[0];
 
-    let patientBlock = cSchemaLookup(component, 'adminui-content-card-body', state.name + '-details-card-body')
+    let patientBlock = cSchemaLookup(
+        component,
+        'adminui-content-card-body',
+        state.name + '-details-card-body'
+    );
 
     patientBlock.children.push({
         componentName: 'adminui-button',
@@ -121,8 +125,10 @@ export function patients_extended_crud(QEWD) {
     datatable.hooks.push('patientDatatableExtendHook');
 
     hooks['adminui-button'].selectPatientBlock = function () {
+
         let _this = this;
         let context = this.context;
+
         $(this.rootElement).click(function () {
             let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
             QEWD.reply({
