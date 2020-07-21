@@ -32,7 +32,7 @@ export function patients_extended_crud(QEWD) {
     let {component, hooks} = crud_assembly(QEWD, patients_extended);
     let state = patients_extended;
     state.patientIdDepends = false;
-
+    var activePatient = 0;
     let extendedHooks = {
         'adminui-datatables': {
             patientDatatableExtendHook: function () {
@@ -96,40 +96,59 @@ export function patients_extended_crud(QEWD) {
 
                         if (id_str && id_str.includes('patients-record-')) {
                             let id = this.parentNode.id.split('record-')[1];
-                            QEWD.reply({
-                                type: state.summary.qewd.getDetail,
-                                params: {
-                                    id: id
-                                }
-                            }).then((res) => {
-                                let obj = res.message.record;
-
-                                component.setState({
-                                    patient: obj
-                                });
-
-                                context.selectedPatient = obj;
-
-                                var root = document.getElementsByTagName('ptwq-root')[0];
-                                root.sidebarTarget.classList.remove('d-none');
-
-                                root.switchToPage('psummary');
-                            }).catch((err) => {
-
-                            });
+                            activePatient = id;
                         }
                     })
                 });
             }
         },
     }
-    console.log(this);
+
     let adminui_row = cSchemaLookup(component, 'adminui-row');
     let datatable = adminui_row.children[0].children[1].children[0];
+
+    let patientBlock = cSchemaLookup(component, 'adminui-content-card-body', state.name + '-details-card-body')
+
+    patientBlock.children.push({
+        componentName: 'adminui-button',
+        state: {
+            text: 'Select Patient',
+        },
+        hooks: ['selectPatientBlock']
+    });
+    console.log(patientBlock);
+
     datatable.hooks.push('patientDatatableExtendHook');
 
+    hooks['adminui-button'].selectPatientBlock = function () {
+        let _this = this;
+        let context = this.context;
+        $(this.rootElement).click(function () {
+            let component = _this.getComponentByName('ptwq-topheader', 'top-header-patient');
+            QEWD.reply({
+                type: state.summary.qewd.getDetail,
+                params: {
+                    id: activePatient
+                }
+            }).then((res) => {
+                let obj = res.message.record;
 
-//    adminui_row.children.unshift();
+                component.setState({
+                    patient: obj
+                });
+
+                context.selectedPatient = obj;
+
+                var root = document.getElementsByTagName('ptwq-root')[0];
+                root.sidebarTarget.classList.remove('d-none');
+
+                root.switchToPage('psummary');
+            }).catch((err) => {
+
+            });
+
+        });
+    }
 
     //Merge whole data block
     hooks = mergeDeep(hooks, extendedHooks);

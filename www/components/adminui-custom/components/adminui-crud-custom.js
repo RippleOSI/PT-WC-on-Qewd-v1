@@ -172,7 +172,7 @@ export function crud_assembly(QEWD, state) {
                       name: state.name
                     },
                     hooks: ['addFormFields']
-                  }
+                  },
                 ]
               },
               {
