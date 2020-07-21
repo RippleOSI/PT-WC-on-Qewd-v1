@@ -109,11 +109,10 @@ export function events_extended_crud(QEWD) {
 
 
                                 card.rootElement.classList.remove('d-none');
-                                card.rootElement.classList.add('d-flex');
+                                card2.rootElement.classList.add('d-flex');
 
-                                console.log(card2.rootElement.classList);
 
-                                card2.rootElement.classList.remove('d-flex');
+                                card.rootElement.classList.remove('d-flex');
                                 card2.rootElement.classList.add('d-none');
 
                                 window.dispatchEvent(new Event('resize'));
@@ -163,9 +162,9 @@ export function events_extended_crud(QEWD) {
                     let card2 = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
 
                     card.rootElement.classList.remove('d-flex');
-                    card.rootElement.classList.add('d-none');
+                    card2.rootElement.classList.add('d-none');
 
-                    card2.rootElement.classList.remove('d-none');
+                    card.rootElement.classList.remove('d-none');
                     card2.rootElement.classList.add('d-flex');
 
 

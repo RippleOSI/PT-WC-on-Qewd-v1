@@ -56,14 +56,12 @@ export function vitals_extended_crud(QEWD) {
                         $(button).text('Show Chart');
                         $(button).addClass('this-show-button');
                         $(button).click(() => {
+                            console.log('there');
+                            card.rootElement.classList.add('d-none');
+                            card.rootElement.classList.remove('d-flex');
 
-
-                            card.rootElement.classList.remove('d-none');
-                            card.rootElement.classList.add('d-block');
-
-
-                            card2.rootElement.classList.remove('d-flex');
                             card2.rootElement.classList.add('d-none');
+                            card2.rootElement.classList.remove('d-block');
 
                         });
                         $(table).append(button);
@@ -79,7 +77,7 @@ export function vitals_extended_crud(QEWD) {
                 QEWD.reply({
                     type: state.summary.qewd.getSummary,
                     params: {
-                        properties: ['heartrate', 'resprate', 'systolic_bp', 'score','patient_id']
+                        proprties: ['heartrate', 'resprate', 'systolic_bp', 'score','patient_id']
                     }
                 })
                     .then((responseObj) => {
@@ -171,10 +169,7 @@ export function vitals_extended_crud(QEWD) {
                     });
 
                     card.rootElement.classList.remove('d-block');
-                    card.rootElement.classList.add('d-none');
-
-                    card2.rootElement.classList.remove('d-none');
-                    card2.rootElement.classList.add('d-flex');
+                    card2.rootElement.classList.add('d-none');
 
 
                 }
