@@ -119,20 +119,49 @@ document.addEventListener('DOMContentLoaded', function() {
     */
 
     // create the context for running the web components
+    let LOCALSTORAGE_CONST = 'LOCALSTORAGE_LOGIN_STATE';
 
-    let context = {
-      paths: {
-        adminui: './components/adminui/',
-        leaflet: './components/leaflet/',
-        fullcalendar:'./components/fullcalendar/',
-        ptwq: './components/ptwq/',
-       /// d3: './components/d3'
-      },
-      readyEvent: new Event('ready'),
-      selectedPatient: null,
-      user: null,
-      schemaLookup: cSchemaLookup,
-    };
+
+    let dataJSON = localStorage.getItem(LOCALSTORAGE_CONST);
+
+    let data = JSON.parse(dataJSON);
+
+
+      let context = new Proxy({
+              paths: {
+                  adminui: './components/adminui/',
+                  leaflet: './components/leaflet/',
+                  fullcalendar: './components/fullcalendar/',
+                  ptwq: './components/ptwq/',
+                  /// d3: './components/d3'
+              },
+              selectedPatient: null,
+              user: null,
+              readyEvent: new Event('ready'),
+              schemaLookup: cSchemaLookup,
+          },
+          {
+
+              storageVals: ['user','selectedPatient'],
+
+              set(target, prop, val) {
+                  if (this.storageVals.includes(prop)) {
+                      localStorage.setItem(LOCALSTORAGE_CONST + '_' + prop, JSON.stringify(val))
+                  }
+                  target[prop] = val;
+                  return true;
+
+              },
+
+              get(target, prop, receiver) {
+                  if(this.storageVals.includes(prop)){
+                      if(!target[prop]){
+                          target[prop] = JSON.parse( localStorage.getItem(LOCALSTORAGE_CONST+'_'+prop));
+                      }
+                  }
+                  return target[prop];
+              }
+          });
 
     // this mainview function will be used by the login hook - it will pick it up
     // from the context object
