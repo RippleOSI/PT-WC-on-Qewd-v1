@@ -8,6 +8,8 @@ export function define_login_modal(QEWD) {
       name: 'modal-login',
       static: true
     },
+    hooks: ['loadModal'],
+
     children: [
       {
         componentName: 'adminui-modal-header',
@@ -104,7 +106,28 @@ export function define_login_modal(QEWD) {
         };
         this.addHandler(fn);
       }
+    },
+    'adminui-modal-root': {
+      loadModal: function(){
+        let ctx = this.context;
+        let _this = this;
+        if(ctx.user) {
+          QEWD.reply({
+            type: 'login',
+            params: {
+              simpleLogin: true,
+            }
+          }).then((res)=>{
+            console.log(ctx.user);
+            let modal = _this.getComponentByName('adminui-modal-root', 'modal-login');
+            modal.hide();
+            modal.remove();
+            _this.context.loadMainView();
+          });
+        }
+      }
     }
+
   };
 
   return {component, hooks};
