@@ -5,6 +5,7 @@ import {QEWD} from '../../qewd-client.js';
 import {cSchemaLookup} from "./utils/cSchemaLookup.js";
 // import the individual component configuration files
 //   they can be maintained independently as a result
+import {context_manager} from './utils/contextManager.js';
 
 import {define_login_modal} from './login-modal.js';
 import {define_logout_modal} from './logout-modal.js';
@@ -119,51 +120,24 @@ document.addEventListener('DOMContentLoaded', function() {
     */
 
     // create the context for running the web components
-    let LOCALSTORAGE_CONST = 'LOCALSTORAGE_LOGIN_STATE';
-
-
-    let dataJSON = localStorage.getItem(LOCALSTORAGE_CONST);
-
-    let data = JSON.parse(dataJSON);
-
-
-      let context = new Proxy({
-              paths: {
-                  adminui: './components/adminui/',
-                  leaflet: './components/leaflet/',
-                  fullcalendar: './components/fullcalendar/',
-                  ptwq: './components/ptwq/',
-                  /// d3: './components/d3'
-              },
-              selectedPatient: null,
-              user: null,
-              readyEvent: new Event('ready'),
-              schemaLookup: cSchemaLookup,
+      let ctx = {
+          paths: {
+              adminui: './components/adminui/',
+              leaflet: './components/leaflet/',
+              fullcalendar: './components/fullcalendar/',
+              ptwq: './components/ptwq/',
+              /// d3: './components/d3'
           },
-          {
+          selectedPatient: null,
+          user: null,
+          latestPage: null,
+          readyEvent: new Event('ready'),
+          schemaLookup: cSchemaLookup,
+      }
 
-              storageVals: ['user','selectedPatient'],
+      let context  = context_manager(ctx);
 
-              set(target, prop, val) {
-                  if (this.storageVals.includes(prop)) {
-                      localStorage.setItem(LOCALSTORAGE_CONST + '_' + prop, JSON.stringify(val))
-                  }
-                  target[prop] = val;
-                  return true;
-
-              },
-
-              get(target, prop, receiver) {
-                  if(this.storageVals.includes(prop)){
-                      if(!target[prop]){
-                          target[prop] = JSON.parse( localStorage.getItem(LOCALSTORAGE_CONST+'_'+prop));
-                      }
-                  }
-                  return target[prop];
-              }
-          });
-
-    // this mainview function will be used by the login hook - it will pick it up
+      // this mainview function will be used by the login hook - it will pick it up
     // from the context object
 
     function loadMainView() {
@@ -176,9 +150,8 @@ document.addEventListener('DOMContentLoaded', function() {
       webComponents.loadGroup(components.patients, root.contentTarget, context);
       webComponents.loadGroup(components.logout_modal, body, context);
 
-
-
     }
+
     context.loadMainView = loadMainView;
 
     webComponents.setLog(true);
@@ -232,6 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // The ready event is dispatched by the admin-root component
     //  It is available to the admin-root component via the context object which
     //  includes the ready event object
+
 
     document.addEventListener('ready', function() {
       let modal = webComponents.getComponentByName('adminui-modal-root', 'modal-login');

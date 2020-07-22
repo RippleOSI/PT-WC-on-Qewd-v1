@@ -112,6 +112,7 @@ export function define_login_modal(QEWD) {
         let ctx = this.context;
         let _this = this;
         if(ctx.user) {
+          setTimeout(()=>{
           QEWD.reply({
             type: 'login',
             params: {
@@ -124,7 +125,8 @@ export function define_login_modal(QEWD) {
             modal.remove();
             _this.context.loadMainView();
           });
-        }
+        },1000);
+        };
       }
     }
 
