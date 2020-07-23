@@ -27,4 +27,10 @@ table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:a
     display: block;
 }
 
+.adminui-crud-summary-block{
+    flex-grow: 1;
+    flex: 1;
+}
+
+.
 

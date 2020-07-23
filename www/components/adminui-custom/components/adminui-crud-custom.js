@@ -133,7 +133,8 @@ export function crud_assembly(QEWD, state) {
                   }
                 ]
               }
-            ]
+            ],
+            hooks: ['summaryHook']
           },
           {
             componentName: 'adminui-content-card',
@@ -142,6 +143,7 @@ export function crud_assembly(QEWD, state) {
               hide: true,
               width: state.detail.cardWidth || '400px'
             },
+            hooks: ['detailsHook'],
             children: [
               {
                 componentName: 'adminui-content-card-header',
@@ -780,6 +782,16 @@ export function crud_assembly(QEWD, state) {
           }
         };
         this.addHandler(fn, this.button);
+      }
+    },
+
+    'adminui-content-card': {
+      summaryHook: function(){
+        console.log(this);
+        this.classList.add('adminui-crud-summary-block');
+      },
+      detailsHook: function (){
+        this.classList.add('adminui-crud-details-block');
       }
     }
   };

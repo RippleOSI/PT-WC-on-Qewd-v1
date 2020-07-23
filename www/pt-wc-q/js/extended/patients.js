@@ -113,6 +113,7 @@ export function patients_extended_crud(QEWD) {
         state.name + '-details-card-body'
     );
 
+
     patientBlock.children.push({
         componentName: 'adminui-button',
         state: {
@@ -121,6 +122,8 @@ export function patients_extended_crud(QEWD) {
         hooks: ['selectPatientBlock']
     });
     console.log(patientBlock);
+
+    let patientsDetails =
 
     datatable.hooks.push('patientDatatableExtendHook');
 
