@@ -282,7 +282,10 @@ export function crud_assembly(QEWD, state) {
         }
 
         let table = this.getComponentByName('adminui-datatables', state.name);
-        let target = table.getParentComponent('adminui-content-card-body');
+        let target = table
+            .getParentComponent('adminui-content-card-body')
+            .querySelector('.card-body');
+
         table.datatable.destroy();
         table.remove();
         let assembly = {
