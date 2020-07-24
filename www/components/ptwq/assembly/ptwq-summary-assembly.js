@@ -2,7 +2,7 @@ function build_summary_card(state) {
     return {
         componentName: 'adminui-content-card',
         state: {
-            name: state.name + '-summary-card'
+            name: state.name + '-summary-assembly-card'
         },
         children: [
             {

@@ -90,11 +90,11 @@ export function events_extended_crud(QEWD) {
                 });
                 $(document).on('init.dt', () => {
 
-                        let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
-                        let card2 = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
+                        let chart = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
+                        let summary = this.getComponentByName('adminui-content-card', state.name + '-summary-card');
 
 
-                        card.setState({
+                        chart.setState({
                             cls: 'd-none'
                         });
 
@@ -108,12 +108,12 @@ export function events_extended_crud(QEWD) {
                             $(button).click(() => {
 
 
-                                card.rootElement.classList.remove('d-none');
-                                card2.rootElement.classList.add('d-flex');
+                                chart.rootElement.classList.remove('d-none');
+                                chart.rootElement.classList.add('d-flex');
 
-
-                                card.rootElement.classList.remove('d-flex');
-                                card2.rootElement.classList.add('d-none');
+                                console.log('hide');
+                                summary.rootElement.classList.remove('d-flex');
+                                summary.rootElement.classList.add('d-none');
 
                                 window.dispatchEvent(new Event('resize'));
 
@@ -158,14 +158,14 @@ export function events_extended_crud(QEWD) {
                 let _this = this;
                 let fn = function () {
 
-                    let card = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
-                    let card2 = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
+                    let chart = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
+                    let summary = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
 
-                    card.rootElement.classList.remove('d-flex');
-                    card2.rootElement.classList.add('d-none');
+                    chart.rootElement.classList.remove('d-flex');
+                    chart.rootElement.classList.add('d-none');
 
-                    card.rootElement.classList.remove('d-none');
-                    card2.rootElement.classList.add('d-flex');
+                    summary.rootElement.classList.remove('d-none');
+                    summary.rootElement.classList.add('d-flex');
 
 
                 }

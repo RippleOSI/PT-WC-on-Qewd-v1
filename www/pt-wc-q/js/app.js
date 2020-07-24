@@ -32,9 +32,11 @@ import {define_map_page} from './map.js';
 import {define_conference_page} from "./conference.js";
 //import {define_d3_page} from './d3.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
+
 import {define_selected_patient_bar} from "./selected-patient-bar.js";
 import {crud_assembly} from '../../components/adminui-custom/components/adminui-crud-custom.js';
 import {summary_assembly} from '../../components/ptwq/assembly/ptwq-summary-assembly.js';
+import {ptwq_calendar_assembly} from '../../components/ptwq/assembly/ptwq-calendar-assembly.js'
 import {vitals_extended_crud} from "./extended/vitals.js";
 import {events_extended_crud} from "./extended/events.js";
 import {patients_extended_crud} from "./extended/patients.js";
@@ -106,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('allergies', crud_assembly(QEWD, allergiesPageState));
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
     webComponents.addComponent('vitals', vitals_extended_crud(QEWD, vitalsPageState));
-    webComponents.addComponent('events', events_extended_crud(QEWD, eventsPageState));
+    webComponents.addComponent('events', ptwq_calendar_assembly(QEWD, eventsPageState));
     webComponents.addComponent('psummary', summary_assembly(QEWD,
           [
               vitalsPageState,
