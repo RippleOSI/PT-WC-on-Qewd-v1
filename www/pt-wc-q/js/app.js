@@ -39,7 +39,6 @@ import {summary_assembly} from '../../components/ptwq/assembly/ptwq-summary-asse
 import {ptwq_calendar_assembly} from '../../components/ptwq/assembly/ptwq-calendar-assembly.js';
 import {ptwq_chart_assembly} from '../../components/ptwq/assembly/ptwq-chart-assembly.js';
 
-import {vitals_extended_crud} from "./extended/vitals.js";
 import {patients_extended_crud} from "./extended/patients.js";
 
 import {userPageState} from './user_state.js';

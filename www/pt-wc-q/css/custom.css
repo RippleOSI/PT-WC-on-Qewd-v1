@@ -34,5 +34,9 @@ table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:a
     flex: 1;
 }
 
+.adminui-summary-dashboard-block{
+    flex: 1;
+}
+
 .
 

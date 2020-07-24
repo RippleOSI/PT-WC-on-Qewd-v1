@@ -4,6 +4,7 @@ function build_summary_card(state) {
         state: {
             name: state.name + '-summary-assembly-card'
         },
+        hooks: ['summaryAssemblyHook'],
         children: [
             {
                 componentName: 'adminui-content-card-header',
@@ -49,6 +50,7 @@ function build_summary_card(state) {
  * @param state_array array of default CRUD state (adminui_crud) what need to be shown at crud
  * @returns {{component: {assemblyName: *, children: [{componentName: string, state: {title: *}}, {children: [], componentName: string}], componentName: string, state: {name: *}, hooks: [string]}, hooks: {}}}
  */
+
 export function summary_assembly(QEWD, state_array) {
 
     let componentBlocks = [];
@@ -144,7 +146,11 @@ export function summary_assembly(QEWD, state_array) {
                 //});
             }
         },
-
+        'adminui-content-card':{
+           'summaryAssemblyHook': function () {
+               this.classList.add('adminui-summary-dashboard-block')
+            }
+        }
     };
 
 
