@@ -27,7 +27,9 @@ table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:a
     display: block;
 }
 
-.adminui-crud-summary-block, .adminui-crud-event-block{
+.adminui-crud-summary-block,
+.adminui-crud-event-block,
+.adminui-crud-chart-block{
     flex-grow: 1;
     flex: 1;
 }

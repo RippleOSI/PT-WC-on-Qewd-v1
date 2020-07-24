@@ -1,4 +1,4 @@
-export function ptwq_calendar_assembly(QEWD,state){
+export function ptwq_chart_assembly(QEWD,state){
 
     state = state || {};
     state.name = state.name || 'crud-' + Date.now();
@@ -71,7 +71,7 @@ export function ptwq_calendar_assembly(QEWD,state){
                     {
                         componentName: 'adminui-content-card',
                         state: {
-                            name: state.name + '-events-card'
+                            name: state.name + '-chart-card'
                         },
                         children: [
                             {
@@ -80,14 +80,14 @@ export function ptwq_calendar_assembly(QEWD,state){
                                     {
                                         componentName: 'adminui-content-card-button-title',
                                         state: {
-                                            title: 'Events Data',
+                                            title: 'Chart data',
                                             title_colour: state.summary.titleColour,
                                             icon: 'table',
                                             buttonColour: state.summary.btnColour,
                                             tooltip: 'Show CRUD',
                                             hideButton: false
                                         },
-                                        hooks: ['showevents']
+                                        hooks: ['showVitals']
                                     }
                                 ]
                             },
@@ -95,18 +95,13 @@ export function ptwq_calendar_assembly(QEWD,state){
                                 componentName: 'adminui-content-card-body',
                                 children: [
                                     {
-                                        componentName: 'fullcalendar-root',
-                                        state: {
-                                            accessToken: 'pk.eyJ1Ijoicm9idHdlZWQiLCJhIjoiY2s4cjdtMzJ4MDZjYjNldGw0ZDJ6enFlYiJ9._wfDdoSZ2RGPbtJJIlbRfw',
-                                            height: '300px'
-                                        },
-                                        hooks: ['getFullcalendar']
+                                        componentName: 'adminui-chart',
+                                        hooks: ['getChartData']
                                     }
                                 ]
                             }
-
                         ],
-                        hooks: ['eventBlockHook']
+                        hooks: ['chartBlockHook']
                     },
                     {
                         componentName: 'adminui-content-card',
@@ -144,9 +139,9 @@ export function ptwq_calendar_assembly(QEWD,state){
                                     {
                                         componentName: 'adminui-button',
                                         state: {
-                                            text: 'Show Events',
+                                            text: 'Show Chart',
                                         },
-                                        hooks: ['selectEvents']
+                                        hooks: ['showChart']
                                     }
                                 ]
                             }
@@ -284,7 +279,7 @@ export function ptwq_calendar_assembly(QEWD,state){
             }
         ]
     };
-    let calendarObj;
+
 
 
     let hooks = {
@@ -743,17 +738,16 @@ export function ptwq_calendar_assembly(QEWD,state){
                 };
                 this.addHandler(fn, this.rootElement);
             },
-
-            selectEvents: function () {
+            showChart: function () {
                 let _this = this;
                 let context = this.context;
 
                 $(this.rootElement).click(function () {
-                    let eventBlock = _this.getComponentByName('adminui-content-card', state.name + '-events-card');
+                    let chartBlock = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                     let dataTable = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
                     console.log(dataTable);
-                    eventBlock.classList.add('d-block');
-                    eventBlock.classList.remove('d-none');
+                    chartBlock.classList.add('d-block');
+                    chartBlock.classList.remove('d-none');
 
                     dataTable.classList.add('d-none');
                     dataTable.classList.remove('d-block');
@@ -817,19 +811,20 @@ export function ptwq_calendar_assembly(QEWD,state){
                 this.addHandler(fn, this.button);
             },
 
-            showevents: function () {
+            showVitals: function () {
                 let _this = this;
+                console.log('there4');
                 let fn = function () {
+                    console.log('there5');
 
-                    let chart = _this.getComponentByName('adminui-content-card', state.name + '-events-card');
+                    let chart = _this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                     let summary = _this.getComponentByName('adminui-content-card', state.name + '-summary-card');
 
                     chart.classList.remove('d-block');
                     chart.classList.add('d-none');
 
-                    summary.classList.remove('d-none');
                     summary.classList.add('d-block');
-
+                    summary.classList.remove('d-none');
 
                 }
                 this.addHandler(fn);
@@ -837,57 +832,101 @@ export function ptwq_calendar_assembly(QEWD,state){
         },
 
         'adminui-content-card': {
-            eventBlockHook: function(){
-                this.classList.add('adminui-crud-event-block');
-
+            chartBlockHook: function(){
+                this.classList.add('adminui-crud-chart-block');
             },
+
             summaryHook: function(){
+                console.log(this);
                 this.classList.add('adminui-crud-summary-block');
             },
             detailsHook: function (){
                 this.classList.add('adminui-crud-details-block');
             }
         },
-
-        'fullcalendar-root': {
-            getFullcalendar: function () {
-                let _this = this;
+        'adminui-chart': {
+            getChartData: function () {
                 let context = this.context;
-                let result = QEWD.reply({
-                    type: 'getEvents',
+                console.log('charts init');
+                QEWD.reply({
+                    type: state.summary.qewd.getSummary,
                     params: {
-                        properties: ['name', 'date','patient_id'],
-                    },
-                }).then((responseObj) => {
-                    let data = [];
-                    let context = this.context;
-                    console.log(context);
-                    responseObj.message.summary.forEach(function(record) {
-                        if (context.selectedPatient && state.patientIdDepends) {
-                            if (context.selectedPatient.id !== record.patient_id) {
-                                return true; // SKIP BY FILTER
+                        proprties: ['heartrate', 'resprate', 'systolic_bp', 'score','patient_id']
+                    }
+                })
+                    .then((responseObj) => {
+                        console.log(responseObj);
+
+                        let data =[] ;
+                        let heartrate = [], resprate = [], systolic_rate = [];
+
+                        responseObj.message.summary.forEach(function(record) {
+                            if (context.selectedPatient && state.patientIdDepends) {
+                                if (context.selectedPatient.id !== record.patient_id) {
+                                    return true; // SKIP BY FILTER
+                                }
                             }
-                        }else{
-                            console.log('contextmiss');
-                        }
-                        data.push(record);
+                            data.push(record);
+                        });
+
+                        let result = data.forEach(el => {
+                            heartrate.push({
+                                x: el.id,
+                                y: el.heartrate,
+                            })
+                            resprate.push({
+                                x: el.id,
+                                y: el.resprate,
+                            })
+                            systolic_rate.push({
+                                x: el.id,
+                                y: el.systolic_bp,
+                            })
+                        });
+                        let config = {
+                            type: 'scatter',
+                            data: {
+                                datasets: [{
+                                    label: 'Heart Rate',
+                                    backgroundColor: 'rgba(226,57,57,0.5)',
+                                    borderColor: '#e23939',
+                                    fill: false,
+                                    showLine: true,
+
+                                    data: heartrate,
+                                }, {
+                                    label: 'Resp Rate',
+                                    backgroundColor: 'rgba(57,171,226,0.5)',
+                                    borderColor: '#39abe2',
+                                    fill: false,
+                                    showLine: true,
+
+                                    data: resprate,
+                                }, {
+                                    label: 'Systolic Rate',
+                                    backgroundColor: 'rgba(226,57,220,0.5)',
+                                    borderColor: '#e239dc',
+                                    fill: false,
+                                    showLine: true,
+
+                                    data: systolic_rate,
+                                }],
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false
+
+                                },
+                            }
+                        };
+                        this.canvas.height = '500px';
+                        this.draw(config);
+                        let card =this.getComponentByName('adminui-content-card', state.name + '-chart-card');
+                        card.classList.add('d-none');
                     });
-                    let events = data.map( (el) => { return {
-                        title: el.name,
-                        start: el.date,
-                    }});
-
-                    _this.renderFullcalendar(events).then((res)=>{
-                        let calendar = _this.getComponentByName('adminui-content-card', state.name + '-events-card')
-                        calendar.classList.add('d-none');
-                    });
-                });
 
 
-                console.log(result);
             }
         },
-
     };
 
 

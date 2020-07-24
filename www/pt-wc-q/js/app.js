@@ -36,9 +36,10 @@ import {define_full_calendar_page} from './researching/full-calendar.js';
 import {define_selected_patient_bar} from "./selected-patient-bar.js";
 import {crud_assembly} from '../../components/adminui-custom/components/adminui-crud-custom.js';
 import {summary_assembly} from '../../components/ptwq/assembly/ptwq-summary-assembly.js';
-import {ptwq_calendar_assembly} from '../../components/ptwq/assembly/ptwq-calendar-assembly.js'
+import {ptwq_calendar_assembly} from '../../components/ptwq/assembly/ptwq-calendar-assembly.js';
+import {ptwq_chart_assembly} from '../../components/ptwq/assembly/ptwq-chart-assembly.js';
+
 import {vitals_extended_crud} from "./extended/vitals.js";
-import {events_extended_crud} from "./extended/events.js";
 import {patients_extended_crud} from "./extended/patients.js";
 
 import {userPageState} from './user_state.js';
@@ -107,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('medications', crud_assembly(QEWD, medicationsPageState));
     webComponents.addComponent('allergies', crud_assembly(QEWD, allergiesPageState));
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
-    webComponents.addComponent('vitals', vitals_extended_crud(QEWD, vitalsPageState));
+    webComponents.addComponent('vitals', ptwq_chart_assembly(QEWD, vitalsPageState));
     webComponents.addComponent('events', ptwq_calendar_assembly(QEWD, eventsPageState));
     webComponents.addComponent('psummary', summary_assembly(QEWD,
           [
