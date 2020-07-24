@@ -589,7 +589,7 @@ export function ptwq_calendar_assembly(QEWD,state){
                     else {
                         toastr.info('Record deleted');
                         let table = _this.getComponentByName('adminui-datatables', state.name);
-                        let target = table.getParentComponent('adminui-content-card-body');
+                        let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');;
                         table.datatable.destroy();
                         table.remove();
                         let assembly = {
@@ -650,7 +650,7 @@ export function ptwq_calendar_assembly(QEWD,state){
                     else {
                         toastr.info('Record updated successfully');
                         let table = _this.getComponentByName('adminui-datatables', state.name);
-                        let target = table.getParentComponent('adminui-content-card-body');
+                        let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');;
                         if (table) {
                             table.datatable.destroy();
                             table.remove();
