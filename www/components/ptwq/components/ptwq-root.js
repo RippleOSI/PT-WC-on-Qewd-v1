@@ -49,7 +49,7 @@ export function load() {
       <!-- Main Content -->
       <div id="content">
         <!-- Topbar -->
-        <nav id="bs-admin-topbar" class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <nav id="bs-admin-topbar" class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top">
         </nav>
         <div id="subheader-content" ></div>
         <!-- End of Topbar -->

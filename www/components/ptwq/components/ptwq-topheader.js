@@ -37,11 +37,11 @@ export function load() {
             super();
 
             const html = `
-<div class="align-items-center justify-content-between mb-4 bg-white d-none">
+<div class="topheader-block align-items-center justify-content-between mb-4 bg-white d-none">
   <div id="contents" class="p-2" style="width: 100%">
    <div class="row">
   <div class="col-sm-8">
-    <div class="h4 topheader-patient-name">
+    <div class="topheader-patient-name">
         
     </div>
     <div class="topheader-patient-address">

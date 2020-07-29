@@ -37,6 +37,42 @@ table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:a
 .adminui-summary-dashboard-block{
     flex: 1;
 }
+.card-header .col{
+    align-self: center;
+}
+.card-header .text-info,
+.card-header .text-primary{
+    color: white !important;
+}
 
-.
+#bs-admin-topbar {
+    margin-bottom: 0 !important;
+}
 
+.topheader-patient-name{
+    font-weight: bold;
+}
+
+.topheader-block{
+    padding: 15px;
+}
+
+.nav-item a.nav-link{
+    color: black;
+}
+.nav-item:hover{
+    background: #ff5d00
+}
+.nav-item:hover a.nav-link{
+    color: white;
+}
+.nav-item .nav-link{
+    border-bottom: 1px solid #f3f3f3;
+}
+
+ptwq-breadcumps nav ol.breadcrumb{
+    background: white;
+}
+ptwq-breadcumps .breadcrumb-item.active{
+    color: black;
+}
