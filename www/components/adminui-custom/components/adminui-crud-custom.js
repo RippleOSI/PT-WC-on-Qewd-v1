@@ -108,7 +108,7 @@ export function crud_assembly(QEWD, state) {
                 componentName: 'adminui-content-card-header',
                 children: [
                   {
-                    componentName: 'adminui-content-card-button-title',
+                    componentName: 'ptwq-content-card-multibutton-title',
                     state: {
                       title: state.summary.title,
                       title_colour: state.summary.titleColour,
@@ -117,6 +117,30 @@ export function crud_assembly(QEWD, state) {
                       tooltip: state.summary.btnTooltip,
                       hideButton: state.summary.disableAdd
                     },
+                    children:[
+                      {
+                        componentName: 'adminui-button',
+                        state: {
+                          title: 'Test',
+                          title_colour: state.summary.titleColour,
+                          icon: state.summary.btnIcon,
+                          buttonColour: state.summary.btnColour,
+                          tooltip: state.summary.btnTooltip,
+                          hideButton: state.summary.disableAdd
+                        }
+                      },
+                      {
+                        componentName: 'adminui-button',
+                        state: {
+                          title: 'Test2',
+                          title_colour: state.summary.titleColour,
+                          icon: state.summary.btnIcon,
+                          buttonColour: state.summary.btnColour,
+                          tooltip: state.summary.btnTooltip,
+                          hideButton: state.summary.disableAdd
+                        }
+                      }
+                    ],
                     hooks: ['createNewRecord']
                   }
                 ]

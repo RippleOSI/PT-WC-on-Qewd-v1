@@ -48,8 +48,7 @@ export function load() {
   <div class="col">
     <h6 class="m-0 font-weight-bold text-primary">Undefined Title</h6>
   </div>
-  <div class="col">
-    <button id="${id}" class="btn btn-primary float-right" href="#"></button>
+  <div class="col childrenTarget" style="display: flex; justify-content: flex-end;" >
   </div>
 </div>
       `;
@@ -64,53 +63,6 @@ export function load() {
      if (state.buttonText) {
         this.button.textContent = state.buttonText;
      }
-      if (state.buttonColour) {
-        this.button.classList.remove(colour);
-        colour = 'btn-' + state.buttonColour;
-        this.button.classList.add(colour);
-      }
-     if (state.name) {
-        this.name = state.name
-      }
-      if (state.title_colour) {
-        let oldColour = this.titleElement.classList.item(2);
-        this.titleElement.classList.remove(oldColour);
-        this.titleElement.classList.add('text-' + state.title_colour);
-      }
-      if (state.icon) {
-        if (!this.i) {
-          this.button.textContent = '';
-          let i = document.createElement('i');
-          this.button.appendChild(i);
-          this.i = i;
-        }
-        this.i.className = 'fas fa-' + state.icon;
-      }
-      if (state.tooltip) {
-        let position = 'top'
-        let text = state.tooltip;
-        if (typeof state.tooltip === 'object') {
-          text = state.tooltip.text;
-          if (state.tooltip.position) position = state.tooltip.position;
-        }
-        this.button.setAttribute('data-toggle', 'tooltip');
-        this.button.setAttribute('data-placement', position);
-        this.button.setAttribute('title', text);
-        $('#' + this.button.id).tooltip();
-        let _this = this;
-        let removeTooltip = function() {
-          $('#' + _this.button.id).tooltip('dispose');
-        };
-        // make sure the tooltip is removed if the component is unloaded
-        this.registerUnloadMethod(removeTooltip);
-      }
-      if (state.hideButton) {
-        this.hideButton();
-      }
-      if (state.disableButton) {
-        this.hideButton();
-        this.button.disabled = true;
-      }
     }
 
     hideButton() {
@@ -123,12 +75,13 @@ export function load() {
       }
     }
 
-    connectedCallback() {
-      this.innerHTML = this.html;
-      this.rootElement = this.getElementsByTagName('div')[0];
-      this.titleElement = this.rootElement.querySelector('h6');
-      this.button = this.rootElement.querySelector('button');
-    }
+      connectedCallback() {
+          this.innerHTML = this.html;
+          this.rootElement = this.getElementsByTagName('div')[0];
+          this.titleElement = this.rootElement.querySelector('h6');
+          this.childrenTarget = this.rootElement.querySelector('.childrenTarget');
+          this.button = this.rootElement.querySelector('button');
+      }
 
     disconnectedCallback() {
       //console.log('*** card-button-title component was removed!');
