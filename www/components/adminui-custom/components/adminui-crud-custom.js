@@ -112,36 +112,35 @@ export function crud_assembly(QEWD, state) {
                     state: {
                       title: state.summary.title,
                       title_colour: state.summary.titleColour,
-                      icon: state.summary.btnIcon,
-                      buttonColour: state.summary.btnColour,
-                      tooltip: state.summary.btnTooltip,
-                      hideButton: state.summary.disableAdd
                     },
                     children:[
                       {
                         componentName: 'adminui-button',
                         state: {
-                          title: 'Test',
+                          title: 'Full screen',
+                          name: state.name + '-summary-full-screen',
                           title_colour: state.summary.titleColour,
-                          icon: state.summary.btnIcon,
+                          icon: 'expand-alt',
                           buttonColour: state.summary.btnColour,
                           tooltip: state.summary.btnTooltip,
-                          hideButton: state.summary.disableAdd
-                        }
+                          hideButton: true,
+                        },
+                        hooks: ['fullScreen']
                       },
                       {
                         componentName: 'adminui-button',
                         state: {
-                          title: 'Test2',
+                          title: 'Create new record',
                           title_colour: state.summary.titleColour,
                           icon: state.summary.btnIcon,
                           buttonColour: state.summary.btnColour,
                           tooltip: state.summary.btnTooltip,
                           hideButton: state.summary.disableAdd
-                        }
+                        },
+                        hooks: ['createNewRecord']
+
                       }
                     ],
-                    hooks: ['createNewRecord']
                   }
                 ]
               },
@@ -752,30 +751,11 @@ export function crud_assembly(QEWD, state) {
           //});
         };
         this.addHandler(fn, this.rootElement);
-      }
-    },
-
-    'adminui-content-card-button-title': {
-
-      updateRecord: function() {
-        let _this = this;
-        let fn = function() {
-          let card = _this.getParentComponent('adminui-content-card');
-          let title = card.querySelector('adminui-content-card-button-title');
-          title.hideButton();
-          let form = _this.getComponentByName('adminui-form', state.name);
-          card.footer.show();
-          let field;
-          for (let name in form.field) {
-            field = form.field[name];
-            field.setState({readonly: false});
-          }
-        };
-        this.addHandler(fn, this.button);
       },
 
       createNewRecord: function() {
         let _this = this;
+
         let fn = function() {
           let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
           let title = card.querySelector('adminui-content-card-button-title');
@@ -785,6 +765,8 @@ export function crud_assembly(QEWD, state) {
           form.recordId = 'new-record';
           card.show();
           card.footer.show();
+
+
           let field;
           for (let name in form.field) {
             field = form.field[name];
@@ -809,7 +791,48 @@ export function crud_assembly(QEWD, state) {
           }
         };
         this.addHandler(fn, this.button);
+      },
+
+      fullScreen: function () {
+        let _this = this;
+
+        let fn = function() {
+
+          let card = _this.getComponentByName(
+              'adminui-content-card',
+              state.name + '-details-card'
+          );
+          card.hide();
+          card.footer.hide();
+
+          _this.setState({
+            hideButton: true,
+          })
+        }
+        this.addHandler(fn, this.button);
+
       }
+    },
+
+    'adminui-content-card-button-title': {
+
+      updateRecord: function() {
+        let _this = this;
+        let fn = function() {
+          let card = _this.getParentComponent('adminui-content-card');
+          let title = card.querySelector('adminui-content-card-button-title');
+          title.hideButton();
+          let form = _this.getComponentByName('adminui-form', state.name);
+          card.footer.show();
+          let field;
+          for (let name in form.field) {
+            field = form.field[name];
+            field.setState({readonly: false});
+          }
+        };
+        this.addHandler(fn, this.button);
+      },
+
     },
 
     'adminui-content-card': {
