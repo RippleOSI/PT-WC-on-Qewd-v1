@@ -78,16 +78,52 @@ export function ptwq_calendar_assembly(QEWD,state){
                                 componentName: 'adminui-content-card-header',
                                 children: [
                                     {
-                                        componentName: 'adminui-content-card-button-title',
+                                        componentName: 'ptwq-content-card-multibutton-title',
                                         state: {
-                                            title: 'Events Data',
+                                            title: state.summary.title,
                                             title_colour: state.summary.titleColour,
-                                            icon: 'table',
-                                            buttonColour: state.summary.btnColour,
-                                            tooltip: 'Show CRUD',
-                                            hideButton: false
                                         },
-                                        hooks: ['showevents']
+                                        children: [
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Table',
+                                                    name: state.name + '-summary-full-screen',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'table',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['showevents']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Full screen',
+                                                    name: state.name + '-summary-full-screen',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'expand-alt',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['fullScreen']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Create new record',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: state.summary.btnIcon,
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: state.summary.disableAdd
+                                                },
+                                                hooks: ['createNewRecord']
+
+                                            }
+                                        ],
                                     }
                                 ]
                             },
@@ -118,16 +154,52 @@ export function ptwq_calendar_assembly(QEWD,state){
                                 componentName: 'adminui-content-card-header',
                                 children: [
                                     {
-                                        componentName: 'adminui-content-card-button-title',
+                                        componentName: 'ptwq-content-card-multibutton-title',
                                         state: {
                                             title: state.summary.title,
                                             title_colour: state.summary.titleColour,
-                                            icon: state.summary.btnIcon,
-                                            buttonColour: state.summary.btnColour,
-                                            tooltip: state.summary.btnTooltip,
-                                            hideButton: state.summary.disableAdd
                                         },
-                                        hooks: ['createNewRecord']
+                                        children: [
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Show chart',
+                                                    name: state.name + '-show-chart-button',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'calendar-week',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['selectEvents']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Full screen',
+                                                    name: state.name + '-summary-full-screen',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'expand-alt',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['fullScreen']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Create new record',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: state.summary.btnIcon,
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: state.summary.disableAdd
+                                                },
+                                                hooks: ['createNewRecord']
+
+                                            }
+                                        ],
                                     }
                                 ]
                             },
@@ -141,13 +213,6 @@ export function ptwq_calendar_assembly(QEWD,state){
                                         },
                                         hooks: ['retrieveRecordSummary']
                                     },
-                                    {
-                                        componentName: 'adminui-button',
-                                        state: {
-                                            text: 'Show Events',
-                                        },
-                                        hooks: ['selectEvents']
-                                    }
                                 ]
                             }
                         ],
@@ -762,26 +827,6 @@ export function ptwq_calendar_assembly(QEWD,state){
                     dataTable.classList.remove('d-block');
                 });
             },
-        },
-
-        'adminui-content-card-button-title': {
-
-            updateRecord: function() {
-                let _this = this;
-                let fn = function() {
-                    let card = _this.getParentComponent('adminui-content-card');
-                    let title = card.querySelector('adminui-content-card-button-title');
-                    title.hideButton();
-                    let form = _this.getComponentByName('adminui-form', state.name);
-                    card.footer.show();
-                    let field;
-                    for (let name in form.field) {
-                        field = form.field[name];
-                        field.setState({readonly: false});
-                    }
-                };
-                this.addHandler(fn, this.button);
-            },
 
             createNewRecord: function() {
                 let _this = this;
@@ -837,6 +882,50 @@ export function ptwq_calendar_assembly(QEWD,state){
                 }
                 this.addHandler(fn);
             },
+
+            fullScreen: function () {
+                let _this = this;
+
+                let fn = function() {
+
+                    let card = _this.getComponentByName(
+                        'adminui-content-card',
+                        state.name + '-details-card'
+                    );
+                    card.hide();
+                    card.footer.hide();
+
+                    _this.setState({
+                        hideButton: true,
+                    })
+                }
+                this.addHandler(fn, this.button);
+
+            }
+
+        },
+
+        'adminui-content-card-button-title': {
+
+            updateRecord: function() {
+                let _this = this;
+                let fn = function() {
+                    let card = _this.getParentComponent('adminui-content-card');
+                    let title = card.querySelector('adminui-content-card-button-title');
+                    title.hideButton();
+                    let form = _this.getComponentByName('adminui-form', state.name);
+                    card.footer.show();
+                    let field;
+                    for (let name in form.field) {
+                        field = form.field[name];
+                        field.setState({readonly: false});
+                    }
+                };
+                this.addHandler(fn, this.button);
+            },
+
+
+
         },
 
         'adminui-content-card': {

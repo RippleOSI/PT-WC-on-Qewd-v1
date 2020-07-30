@@ -1,4 +1,4 @@
-export function ptwq_chart_assembly(QEWD,state){
+export function ptwq_chart_assembly(QEWD, state) {
 
     state = state || {};
     state.name = state.name || 'crud-' + Date.now();
@@ -16,7 +16,7 @@ export function ptwq_chart_assembly(QEWD,state){
 
     state.summary.data_properties = state.summary.data_properties || [];
 
-    if(state.patientIdDepends){
+    if (state.patientIdDepends) {
         state.summary.headers.push('Patient ID');
         state.summary.data_properties.push('patient_id');
     }
@@ -24,12 +24,13 @@ export function ptwq_chart_assembly(QEWD,state){
 
     if (state.summary.headers.length === state.summary.data_properties.length) {
         state.summary.headers.push('Select');
-    };
+    }
+    ;
 
     let formFields = {};
     let formFieldPropertyNames = {};
     if (state.detail.fields) {
-        state.detail.fields.forEach(function(field, index) {
+        state.detail.fields.forEach(function (field, index) {
             if (field.name && !field.data_property) field.data_property = field.name;
             if (!field.name && field.data_property) field.name = field.data_property;
             formFields[field.data_property] = state.detail.fields[index];
@@ -43,7 +44,6 @@ export function ptwq_chart_assembly(QEWD,state){
         state: {
             name: state.name
         },
-        hooks: ['loadModal'],
         children: [
 
             {
@@ -78,16 +78,52 @@ export function ptwq_chart_assembly(QEWD,state){
                                 componentName: 'adminui-content-card-header',
                                 children: [
                                     {
-                                        componentName: 'adminui-content-card-button-title',
+                                        componentName: 'ptwq-content-card-multibutton-title',
                                         state: {
-                                            title: 'Chart data',
+                                            title: state.summary.title,
                                             title_colour: state.summary.titleColour,
-                                            icon: 'table',
-                                            buttonColour: state.summary.btnColour,
-                                            tooltip: 'Show CRUD',
-                                            hideButton: false
                                         },
-                                        hooks: ['showVitals']
+                                        children: [
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Show Chart',
+                                                    name: state.name + '-show-chart-button',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'table',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['showVitals']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Full screen',
+                                                    name: state.name + '-summary-full-screen',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'expand-alt',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['fullScreen']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Create new record',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: state.summary.btnIcon,
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: state.summary.disableAdd
+                                                },
+                                                hooks: ['createNewRecord']
+
+                                            }
+                                        ],
                                     }
                                 ]
                             },
@@ -118,7 +154,7 @@ export function ptwq_chart_assembly(QEWD,state){
                                             title: state.summary.title,
                                             title_colour: state.summary.titleColour,
                                         },
-                                        children:[
+                                        children: [
                                             {
                                                 componentName: 'adminui-button',
                                                 state: {
@@ -310,12 +346,11 @@ export function ptwq_chart_assembly(QEWD,state){
     };
 
 
-
     let hooks = {
 
         'ptwq-content-page': {
 
-            loadModal: function() {
+            loadModal: function () {
                 let modal = this.getComponentByName('adminui-modal-root', 'confirm-delete-' + state.name);
                 if (!modal) {
                     // add modal for confirming record deletions
@@ -325,17 +360,16 @@ export function ptwq_chart_assembly(QEWD,state){
                 let table = this.getComponentByName('adminui-datatables', state.name);
 
                 let target = table
-                                .getParentComponent('adminui-content-card-body')
-                                .querySelector('.card-body');
+                    .getParentComponent('adminui-content-card-body')
 
-                if(table.datatable) {
+                if (target) {
+                    target = target.querySelector('.card-body');
+                }
+                if (table.datatable) {
                     table.datatable.destroy();
-                }
-
-                if(table) {
                     table.remove();
-                }
 
+                }
 
 
                 let assembly = {
@@ -352,7 +386,7 @@ export function ptwq_chart_assembly(QEWD,state){
 
         'adminui-form': {
 
-            addFormFields: function() {
+            addFormFields: function () {
                 let form = this;
                 let fields = state.detail.fields;
                 let noOfFields = fields.length;
@@ -373,7 +407,7 @@ export function ptwq_chart_assembly(QEWD,state){
                                 radios: field.radios
                             }
                         };
-                        form.loadGroup(assembly, form, form.context, function() {
+                        form.loadGroup(assembly, form, form.context, function () {
                             addFormField(no + 1);
                         });
                         return;
@@ -381,7 +415,7 @@ export function ptwq_chart_assembly(QEWD,state){
 
                     if (field.type === 'checkboxes') {
                         let checkboxes = [];
-                        field.checkboxes.forEach(function(checkbox) {
+                        field.checkboxes.forEach(function (checkbox) {
                             if (typeof checkbox.if === 'function') {
                                 if (!checkbox.if.call(form)) {
                                     return;
@@ -400,7 +434,7 @@ export function ptwq_chart_assembly(QEWD,state){
                                 checkboxes: checkboxes
                             }
                         };
-                        form.loadGroup(assembly, form, form.context, function() {
+                        form.loadGroup(assembly, form, form.context, function () {
                             addFormField(no + 1);
                         });
                         return;
@@ -438,150 +472,150 @@ export function ptwq_chart_assembly(QEWD,state){
                         assembly.state.rows = field.rows;
                     }
 
-                    form.loadGroup(assembly, form, form.context, function() {
+                    form.loadGroup(assembly, form, form.context, function () {
                         addFormField(no + 1);
                     });
                 }
+
                 addFormField(0);
             }
         },
 
         'adminui-form-select': {
-            displayOptions: function(state) {
+            displayOptions: function (state) {
                 this.setState({options: state.options});
             }
         },
 
         'adminui-form-select-multiple': {
-            displayOptions: function(state) {
+            displayOptions: function (state) {
                 this.setState({options: state.options});
             }
         },
 
         'adminui-datatables': {
 
-            retrieveRecordSummary: async function() {
+            retrieveRecordSummary: async function () {
                 let table = this;
                 let context = this.context;
 
-                /*
+
                 QEWD.send({
-                  type: state.summary.qewd.getSummary,
-                  params: {
-                    properties: state.summary.data_properties
-                  }
-                }, function(responseObj) {
-                */
-                let responseObj = await QEWD.reply({
                     type: state.summary.qewd.getSummary,
                     params: {
                         properties: state.summary.data_properties
                     }
-                });
-                if (!responseObj.message.error) {
-                    table.data = {};
-                    let data = [];
-                    responseObj.message.summary.forEach(function(record) {
-                        console.log('there234');
-                        if ( context.selectedPatient && state.patientIdDepends) {
-                            if ( context.selectedPatient.id !== record.patient_id ) {
-                                return true; // SKIP BY FILTER
-                            }
+                }, function (responseObj) {
+
+                    /*let responseObj = await QEWD.reply({
+                        type: state.summary.qewd.getSummary,
+                        params: {
+                            properties: state.summary.data_properties
                         }
-                        table.data[record.id] = record;
-                        let row = [];
-                        state.summary.data_properties.forEach(function(property) {
-                            row.push(record[property]);
+                    });*/
+                    if (!responseObj.message.error) {
+                        table.data = {};
+                        let data = [];
+                        responseObj.message.summary.forEach(function (record) {
+                            console.log('there234');
+                            if (context.selectedPatient && state.patientIdDepends) {
+                                if (context.selectedPatient.id !== record.patient_id) {
+                                    return true; // SKIP BY FILTER
+                                }
+                            }
+                            table.data[record.id] = record;
+                            let row = [];
+                            state.summary.data_properties.forEach(function (property) {
+                                row.push(record[property]);
+                            });
+                            row.push(record.id);
+                            if (state.summary.enableDelete) {
+                                row.push('');
+                            }
+                            data.push(row);
                         });
-                        row.push(record.id);
+                        let columns = [];
+                        let noOfCols = state.summary.headers.length;
+
+                        state.summary.headers.forEach(function (header) {
+                            columns.push({title: header});
+                        });
                         if (state.summary.enableDelete) {
-                            row.push('');
+                            columns.push({title: 'Delete'});
                         }
-                        data.push(row);
-                    });
-                    let columns = [];
-                    let noOfCols = state.summary.headers.length;
+                        let obj = {
+                            data: data,
+                            columns: columns
+                        };
+                        //        if (table.datatable) this.datatable.destroy();
 
-                    state.summary.headers.forEach(function(header) {
-                        columns.push({title: header});
-                    });
-                    if (state.summary.enableDelete) {
-                        columns.push({title: 'Delete'});
-                    }
-                    let obj = {
-                        data: data,
-                        columns: columns
-                    };
-                    //        if (table.datatable) this.datatable.destroy();
-
-                    table.render(obj);
-                    table.datatable.rows().every(function(index, element) {
-                        let row = $(this.node());
-                        let td = row.find('td').eq(noOfCols - 1)[0];
-                        let id = td.textContent;
-                        table.row = table.data[id];
-                        td.id = state.name + '-record-' + id;
-                        td.textContent = '';
-                        if (state.summary.enableDelete) {
-                            td = row.find('td').eq(noOfCols)[0];
-                            td.id = state.name + '-delete-' + id;
-                            let confirmTextFn = state.summary.deleteConfirmText;
-                            let confirmText;
-                            if (typeof confirmTextFn === 'function') {
-                                confirmText = confirmTextFn.call(table);
-                            }
-                            else {
-                                let name_td = row.find('td').eq(0)[0];
-                                confirmText = name_td.textContent;
-                            }
-                            td.setAttribute('data-confirm', confirmText);
-                        }
-                    });
-
-                    table.datatable.rows({page: 'current'}).every(function(index, element) {
-                        let row = $(this.node());
-                        let td = row.find('td').eq(noOfCols - 1)[0];
-                        table.loadGroup(showRecordBtn, td, table.context);
-                        if (state.summary.enableDelete) {
-                            td = row.find('td').eq(noOfCols)[0];
-                            table.loadGroup(deleteBtn, td, table.context);
-                        }
-                    });
-
-                    table.datatable.on('draw', function() {
-                        table.datatable.rows({page: 'current'}).every(function(index, element) {
+                        table.render(obj);
+                        table.datatable.rows().every(function (index, element) {
                             let row = $(this.node());
-                            let td = row.find('td').eq(2)[0];
-                            let btn = td.querySelector('adminui-button');
-                            if (btn) {
-                                td.removeChild(btn);
+                            let td = row.find('td').eq(noOfCols - 1)[0];
+                            let id = td.textContent;
+                            table.row = table.data[id];
+                            td.id = state.name + '-record-' + id;
+                            td.textContent = '';
+                            if (state.summary.enableDelete) {
+                                td = row.find('td').eq(noOfCols)[0];
+                                td.id = state.name + '-delete-' + id;
+                                let confirmTextFn = state.summary.deleteConfirmText;
+                                let confirmText;
+                                if (typeof confirmTextFn === 'function') {
+                                    confirmText = confirmTextFn.call(table);
+                                } else {
+                                    let name_td = row.find('td').eq(0)[0];
+                                    confirmText = name_td.textContent;
+                                }
+                                td.setAttribute('data-confirm', confirmText);
                             }
+                        });
+
+                        table.datatable.rows({page: 'current'}).every(function (index, element) {
+                            let row = $(this.node());
+                            let td = row.find('td').eq(noOfCols - 1)[0];
                             table.loadGroup(showRecordBtn, td, table.context);
                             if (state.summary.enableDelete) {
-                                td = row.find('td').eq(3)[0];
-                                btn = td.querySelector('adminui-button');
-                                if (btn) {
-                                    td.removeChild(btn);
-                                }
+                                td = row.find('td').eq(noOfCols)[0];
                                 table.loadGroup(deleteBtn, td, table.context);
                             }
                         });
-                    });
-                }
-                //});
+
+                        table.datatable.on('draw', function () {
+                            table.datatable.rows({page: 'current'}).every(function (index, element) {
+                                let row = $(this.node());
+                                let td = row.find('td').eq(2)[0];
+                                let btn = td.querySelector('adminui-button');
+                                if (btn) {
+                                    td.removeChild(btn);
+                                }
+                                table.loadGroup(showRecordBtn, td, table.context);
+                                if (state.summary.enableDelete) {
+                                    td = row.find('td').eq(3)[0];
+                                    btn = td.querySelector('adminui-button');
+                                    if (btn) {
+                                        td.removeChild(btn);
+                                    }
+                                    table.loadGroup(deleteBtn, td, table.context);
+                                }
+                            });
+                        });
+                    }
+                });
             }
         },
 
         'adminui-button': {
 
-            confirmDelete: function() {
+            confirmDelete: function () {
                 let _this = this;
                 this.rootElement.setAttribute('data-toggle', 'modal');
                 let modalRoot = this.getComponentByName('adminui-modal-root', 'confirm-delete-' + state.name);
                 if (modalRoot) {
                     this.rootElement.setAttribute('data-target', '#' + modalRoot.rootElement.id);
                 }
-                let fn = function() {
+                let fn = function () {
                     let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                     card.hide();
                     let id = _this.parentNode.id.split('delete-')[1];
@@ -596,9 +630,9 @@ export function ptwq_chart_assembly(QEWD,state){
                 this.addHandler(fn);
             },
 
-            delete: function() {
+            delete: function () {
                 let _this = this;
-                let fn = async function() {
+                let fn = async function () {
                     let id = _this.parentNode.id.split('delete-')[1];
                     /*
                     QEWD.send({
@@ -618,11 +652,11 @@ export function ptwq_chart_assembly(QEWD,state){
                     modalRoot.hide();
                     if (responseObj.message.error) {
                         toastr.error(responseObj.message.error);
-                    }
-                    else {
+                    } else {
                         toastr.info('Record deleted');
                         let table = _this.getComponentByName('adminui-datatables', state.name);
-                        let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');;
+                        let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');
+                        ;
                         table.datatable.destroy();
                         table.remove();
                         let assembly = {
@@ -640,9 +674,9 @@ export function ptwq_chart_assembly(QEWD,state){
                 this.addHandler(fn);
             },
 
-            save: function() {
+            save: function () {
                 let _this = this;
-                let fn = async function() {
+                let fn = async function () {
                     let form = _this.getComponentByName('adminui-form', state.name);
                     let field;
                     let value;
@@ -662,8 +696,7 @@ export function ptwq_chart_assembly(QEWD,state){
                                 if (value[xname]) arr.push(xname);
                             }
                             params[formFieldPropertyNames[name]] = arr;
-                        }
-                        else {
+                        } else {
                             params[formFieldPropertyNames[name]] = value;
                         }
                     }
@@ -679,11 +712,11 @@ export function ptwq_chart_assembly(QEWD,state){
                     });
                     if (responseObj.message.error) {
                         toastr.error(responseObj.message.error);
-                    }
-                    else {
+                    } else {
                         toastr.info('Record updated successfully');
                         let table = _this.getComponentByName('adminui-datatables', state.name);
-                        let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');;
+                        let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');
+                        ;
                         if (table) {
                             table.datatable.destroy();
                             table.remove();
@@ -705,12 +738,12 @@ export function ptwq_chart_assembly(QEWD,state){
                 this.addHandler(fn);
             },
 
-            getDetail: function() {
+            getDetail: function () {
                 let _this = this;
                 let id = this.parentNode.id.split('record-')[1];
                 let card = this.getComponentByName('adminui-content-card', state.name + '-details-card');
                 let form = this.getComponentByName('adminui-form', state.name);
-                let fn = async function() {
+                let fn = async function () {
                     form.recordId = id;
                     /*
                     QEWD.send({
@@ -733,8 +766,7 @@ export function ptwq_chart_assembly(QEWD,state){
                         let title_value;
                         if (typeof state.detail.title_data_property === 'function') {
                             title_value = state.detail.title_data_property.call(_this);
-                        }
-                        else {
+                        } else {
                             title_value = _this.record[state.detail.title_data_property];
                         }
 
@@ -751,20 +783,17 @@ export function ptwq_chart_assembly(QEWD,state){
                                     selectedValue: _this.record[name],
                                     readonly: true
                                 });
-                            }
-                            else if (field.type === 'checkbox-group') {
+                            } else if (field.type === 'checkbox-group') {
                                 field.setState({
                                     selectedValues: _this.record[name],
                                     readonly: true
                                 });
-                            }
-                            else if (field.type === 'select-multiple') {
+                            } else if (field.type === 'select-multiple') {
                                 field.setState({
                                     selectedValues: _this.record[name],
                                     readonly: true
                                 });
-                            }
-                            else {
+                            } else {
                                 if (field.type === 'range' && !_this.record[name]) {
                                     _this.record[name] = field.min;
                                 }
@@ -779,6 +808,7 @@ export function ptwq_chart_assembly(QEWD,state){
                 };
                 this.addHandler(fn, this.rootElement);
             },
+
             showChart: function () {
                 let _this = this;
                 let context = this.context;
@@ -794,30 +824,10 @@ export function ptwq_chart_assembly(QEWD,state){
                     dataTable.classList.remove('d-block');
                 });
             },
-        },
 
-        'adminui-content-card-button-title': {
-
-            updateRecord: function() {
+            createNewRecord: function () {
                 let _this = this;
-                let fn = function() {
-                    let card = _this.getParentComponent('adminui-content-card');
-                    let title = card.querySelector('adminui-content-card-button-title');
-                    title.hideButton();
-                    let form = _this.getComponentByName('adminui-form', state.name);
-                    card.footer.show();
-                    let field;
-                    for (let name in form.field) {
-                        field = form.field[name];
-                        field.setState({readonly: false});
-                    }
-                };
-                this.addHandler(fn, this.button);
-            },
-
-            createNewRecord: function() {
-                let _this = this;
-                let fn = function() {
+                let fn = function () {
                     let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                     let title = card.querySelector('adminui-content-card-button-title');
                     title.setState({title: state.detail.newRecordTitle || 'New Record'});
@@ -840,8 +850,7 @@ export function ptwq_chart_assembly(QEWD,state){
                                 selectedValues: [],
                                 readonly: false
                             });
-                        }
-                        else {
+                        } else {
                             field.setState({
                                 value: '',
                                 readonly: false
@@ -870,18 +879,59 @@ export function ptwq_chart_assembly(QEWD,state){
                 }
                 this.addHandler(fn);
             },
+
+            fullScreen: function () {
+                let _this = this;
+
+                let fn = function() {
+
+                    let card = _this.getComponentByName(
+                        'adminui-content-card',
+                        state.name + '-details-card'
+                    );
+                    card.hide();
+                    card.footer.hide();
+
+                    _this.setState({
+                        hideButton: true,
+                    })
+                }
+                this.addHandler(fn, this.button);
+
+            }
         },
 
+        'adminui-content-card-button-title': {
+
+            updateRecord: function () {
+                let _this = this;
+                let fn = function () {
+                    let card = _this.getParentComponent('adminui-content-card');
+                    let title = card.querySelector('adminui-content-card-button-title');
+                    title.hideButton();
+                    let form = _this.getComponentByName('adminui-form', state.name);
+                    card.footer.show();
+                    let field;
+                    for (let name in form.field) {
+                        field = form.field[name];
+                        field.setState({readonly: false});
+                    }
+                };
+                this.addHandler(fn, this.button);
+            },
+
+       },
+
         'adminui-content-card': {
-            chartBlockHook: function(){
+            chartBlockHook: function () {
                 this.classList.add('adminui-crud-chart-block');
             },
 
-            summaryHook: function(){
+            summaryHook: function () {
                 console.log(this);
                 this.classList.add('adminui-crud-summary-block');
             },
-            detailsHook: function (){
+            detailsHook: function () {
                 this.classList.add('adminui-crud-details-block');
             }
         },
@@ -892,16 +942,16 @@ export function ptwq_chart_assembly(QEWD,state){
                 QEWD.reply({
                     type: state.summary.qewd.getSummary,
                     params: {
-                        proprties: ['heartrate', 'resprate', 'systolic_bp', 'score','patient_id']
+                        proprties: ['heartrate', 'resprate', 'systolic_bp', 'score', 'patient_id']
                     }
                 })
                     .then((responseObj) => {
                         console.log(responseObj);
 
-                        let data =[] ;
+                        let data = [];
                         let heartrate = [], resprate = [], systolic_rate = [];
 
-                        responseObj.message.summary.forEach(function(record) {
+                        responseObj.message.summary.forEach(function (record) {
                             if (context.selectedPatient && state.patientIdDepends) {
                                 if (context.selectedPatient.id !== record.patient_id) {
                                     return true; // SKIP BY FILTER
@@ -961,7 +1011,7 @@ export function ptwq_chart_assembly(QEWD,state){
                         };
                         this.canvas.height = '500px';
                         this.draw(config);
-                        let card =this.getComponentByName('adminui-content-card', state.name + '-chart-card');
+                        let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                         card.classList.add('d-none');
                     });
 
