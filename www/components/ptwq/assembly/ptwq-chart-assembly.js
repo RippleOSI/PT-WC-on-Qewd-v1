@@ -113,17 +113,53 @@ export function ptwq_chart_assembly(QEWD,state){
                                 componentName: 'adminui-content-card-header',
                                 children: [
                                     {
-                                        componentName: 'adminui-content-card-button-title',
+                                        componentName: 'ptwq-content-card-multibutton-title',
                                         state: {
                                             title: state.summary.title,
                                             title_colour: state.summary.titleColour,
-                                            icon: state.summary.btnIcon,
-                                            buttonColour: state.summary.btnColour,
-                                            tooltip: state.summary.btnTooltip,
-                                            hideButton: state.summary.disableAdd
                                         },
-                                        hooks: ['createNewRecord']
-                                    }
+                                        children:[
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Show chart',
+                                                    name: state.name + '-show-chart-button',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'chart-line',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['showChart']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Full screen',
+                                                    name: state.name + '-summary-full-screen',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'expand-alt',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['fullScreen']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Create new record',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: state.summary.btnIcon,
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: state.summary.disableAdd
+                                                },
+                                                hooks: ['createNewRecord']
+
+                                            }
+                                        ],
+                                    },
                                 ]
                             },
                             {
@@ -136,13 +172,6 @@ export function ptwq_chart_assembly(QEWD,state){
                                         },
                                         hooks: ['retrieveRecordSummary']
                                     },
-                                    {
-                                        componentName: 'adminui-button',
-                                        state: {
-                                            text: 'Show Chart',
-                                        },
-                                        hooks: ['showChart']
-                                    }
                                 ]
                             }
                         ],
@@ -294,12 +323,21 @@ export function ptwq_chart_assembly(QEWD,state){
                 }
 
                 let table = this.getComponentByName('adminui-datatables', state.name);
+
                 let target = table
                                 .getParentComponent('adminui-content-card-body')
                                 .querySelector('.card-body');
 
-                table.datatable.destroy();
-                table.remove();
+                if(table.datatable) {
+                    table.datatable.destroy();
+                }
+
+                if(table) {
+                    table.remove();
+                }
+
+
+
                 let assembly = {
                     componentName: 'adminui-datatables',
                     assemblyName: state.assemblyName,
