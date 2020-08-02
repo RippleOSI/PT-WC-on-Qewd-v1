@@ -351,6 +351,106 @@ export function ptwq_calendar_assembly(QEWD,state){
     };
     let calendarObj;
 
+    let getFullCalendarData = async function(_this, context){
+        return new Promise((resolve)=>{
+            QEWD.reply({
+                type: 'getEvents',
+                params: {
+                    properties: ['id','name', 'date','patient_id'],
+                },
+            }).then((responseObj) => {
+                let data = [];
+                console.log(context);
+                responseObj.message.summary.forEach(function (record) {
+                    if (context.selectedPatient && state.patientIdDepends) {
+                        if (context.selectedPatient.id !== record.patient_id) {
+                            return true; // SKIP BY FILTER
+                        }
+                    } else {
+                        console.log('contextmiss');
+                    }
+                    data.push(record);
+                });
+                let events = data.map((el) => {
+                    return {
+                        id: el.id,
+                        eventId: el.id,
+                        title: el.name,
+                        start: el.date,
+                    }
+                });
+                resolve(events);
+            });
+        });
+    }
+
+    let getDetailsActions = async function(id, _this) {
+        let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
+        let form = _this.getComponentByName('adminui-form', state.name);
+
+        form.recordId = id;
+
+        /*
+        QEWD.send({
+          type: state.summary.qewd.getDetail,
+          params: {
+            id: id
+          }
+        }, function(responseObj) {
+        */
+        let responseObj = await QEWD.reply({
+            type: state.summary.qewd.getDetail,
+            params: {
+                id: id
+            }
+        });
+        if (!responseObj.message.error) {
+            card.show();
+            card.footer.hide();
+            _this.record = responseObj.message.record;
+            let title_value;
+            if (typeof state.detail.title_data_property === 'function') {
+                title_value = state.detail.title_data_property.call(_this);
+            } else {
+                title_value = _this.record[state.detail.title_data_property];
+            }
+
+            let title = card.querySelector('adminui-content-card-button-title');
+            title.setState({title: title_value});
+            title.showButton();
+
+            for (let fname in formFields) {
+                let name = formFields[fname].name;
+                let field = form.field[name];
+
+                if (field.type === 'radio-group') {
+                    field.setState({
+                        selectedValue: _this.record[name],
+                        readonly: true
+                    });
+                } else if (field.type === 'checkbox-group') {
+                    field.setState({
+                        selectedValues: _this.record[name],
+                        readonly: true
+                    });
+                } else if (field.type === 'select-multiple') {
+                    field.setState({
+                        selectedValues: _this.record[name],
+                        readonly: true
+                    });
+                } else {
+                    if (field.type === 'range' && !_this.record[name]) {
+                        _this.record[name] = field.min;
+                    }
+                    field.setState({
+                        value: _this.record[name],
+                        readonly: true
+                    });
+                }
+            }
+        }
+        //});
+    };
 
     let hooks = {
 
@@ -729,6 +829,19 @@ export function ptwq_calendar_assembly(QEWD,state){
                             hooks: ['retrieveRecordSummary']
                         };
                         _this.loadGroup(assembly, target, _this.context);
+
+                        let calendar = _this.getComponentByName('fullcalendar-root','fullcalendar-root-1');
+                        getFullCalendarData(_this, _this.context).then((events)=>{
+                            calendar.renderFullcalendar(events).then((res)=>{
+                                calendar.addEventHandler(function(info){
+                                    console.log(info);
+                                    //let id = info.event.id;
+                                    getDetailsActions.call(_this, info.event.id, _this);
+
+                                    console.log('event Clicked');
+                                },'eventClick');
+                            });
+                        })
                         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                         card.hide();
                     }
@@ -737,79 +850,10 @@ export function ptwq_calendar_assembly(QEWD,state){
                 this.addHandler(fn);
             },
 
-            getDetail: function() {
+            getDetail: function () {
                 let _this = this;
                 let id = this.parentNode.id.split('record-')[1];
-                let card = this.getComponentByName('adminui-content-card', state.name + '-details-card');
-                let form = this.getComponentByName('adminui-form', state.name);
-                let fn = async function() {
-                    form.recordId = id;
-                    /*
-                    QEWD.send({
-                      type: state.summary.qewd.getDetail,
-                      params: {
-                        id: id
-                      }
-                    }, function(responseObj) {
-                    */
-                    let responseObj = await QEWD.reply({
-                        type: state.summary.qewd.getDetail,
-                        params: {
-                            id: id
-                        }
-                    });
-                    if (!responseObj.message.error) {
-                        card.show();
-                        card.footer.hide();
-                        _this.record = responseObj.message.record;
-                        let title_value;
-                        if (typeof state.detail.title_data_property === 'function') {
-                            title_value = state.detail.title_data_property.call(_this);
-                        }
-                        else {
-                            title_value = _this.record[state.detail.title_data_property];
-                        }
-
-                        let title = card.querySelector('adminui-content-card-button-title');
-                        title.setState({title: title_value});
-                        title.showButton();
-
-                        for (let fname in formFields) {
-                            let name = formFields[fname].name;
-                            let field = form.field[name];
-
-                            if (field.type === 'radio-group') {
-                                field.setState({
-                                    selectedValue: _this.record[name],
-                                    readonly: true
-                                });
-                            }
-                            else if (field.type === 'checkbox-group') {
-                                field.setState({
-                                    selectedValues: _this.record[name],
-                                    readonly: true
-                                });
-                            }
-                            else if (field.type === 'select-multiple') {
-                                field.setState({
-                                    selectedValues: _this.record[name],
-                                    readonly: true
-                                });
-                            }
-                            else {
-                                if (field.type === 'range' && !_this.record[name]) {
-                                    _this.record[name] = field.min;
-                                }
-                                field.setState({
-                                    value: _this.record[name],
-                                    readonly: true
-                                });
-                            }
-                        }
-                    }
-                    //});
-                };
-                this.addHandler(fn, this.rootElement);
+                this.addHandler(getDetailsActions.bind(this,id,this), this.rootElement);
             },
 
             selectEvents: function () {
@@ -945,38 +989,20 @@ export function ptwq_calendar_assembly(QEWD,state){
             getFullcalendar: function () {
                 let _this = this;
                 let context = this.context;
-                let result = QEWD.reply({
-                    type: 'getEvents',
-                    params: {
-                        properties: ['name', 'date','patient_id'],
-                    },
-                }).then((responseObj) => {
-                    let data = [];
-                    let context = this.context;
-                    console.log(context);
-                    responseObj.message.summary.forEach(function(record) {
-                        if (context.selectedPatient && state.patientIdDepends) {
-                            if (context.selectedPatient.id !== record.patient_id) {
-                                return true; // SKIP BY FILTER
-                            }
-                        }else{
-                            console.log('contextmiss');
-                        }
-                        data.push(record);
-                    });
-                    let events = data.map( (el) => { return {
-                        title: el.name,
-                        start: el.date,
-                    }});
 
+                getFullCalendarData(_this, context).then((events)=>{
                     _this.renderFullcalendar(events).then((res)=>{
                         let calendar = _this.getComponentByName('adminui-content-card', state.name + '-events-card')
                         calendar.classList.add('d-none');
+                        _this.addEventHandler(function(info){
+                            console.log(info);
+                            //let id = info.event.id;
+                            getDetailsActions.call(_this, info.event.id, _this);
+
+                            console.log('event Clicked');
+                        },'eventClick');
                     });
-                });
-
-
-                console.log(result);
+                })
             }
         },
 

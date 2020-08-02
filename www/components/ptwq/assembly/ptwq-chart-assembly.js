@@ -1072,7 +1072,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                             var clickedElementIndex = activePoints[0]._index;
                             var value = this.chart.data.datasets[clickedDatasetIndex].data[clickedElementIndex];
                             if (value) {
-                                getDetailsActions.call(this, 2, this);
+                                getDetailsActions.call(this, value.x, this);
                             }
                         }
                         console.log(value);
