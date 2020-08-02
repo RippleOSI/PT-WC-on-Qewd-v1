@@ -38,6 +38,76 @@ export function ptwq_chart_assembly(QEWD, state) {
         });
     }
 
+
+    let getDetailsActions = async function(id, _this) {
+        let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
+        let form = _this.getComponentByName('adminui-form', state.name);
+
+        form.recordId = id;
+
+        /*
+        QEWD.send({
+          type: state.summary.qewd.getDetail,
+          params: {
+            id: id
+          }
+        }, function(responseObj) {
+        */
+        let responseObj = await QEWD.reply({
+            type: state.summary.qewd.getDetail,
+            params: {
+                id: id
+            }
+        });
+        if (!responseObj.message.error) {
+            card.show();
+            card.footer.hide();
+            _this.record = responseObj.message.record;
+            let title_value;
+            if (typeof state.detail.title_data_property === 'function') {
+                title_value = state.detail.title_data_property.call(_this);
+            } else {
+                title_value = _this.record[state.detail.title_data_property];
+            }
+
+            let title = card.querySelector('adminui-content-card-button-title');
+            title.setState({title: title_value});
+            title.showButton();
+
+            for (let fname in formFields) {
+                let name = formFields[fname].name;
+                let field = form.field[name];
+
+                if (field.type === 'radio-group') {
+                    field.setState({
+                        selectedValue: _this.record[name],
+                        readonly: true
+                    });
+                } else if (field.type === 'checkbox-group') {
+                    field.setState({
+                        selectedValues: _this.record[name],
+                        readonly: true
+                    });
+                } else if (field.type === 'select-multiple') {
+                    field.setState({
+                        selectedValues: _this.record[name],
+                        readonly: true
+                    });
+                } else {
+                    if (field.type === 'range' && !_this.record[name]) {
+                        _this.record[name] = field.min;
+                    }
+                    field.setState({
+                        value: _this.record[name],
+                        readonly: true
+                    });
+                }
+            }
+        }
+        //});
+    };
+
+
     let component = {
         componentName: 'ptwq-content-page',
         assemblyName: state.assemblyName,
@@ -499,7 +569,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                 let table = this;
                 let context = this.context;
 
-
+                console.log('retrive-record');
                 QEWD.send({
                     type: state.summary.qewd.getSummary,
                     params: {
@@ -741,72 +811,7 @@ export function ptwq_chart_assembly(QEWD, state) {
             getDetail: function () {
                 let _this = this;
                 let id = this.parentNode.id.split('record-')[1];
-                let card = this.getComponentByName('adminui-content-card', state.name + '-details-card');
-                let form = this.getComponentByName('adminui-form', state.name);
-                let fn = async function () {
-                    form.recordId = id;
-                    /*
-                    QEWD.send({
-                      type: state.summary.qewd.getDetail,
-                      params: {
-                        id: id
-                      }
-                    }, function(responseObj) {
-                    */
-                    let responseObj = await QEWD.reply({
-                        type: state.summary.qewd.getDetail,
-                        params: {
-                            id: id
-                        }
-                    });
-                    if (!responseObj.message.error) {
-                        card.show();
-                        card.footer.hide();
-                        _this.record = responseObj.message.record;
-                        let title_value;
-                        if (typeof state.detail.title_data_property === 'function') {
-                            title_value = state.detail.title_data_property.call(_this);
-                        } else {
-                            title_value = _this.record[state.detail.title_data_property];
-                        }
-
-                        let title = card.querySelector('adminui-content-card-button-title');
-                        title.setState({title: title_value});
-                        title.showButton();
-
-                        for (let fname in formFields) {
-                            let name = formFields[fname].name;
-                            let field = form.field[name];
-
-                            if (field.type === 'radio-group') {
-                                field.setState({
-                                    selectedValue: _this.record[name],
-                                    readonly: true
-                                });
-                            } else if (field.type === 'checkbox-group') {
-                                field.setState({
-                                    selectedValues: _this.record[name],
-                                    readonly: true
-                                });
-                            } else if (field.type === 'select-multiple') {
-                                field.setState({
-                                    selectedValues: _this.record[name],
-                                    readonly: true
-                                });
-                            } else {
-                                if (field.type === 'range' && !_this.record[name]) {
-                                    _this.record[name] = field.min;
-                                }
-                                field.setState({
-                                    value: _this.record[name],
-                                    readonly: true
-                                });
-                            }
-                        }
-                    }
-                    //});
-                };
-                this.addHandler(fn, this.rootElement);
+                this.addHandler(getDetailsActions.bind(this,id,this), this.rootElement);
             },
 
             showChart: function () {
@@ -942,7 +947,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                 QEWD.reply({
                     type: state.summary.qewd.getSummary,
                     params: {
-                        proprties: ['heartrate', 'resprate', 'systolic_bp', 'score', 'patient_id']
+                        properties: ['heartrate', 'resprate', 'systolic_bp', 'score', 'patient_id']
                     }
                 })
                     .then((responseObj) => {
@@ -950,6 +955,7 @@ export function ptwq_chart_assembly(QEWD, state) {
 
                         let data = [];
                         let heartrate = [], resprate = [], systolic_rate = [];
+                        let  labels = [];
 
                         responseObj.message.summary.forEach(function (record) {
                             if (context.selectedPatient && state.patientIdDepends) {
@@ -959,58 +965,104 @@ export function ptwq_chart_assembly(QEWD, state) {
                             }
                             data.push(record);
                         });
-
+                        console.log(responseObj.message.summary);
                         let result = data.forEach(el => {
+                            labels.push(el.id );
                             heartrate.push({
                                 x: el.id,
                                 y: el.heartrate,
+                                value: el.id,
+                                name: el.heartrate,
                             })
                             resprate.push({
                                 x: el.id,
                                 y: el.resprate,
+                                value: el.id,
+                                name: el.resprate,
                             })
                             systolic_rate.push({
                                 x: el.id,
                                 y: el.systolic_bp,
+                                value: el.id,
+                                name: el.systolic_bp,
                             })
                         });
+                        console.log(systolic_rate);
                         let config = {
-                            type: 'scatter',
+                            type: 'line',
+
                             data: {
+                                labels: labels,
                                 datasets: [{
                                     label: 'Heart Rate',
                                     backgroundColor: 'rgba(226,57,57,0.5)',
                                     borderColor: '#e23939',
                                     fill: false,
-                                    showLine: true,
-
                                     data: heartrate,
                                 }, {
                                     label: 'Resp Rate',
                                     backgroundColor: 'rgba(57,171,226,0.5)',
                                     borderColor: '#39abe2',
                                     fill: false,
-                                    showLine: true,
-
                                     data: resprate,
                                 }, {
                                     label: 'Systolic Rate',
                                     backgroundColor: 'rgba(226,57,220,0.5)',
                                     borderColor: '#e239dc',
                                     fill: false,
-                                    showLine: true,
-
                                     data: systolic_rate,
                                 }],
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false
+                            },
+                            options: {
+                                responsive: true,
 
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: false,
                                 },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Month'
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Value'
+                                        }
+                                    }]
+                                }
                             }
+
+
                         };
+
                         this.canvas.height = '500px';
                         this.draw(config);
+                        this.canvas.onclick = (evt) => {
+                            let chart = this.chart;
+                            var activePoints = chart.getElementsAtEvent(evt);
+                            var activeDataSet = chart.getDatasetAtEvent(evt);
+
+                            if (activePoints.length > 0)
+                            {
+                                var clickedDatasetIndex = activeDataSet[0]._datasetIndex;
+                                var clickedElementIndex = activePoints[0]._index;
+                                var value = this.chart.data.datasets[clickedDatasetIndex].data[clickedElementIndex];
+                                if(value){
+                                    getDetailsActions.call(this,2,this);
+                                }
+                            }
+                            console.log(value);
+                        };
                         let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
                         card.classList.add('d-none');
                     });
