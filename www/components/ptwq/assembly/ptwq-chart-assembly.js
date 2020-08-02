@@ -107,7 +107,113 @@ export function ptwq_chart_assembly(QEWD, state) {
         //});
     };
 
+    let chartConfigGenerator = async function(context){
+        return new Promise((resolve, reject)=> {
+            QEWD.reply({
+                type: state.summary.qewd.getSummary,
+                params: {
+                    properties: ['heartrate', 'resprate', 'systolic_bp', 'score', 'patient_id']
+                }
+            })
+                .then((responseObj) => {
+                    console.log(responseObj);
 
+                    let data = [];
+                    let heartrate = [], resprate = [], systolic_rate = [];
+                    let labels = [];
+
+                    responseObj.message.summary.forEach(function (record) {
+                        if (context.selectedPatient && state.patientIdDepends) {
+                            if (context.selectedPatient.id !== record.patient_id) {
+                                return true; // SKIP BY FILTER
+                            }
+                        }
+                        data.push(record);
+                    });
+                    console.log(responseObj.message.summary);
+                    let result = data.forEach(el => {
+                        labels.push(el.id);
+                        heartrate.push({
+                            x: el.id,
+                            y: el.heartrate,
+                            value: el.id,
+                            name: el.heartrate,
+                        })
+                        resprate.push({
+                            x: el.id,
+                            y: el.resprate,
+                            value: el.id,
+                            name: el.resprate,
+                        })
+                        systolic_rate.push({
+                            x: el.id,
+                            y: el.systolic_bp,
+                            value: el.id,
+                            name: el.systolic_bp,
+                        })
+                    });
+                    console.log(systolic_rate);
+                    let config = {
+                        type: 'line',
+
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Heart Rate',
+                                backgroundColor: 'rgba(226,57,57,0.5)',
+                                borderColor: '#e23939',
+                                fill: false,
+                                data: heartrate,
+                            }, {
+                                label: 'Resp Rate',
+                                backgroundColor: 'rgba(57,171,226,0.5)',
+                                borderColor: '#39abe2',
+                                fill: false,
+                                data: resprate,
+                            }, {
+                                label: 'Systolic Rate',
+                                backgroundColor: 'rgba(226,57,220,0.5)',
+                                borderColor: '#e239dc',
+                                fill: false,
+                                data: systolic_rate,
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+
+                            tooltips: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            hover: {
+                                mode: 'nearest',
+                                intersect: true
+                            },
+                            scales: {
+                                xAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Month'
+                                    }
+                                }],
+                                yAxes: [{
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Value'
+                                    }
+                                }]
+                            }
+                        }
+
+
+                    };
+
+                    resolve(config);
+                });
+        });
+    }
     let component = {
         componentName: 'ptwq-content-page',
         assemblyName: state.assemblyName,
@@ -202,6 +308,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                                 children: [
                                     {
                                         componentName: 'adminui-chart',
+                                        name: state.name + '-chart',
                                         hooks: ['getChartData']
                                     }
                                 ]
@@ -800,6 +907,13 @@ export function ptwq_chart_assembly(QEWD, state) {
                             hooks: ['retrieveRecordSummary']
                         };
                         _this.loadGroup(assembly, target, _this.context);
+
+                        let chartComponent = _this.getComponentByName('adminui-chart','unnamed-chart-0');
+                        chartConfigGenerator(_this.context).then((config)=>{
+                            chartComponent.chart.options = config.options;
+                            chartComponent.chart.data = config.data;
+                            chartComponent.chart.update();
+                        });
                         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                         card.hide();
                     }
@@ -944,130 +1058,28 @@ export function ptwq_chart_assembly(QEWD, state) {
             getChartData: function () {
                 let context = this.context;
                 console.log('charts init');
-                QEWD.reply({
-                    type: state.summary.qewd.getSummary,
-                    params: {
-                        properties: ['heartrate', 'resprate', 'systolic_bp', 'score', 'patient_id']
-                    }
-                })
-                    .then((responseObj) => {
-                        console.log(responseObj);
+                this.canvas.height = '500px';
+                console.log(this.name);
+                chartConfigGenerator(context).then((config)=> {
+                    this.draw(config);
+                    this.canvas.onclick = (evt) => {
+                        let chart = this.chart;
+                        var activePoints = chart.getElementsAtEvent(evt);
+                        var activeDataSet = chart.getDatasetAtEvent(evt);
 
-                        let data = [];
-                        let heartrate = [], resprate = [], systolic_rate = [];
-                        let  labels = [];
-
-                        responseObj.message.summary.forEach(function (record) {
-                            if (context.selectedPatient && state.patientIdDepends) {
-                                if (context.selectedPatient.id !== record.patient_id) {
-                                    return true; // SKIP BY FILTER
-                                }
+                        if (activePoints.length > 0) {
+                            var clickedDatasetIndex = activeDataSet[0]._datasetIndex;
+                            var clickedElementIndex = activePoints[0]._index;
+                            var value = this.chart.data.datasets[clickedDatasetIndex].data[clickedElementIndex];
+                            if (value) {
+                                getDetailsActions.call(this, 2, this);
                             }
-                            data.push(record);
-                        });
-                        console.log(responseObj.message.summary);
-                        let result = data.forEach(el => {
-                            labels.push(el.id );
-                            heartrate.push({
-                                x: el.id,
-                                y: el.heartrate,
-                                value: el.id,
-                                name: el.heartrate,
-                            })
-                            resprate.push({
-                                x: el.id,
-                                y: el.resprate,
-                                value: el.id,
-                                name: el.resprate,
-                            })
-                            systolic_rate.push({
-                                x: el.id,
-                                y: el.systolic_bp,
-                                value: el.id,
-                                name: el.systolic_bp,
-                            })
-                        });
-                        console.log(systolic_rate);
-                        let config = {
-                            type: 'line',
-
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'Heart Rate',
-                                    backgroundColor: 'rgba(226,57,57,0.5)',
-                                    borderColor: '#e23939',
-                                    fill: false,
-                                    data: heartrate,
-                                }, {
-                                    label: 'Resp Rate',
-                                    backgroundColor: 'rgba(57,171,226,0.5)',
-                                    borderColor: '#39abe2',
-                                    fill: false,
-                                    data: resprate,
-                                }, {
-                                    label: 'Systolic Rate',
-                                    backgroundColor: 'rgba(226,57,220,0.5)',
-                                    borderColor: '#e239dc',
-                                    fill: false,
-                                    data: systolic_rate,
-                                }],
-                            },
-                            options: {
-                                responsive: true,
-
-                                tooltips: {
-                                    mode: 'index',
-                                    intersect: false,
-                                },
-                                hover: {
-                                    mode: 'nearest',
-                                    intersect: true
-                                },
-                                scales: {
-                                    xAxes: [{
-                                        display: true,
-                                        scaleLabel: {
-                                            display: true,
-                                            labelString: 'Month'
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        display: true,
-                                        scaleLabel: {
-                                            display: true,
-                                            labelString: 'Value'
-                                        }
-                                    }]
-                                }
-                            }
-
-
-                        };
-
-                        this.canvas.height = '500px';
-                        this.draw(config);
-                        this.canvas.onclick = (evt) => {
-                            let chart = this.chart;
-                            var activePoints = chart.getElementsAtEvent(evt);
-                            var activeDataSet = chart.getDatasetAtEvent(evt);
-
-                            if (activePoints.length > 0)
-                            {
-                                var clickedDatasetIndex = activeDataSet[0]._datasetIndex;
-                                var clickedElementIndex = activePoints[0]._index;
-                                var value = this.chart.data.datasets[clickedDatasetIndex].data[clickedElementIndex];
-                                if(value){
-                                    getDetailsActions.call(this,2,this);
-                                }
-                            }
-                            console.log(value);
-                        };
-                        let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
-                        card.classList.add('d-none');
-                    });
-
-
+                        }
+                        console.log(value);
+                    };
+                    let card = this.getComponentByName('adminui-content-card', state.name + '-chart-card');
+                    card.classList.add('d-none');
+                });
             }
         },
     };
