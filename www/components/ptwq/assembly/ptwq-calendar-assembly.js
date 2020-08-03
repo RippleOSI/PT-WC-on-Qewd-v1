@@ -257,6 +257,13 @@ export function ptwq_calendar_assembly(QEWD,state){
                                         },
                                         hooks: ['addFormFields']
                                     },
+                                    {
+                                        componentName: 'adminui-button',
+                                        state: {
+                                            text: 'Start Conference',
+                                        },
+                                        hooks: ['startConferenceButton']
+                                    }
                                 ]
                             },
                             {
@@ -712,6 +719,14 @@ export function ptwq_calendar_assembly(QEWD,state){
         },
 
         'adminui-button': {
+
+            startConferenceButton: function () {
+                let fn = function () {
+                    var root = document.getElementsByTagName('ptwq-root')[0];
+                    root.switchToPage('conference');
+                }
+                this.addHandler(fn)
+            },
 
             confirmDelete: function() {
                 let _this = this;
