@@ -40,7 +40,9 @@ let eventsPageState = {
             name: 'date',
             data_property: 'date',
             label: 'Date',
-            type: 'text',
+            type: 'datepicker',
+            saveFormat: 'yyyy-mm-dd',
+            displayFormat: 'yyyy-mm-dd',
             labelWidth: 4
         },
         {

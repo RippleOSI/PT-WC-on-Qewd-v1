@@ -383,9 +383,12 @@ export function crud_assembly(QEWD, state) {
           if (field.type === 'select') componentName = 'adminui-form-select';
           if (field.type === 'multiselect') componentName = 'adminui-form-select-multiple';
           if (field.type === 'textarea') componentName = 'adminui-form-textarea';
+          if (field.type === 'datepicker') componentName = 'adminui-form-datepicker';
+
           assembly = {
             componentName: componentName,
             state: {
+              ...field,
               name: field.name,
               type: field.type,
               label: field.label,
