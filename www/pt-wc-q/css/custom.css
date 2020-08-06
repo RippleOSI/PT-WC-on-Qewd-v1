@@ -82,3 +82,8 @@ ptwq-breadcumps .breadcrumb-item.active{
 adminui-topbar-navbar{
     margin-left: auto;
 }
+
+#content{
+    background: url("../img/gray_polygonal4-2.jpg");
+    background-size: contain;
+}

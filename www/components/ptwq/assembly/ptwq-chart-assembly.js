@@ -61,7 +61,7 @@ export function ptwq_chart_assembly(QEWD, state) {
         });
         if (!responseObj.message.error) {
             card.show();
-            this.classList.remove('d-none');
+            card.classList.remove('d-none');
 
             card.footer.hide();
             _this.record = responseObj.message.record;
@@ -397,7 +397,6 @@ export function ptwq_chart_assembly(QEWD, state) {
                         state: {
                             name: state.name + '-details-card',
                             hide: true,
-                            width: state.detail.cardWidth || '400px'
                         },
                         hooks: ['detailsHook'],
                         children: [
@@ -797,7 +796,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                 let fn = function () {
                     let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                     card.hide();
-                    this.classList.add('d-none');
+                    card.classList.add('d-none');
 
                     let id = _this.parentNode.id.split('delete-')[1];
                     let display = _this.parentNode.getAttribute('data-confirm');
@@ -920,7 +919,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                         });
                         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                         card.hide();
-                        this.classList.add('d-none');
+                        card.classList.add('d-none');
 
                     }
                     //});
@@ -960,7 +959,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                     let form = _this.getComponentByName('adminui-form', state.name);
                     form.recordId = 'new-record';
                     card.show();
-                    this.classList.remove('d-none');
+                    card.classList.remove('d-none');
 
                     card.footer.show();
                     let field;
@@ -1017,7 +1016,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                         state.name + '-details-card'
                     );
                     card.hide();
-                    this.classList.add('d-none');
+                    card.classList.add('d-none');
 
                     card.footer.hide();
 
