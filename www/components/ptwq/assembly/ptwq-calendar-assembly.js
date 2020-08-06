@@ -222,8 +222,6 @@ export function ptwq_calendar_assembly(QEWD,state){
                         componentName: 'adminui-content-card',
                         state: {
                             name: state.name + '-details-card',
-                            hide: true,
-                            width: state.detail.cardWidth || '400px'
                         },
                         hooks: ['detailsHook'],
                         children: [
@@ -413,6 +411,8 @@ export function ptwq_calendar_assembly(QEWD,state){
         });
         if (!responseObj.message.error) {
             card.show();
+            card.classList.remove('d-none');
+
             card.footer.hide();
             _this.record = responseObj.message.record;
             let title_value;
@@ -738,6 +738,8 @@ export function ptwq_calendar_assembly(QEWD,state){
                 let fn = function() {
                     let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                     card.hide();
+                    card.classList.add('d-none');
+
                     let id = _this.parentNode.id.split('delete-')[1];
                     let display = _this.parentNode.getAttribute('data-confirm');
                     let header = modalRoot.querySelector('adminui-modal-header');
@@ -855,17 +857,22 @@ export function ptwq_calendar_assembly(QEWD,state){
                         let calendar = _this.getComponentByName('fullcalendar-root','fullcalendar-root-1');
                         getFullCalendarData(_this, _this.context).then((events)=>{
                             calendar.renderFullcalendar(events).then((res)=>{
+                                window.dispatchEvent(new Event('resize'));
+
                                 calendar.addEventHandler(function(info){
                                     console.log(info);
                                     //let id = info.event.id;
                                     getDetailsActions.call(_this, info.event.id, _this);
 
                                     console.log('event Clicked');
+
                                 },'eventClick');
                             });
                         })
                         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                         card.hide();
+                        card.classList.add('d-none');
+
                     }
                     //});
                 };
@@ -904,6 +911,8 @@ export function ptwq_calendar_assembly(QEWD,state){
                     let form = _this.getComponentByName('adminui-form', state.name);
                     form.recordId = 'new-record';
                     card.show();
+                    card.classList.remove('d-none');
+
                     card.footer.show();
                     let field;
                     for (let name in form.field) {
@@ -944,6 +953,7 @@ export function ptwq_calendar_assembly(QEWD,state){
                     summary.classList.remove('d-none');
                     summary.classList.add('d-block');
 
+                    window.dispatchEvent(new Event('resize'));
 
                 }
                 this.addHandler(fn);
@@ -959,6 +969,8 @@ export function ptwq_calendar_assembly(QEWD,state){
                         state.name + '-details-card'
                     );
                     card.hide();
+                    card.classList.add('d-none');
+
                     card.footer.hide();
 
                     _this.setState({
@@ -1003,6 +1015,8 @@ export function ptwq_calendar_assembly(QEWD,state){
                 this.classList.add('adminui-crud-summary-block');
             },
             detailsHook: function (){
+                this.classList.add('d-none');
+
                 this.classList.add('adminui-crud-details-block');
             }
         },

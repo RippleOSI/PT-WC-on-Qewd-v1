@@ -61,6 +61,8 @@ export function ptwq_chart_assembly(QEWD, state) {
         });
         if (!responseObj.message.error) {
             card.show();
+            this.classList.remove('d-none');
+
             card.footer.hide();
             _this.record = responseObj.message.record;
             let title_value;
@@ -795,6 +797,8 @@ export function ptwq_chart_assembly(QEWD, state) {
                 let fn = function () {
                     let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                     card.hide();
+                    this.classList.add('d-none');
+
                     let id = _this.parentNode.id.split('delete-')[1];
                     let display = _this.parentNode.getAttribute('data-confirm');
                     let header = modalRoot.querySelector('adminui-modal-header');
@@ -916,6 +920,8 @@ export function ptwq_chart_assembly(QEWD, state) {
                         });
                         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
                         card.hide();
+                        this.classList.add('d-none');
+
                     }
                     //});
                 };
@@ -954,6 +960,8 @@ export function ptwq_chart_assembly(QEWD, state) {
                     let form = _this.getComponentByName('adminui-form', state.name);
                     form.recordId = 'new-record';
                     card.show();
+                    this.classList.remove('d-none');
+
                     card.footer.show();
                     let field;
                     for (let name in form.field) {
@@ -1009,6 +1017,8 @@ export function ptwq_chart_assembly(QEWD, state) {
                         state.name + '-details-card'
                     );
                     card.hide();
+                    this.classList.add('d-none');
+
                     card.footer.hide();
 
                     _this.setState({
@@ -1051,6 +1061,8 @@ export function ptwq_chart_assembly(QEWD, state) {
                 this.classList.add('adminui-crud-summary-block');
             },
             detailsHook: function () {
+                this.classList.add('d-none');
+
                 this.classList.add('adminui-crud-details-block');
             }
         },

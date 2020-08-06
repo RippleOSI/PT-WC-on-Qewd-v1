@@ -163,8 +163,6 @@ export function crud_assembly(QEWD, state) {
             componentName: 'adminui-content-card',
             state: {
               name: state.name + '-details-card',
-              hide: true,
-              width: state.detail.cardWidth || '400px'
             },
             hooks: ['detailsHook'],
             children: [
@@ -560,6 +558,8 @@ export function crud_assembly(QEWD, state) {
         let fn = function() {
           let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
           card.hide();
+          card.classList.add('d-none');
+
           let id = _this.parentNode.id.split('delete-')[1];
           let display = _this.parentNode.getAttribute('data-confirm');
           let header = modalRoot.querySelector('adminui-modal-header');
@@ -675,6 +675,8 @@ export function crud_assembly(QEWD, state) {
                 _this.loadGroup(assembly, target, _this.context);
               let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
               card.hide();
+              card.classList.add('d-none');
+
             }
           //});
         };
@@ -704,6 +706,8 @@ export function crud_assembly(QEWD, state) {
           });
             if (!responseObj.message.error) {
               card.show();
+              card.classList.remove('d-none');
+
               card.footer.hide();
               _this.record = responseObj.message.record;
               let title_value;
@@ -767,6 +771,7 @@ export function crud_assembly(QEWD, state) {
           let form = _this.getComponentByName('adminui-form', state.name);
           form.recordId = 'new-record';
           card.show();
+          card.classList.remove('d-none');
           card.footer.show();
 
 
@@ -806,6 +811,8 @@ export function crud_assembly(QEWD, state) {
               state.name + '-details-card'
           );
           card.hide();
+          card.classList.add('d-none');
+
           card.footer.hide();
 
           _this.setState({
@@ -844,6 +851,7 @@ export function crud_assembly(QEWD, state) {
         this.classList.add('adminui-crud-summary-block');
       },
       detailsHook: function (){
+        this.classList.add('d-none');
         this.classList.add('adminui-crud-details-block');
       }
     }
