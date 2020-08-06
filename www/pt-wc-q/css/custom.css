@@ -33,7 +33,9 @@ table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:a
     flex-grow: 1;
     flex: 1;
 }
-
+.adminui-crud-details-block{
+    flex: 1;
+}
 .adminui-summary-dashboard-block{
     flex: 1;
 }
