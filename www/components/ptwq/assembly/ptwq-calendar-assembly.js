@@ -898,6 +898,8 @@ export function ptwq_calendar_assembly(QEWD,state){
 
                     dataTable.classList.add('d-none');
                     dataTable.classList.remove('d-block');
+                    window.dispatchEvent(new Event('resize'));
+
                 });
             },
 
