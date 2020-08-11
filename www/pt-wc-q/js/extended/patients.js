@@ -61,6 +61,8 @@ export function patients_extended_crud(QEWD) {
                     &&
                     context.user.role === 'patient'
                 ) {
+                    root.loaderVisibility(true);
+
                     console.log('role is set');
                     QEWD.reply({
                         type: state.summary.qewd.getDetail,
@@ -80,6 +82,7 @@ export function patients_extended_crud(QEWD) {
 
                         var root = document.getElementsByTagName('ptwq-root')[0];
                         root.sidebarTarget.classList.remove('d-none');
+                        root.loaderVisibility(false);
 
                         root.switchToPage('psummary');
 

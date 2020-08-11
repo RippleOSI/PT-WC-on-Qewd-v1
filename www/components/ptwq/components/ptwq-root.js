@@ -39,6 +39,18 @@ export function load() {
 
       const html = `
 <div id="page-top">
+  <div id="loader" class="d-none">
+    <div class="loader-animation-container">
+        <div class="loader-animation-block">
+            <div class="loader-animation-spinner">
+            <div class="loader-animation-spinner-reverse">
+                        <div class="loader-animation-spinner" style="animation-duration: 0.5s;">
+                        </div>
+            </div>
+            </div>
+        </div>        
+    </div>
+</div>  
   <div id="wrapper">
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -220,11 +232,23 @@ export function load() {
       this.subheaderTarget = this.rootElement.querySelector('#subheader-content');
       this.contentTarget = this.rootElement.querySelector('#pageContent');
       this.footerTarget = this.rootElement.querySelector('#footerContent');
+      this.loader = this.rootElement.querySelector('#loader');
       this.middlewareArray = [];
       this.name = 'root';
 
     }
 
+    loaderVisibility(show){
+      if(show){
+        console.log('show loader');
+        this.loader.classList.remove('d-none');
+      }else{
+        console.log('hide loader');
+
+        this.loader.classList.add('d-none');
+
+      }
+    }
     /**
      * Register middleware for page swap checking
      * @param page

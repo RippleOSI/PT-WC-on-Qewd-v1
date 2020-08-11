@@ -114,9 +114,7 @@ export function define_sidebar() {
   let hooks = {
     'ptwq-sidebar-nav-item': {
         navItemHook: function (){
-          var root = document.getElementsByTagName('adminui-root')[0];
-          root.switchToPage('patients');
-          console.log('patients234');
+
         }
     },
   }

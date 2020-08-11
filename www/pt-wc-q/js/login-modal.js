@@ -1,3 +1,4 @@
+
 export function define_login_modal(QEWD) {
 
   //          **** login modal ****
@@ -111,7 +112,11 @@ export function define_login_modal(QEWD) {
       loadModal: function(){
         let ctx = this.context;
         let _this = this;
+        let root = _this.getComponentByName('ptwq-root', 'root');
+        root.loaderVisibility(true);
         if(ctx.user) {
+
+
           setTimeout(()=>{
           QEWD.reply({
             type: 'login',
@@ -126,6 +131,8 @@ export function define_login_modal(QEWD) {
             _this.context.loadMainView();
           });
         },1000);
+        }else{
+          root.loaderVisibility(false)
         };
       }
     }

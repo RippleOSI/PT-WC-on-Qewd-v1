@@ -87,3 +87,52 @@ adminui-topbar-navbar{
     background: url("../img/gray_polygonal4-2.jpg");
     background-size: contain;
 }
+#loader{
+    position: absolute;
+    z-index: 10000;
+    background: white;
+    width: 100vw;
+    height: 100vh;
+}
+
+@keyframes translating {
+    0%   { transform: rotate(0); }
+    100% { transform: rotate(360deg);}
+}
+
+@keyframes translating-reverse {
+    0%   { transform: rotate(0); }
+    100% { transform: rotate(-360deg);}
+}
+
+.loader-animation-block{
+    width: 100px;
+    transform: rotate(180deg);
+    height: 100px;
+}
+
+.loader-animation-container{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.loader-animation-spinner{
+    border: 10px solid #ff5d00;
+    border-bottom: 10px solid transparent;
+    height: 100%;
+    width: 100%;
+
+    animation: translating 1s linear infinite;
+    border-radius: 50px;
+}
+.loader-animation-spinner-reverse{
+    border: 10px solid #ff5d00;
+    border-bottom: 10px solid transparent;
+    height: 100%;
+    width: 100%;
+    animation: translating-reverse 0.5s linear infinite;
+    border-radius: 50px;
+}

@@ -145,6 +145,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadMainView() {
       let body = document.getElementsByTagName('body')[0];
       let root = webComponents.getComponentByName('ptwq-root', 'root');
+      root.loaderVisibility(false);
+
       let components = webComponents.components;
       webComponents.loadGroup(components.sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.topbar, root.topbarTarget, context);
@@ -221,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
       root.setState({
         sidebar_colour: 'no-color'
       })
+      root.loaderVisibility(true);
 
 
       root.registerMiddleware(
