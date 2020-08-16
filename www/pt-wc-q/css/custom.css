@@ -136,3 +136,20 @@ adminui-topbar-navbar{
     animation: translating-reverse 0.5s linear infinite;
     border-radius: 50px;
 }
+
+adminui-sidebar-toggler{
+    padding-top: 20px;
+}
+
+.max-width-50{
+    max-width: 50%;
+}
+
+.nav-item.active{
+    background: #ff5d00;
+
+}
+
+.nav-item.active .nav-link{
+    color: white;
+}

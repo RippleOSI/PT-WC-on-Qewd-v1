@@ -1,46 +1,14 @@
 function build_summary_card(state) {
     return {
-        componentName: 'adminui-content-card',
+        componentName: 'ptwq-summary-element',
         state: {
-            name: state.name + '-summary-assembly-card'
+            name: state.name + '-summary-assembly-card',
+            title: state.title,
+            summaryLoader: state.summary.getSummary,
+            icon: state.icon ? state.icon : 'notes-medical',
+            page: state.name,
         },
         hooks: ['summaryAssemblyHook'],
-        children: [
-            {
-                componentName: 'adminui-content-card-header',
-                children: [
-                    {
-                        componentName: 'adminui-content-card-button-title',
-                        state: {
-                            title: state.summary.title,
-                            title_colour: state.summary.titleColour,
-                            icon: state.summary.btnIcon,
-                            buttonColour: state.summary.btnColour,
-                            tooltip: state.summary.btnTooltip,
-                            hideButton: true
-                        },
-                    }
-                ]
-            },
-            {
-                componentName: 'adminui-content-card-body',
-                children: [
-                    {
-                        componentName: 'ptwq-datatables',
-                        state: {
-                            name: state.name,
-                            options: {
-                                qewdRequest: state.summary.qewd.getSummary,
-                                headers: state.summary.headers,
-                                data_properties: state.summary.data_properties
-                            },
-
-                        },
-                        hooks: ['retrieveRecordSummary']
-                    }
-                ]
-            }
-        ]
     };
 }
 
