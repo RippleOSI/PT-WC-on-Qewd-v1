@@ -153,3 +153,36 @@ adminui-sidebar-toggler{
 .nav-item.active .nav-link{
     color: white;
 }
+
+.summary-card-item{
+
+}
+
+.summary-card-item__heading{
+    text-align: center;
+}
+.summary-card-item__heading > .icon{
+    font-size: 36px;
+}
+.summary-card-item__items{
+
+}
+.list-group-item+.list-group-item{
+    border-top-width: 1px;
+}
+.summary-card-item__items .list-group-item{
+    width: 300px;
+
+}
+.summary-card-item__items li:hover{
+    background: #ff5d00;
+    color: white;
+    cursor: pointer;
+}
+
+ptwq-summary-element{
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+

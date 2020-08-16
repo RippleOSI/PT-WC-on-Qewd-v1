@@ -2,6 +2,7 @@ let contactsPageState = {
     assemblyName: 'contacts',
     name: 'contacts',
     title: 'Contacts',
+    icon: 'phone',
     summary: {
       title: 'Contacts:',
       titleColour: 'info',
@@ -92,7 +93,7 @@ let contactsPageState = {
           labelWidth: 4,
           height: 2
         },
-      
+
         {
           name: 'note',
           data_property: 'note',

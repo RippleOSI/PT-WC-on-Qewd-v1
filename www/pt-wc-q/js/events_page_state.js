@@ -2,6 +2,8 @@ let eventsPageState = {
     assemblyName: 'events',
     name: 'events',
     title: 'Events',
+    icon: 'calendar-alt',
+
     summary: {
       title: 'Current Events',
       titleColour: 'info',

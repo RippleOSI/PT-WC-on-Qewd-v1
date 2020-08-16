@@ -2,6 +2,8 @@ let vaccinationsPageState = {
     assemblyName: 'vaccinations',
     name: 'vaccinations',
     title: 'Vaccinations',
+    icon: 'syringe',
+
     summary: {
       title: 'Current Vaccinations',
       titleColour: 'info',
@@ -50,7 +52,7 @@ let vaccinationsPageState = {
         type: 'text',
         labelWidth: 4
     },
- 
+
         {
           name: 'comments',
           data_property: 'comments',
@@ -59,7 +61,7 @@ let vaccinationsPageState = {
           labelWidth: 4,
           height: 6
         },
-        
+
         {
           name: 'author',
           data_property: 'author',

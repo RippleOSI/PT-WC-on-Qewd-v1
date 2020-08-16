@@ -34,9 +34,14 @@ export function load() {
       `;
 
             this.html = `${html}`;
+            this.options = {};
         }
 
         setState(state) {
+            this.options = {
+                ...this.options,
+                ...state
+            };
             if (state.name) {
                 this.name = state.name;
             }
@@ -60,8 +65,13 @@ export function load() {
                     this.putListElement(el);
                 })
             }
-            if(state.page_goal){
-
+            if(state.page){
+                this.pageSelect = function() {
+                    console.log('switch to page ' + state.page);
+                    var root = document.getElementsByTagName('ptwq-root')[0];
+                    root.switchToPage(state.page);
+                };
+                this.rootElement.addEventListener('click', this.pageSelect);
             }
         }
 
@@ -89,9 +99,10 @@ export function load() {
         putListElement(content){
             let lE = this.listElement;
             let listElement;
-            listElement= document.createElement('div');
+            listElement= document.createElement('li');
             listElement.classList.add('list-group-item');
             listElement.textContent = content;
+            lE.appendChild(listElement);
         }
 
         onLoaded() {

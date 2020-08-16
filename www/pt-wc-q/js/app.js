@@ -114,7 +114,10 @@ document.addEventListener('DOMContentLoaded', function() {
               vitalsPageState,
               eventsPageState,
               allergiesPageState,
-              medicationsPageState
+              medicationsPageState,
+              contactsPageState,
+              vaccinationsPageState,
+
           ]));
 
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State

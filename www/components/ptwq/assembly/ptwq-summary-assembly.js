@@ -4,7 +4,8 @@ function build_summary_card(state) {
         state: {
             name: state.name + '-summary-assembly-card',
             title: state.title,
-            summaryLoader: state.summary.getSummary,
+            summaryLoader: state.summary.qewd.getSummary,
+            data_properties: state.summary.data_properties,
             icon: state.icon ? state.icon : 'notes-medical',
             page: state.name,
         },
@@ -49,74 +50,33 @@ export function summary_assembly(QEWD, state_array) {
     };
 
     let hooks = {
-        'ptwq-datatables': {
+        'ptwq-summary-element':{
+           'summaryAssemblyHook':  async function () {
+               let sE = this;
+               let responseObj = await QEWD.reply({
+                   type: sE.options.summaryLoader,
+                   params: {
+                       properties: sE.options.data_properties
+                   }
+               });
+               if (!responseObj.message.error) {
+                   let result = {};
+                   let arrayOrRecords = [];
+                   responseObj.message.summary.forEach((record)=>{
+                       let line = [];
+                       console.log(record);
+                       sE.options.data_properties.forEach(function(property) {
+                           line.push(record[property]);
+                       });
+                       arrayOrRecords.push(line.join(' / '));
 
-            retrieveRecordSummary: async function() {
-                let table = this;
-                console.log('load hooks');
-                console.log(this.options);
-
-                let responseObj = await QEWD.reply({
-                    type: this.options.qewdRequest,
-                    params: {
-                        properties: this.options.data_properties
-                    }
-                });
-                if (!responseObj.message.error) {
-                    table.data = {};
-                    let data = [];
-                    responseObj.message.summary.forEach(function(record) {
-                        table.data[record.id] = record;
-                        let row = [];
-                        table.options.data_properties.forEach(function(property) {
-                            row.push(record[property]);
-                        });
-                        row.push(record.id);
-
-                        data.push(row);
-                    });
-                    let columns = [];
-                    let noOfCols = table.options.headers.length;
-
-                    table.options.headers.forEach(function(header) {
-                        columns.push({title: header});
-                    });
-
-                    let obj = {
-
-                        data: data,
-                        columns: columns,
-                        searching: false,
-                        bLengthChange: false,
-                        paging: false,
-                        bInfo : false
-
-                    };
-
-                    table.render(obj);
-
-                    table.datatable.rows().every(function(index, element) {
-                        let row = $(this.node());
-                        let td = row.find('td').eq(noOfCols - 1)[0];
-                        let id = td.textContent;
-                        table.row = table.data[id];
-                        td.id = table.name + '-record-' + id;
-                        td.textContent = '';
-
-                    });
-
-                    table.datatable.rows({page: 'current'}).every(function(index, element) {
-                        let row = $(this.node());
-                        let td = row.find('td').eq(noOfCols - 1)[0];
-                    });
-
-                }
-                //});
-            }
-        },
-        'adminui-content-card':{
-           'summaryAssemblyHook': function () {
-               this.classList.add('adminui-summary-dashboard-block')
+                   })
+                   if(arrayOrRecords.length) {
+                       sE.setState({
+                           items: arrayOrRecords,
+                       })
+                   }
+               }
             }
         }
     };

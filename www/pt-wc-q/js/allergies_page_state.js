@@ -2,6 +2,8 @@ let allergiesPageState = {
     assemblyName: 'allergies',
     name: 'allergies',
     title: 'Allergies',
+    icon: 'hands',
+
     summary: {
       title: 'Current Allergies',
       titleColour: 'info',
@@ -71,7 +73,7 @@ let allergiesPageState = {
           label: 'Terminology',
           type: 'text',
           labelWidth: 4
-        
+
         },
         {
           name: 'code',
@@ -79,7 +81,7 @@ let allergiesPageState = {
           label: 'Code',
           type: 'text',
           labelWidth: 4
-        
+
         },
         {
           name: 'author',
@@ -87,7 +89,7 @@ let allergiesPageState = {
           label: 'Author',
           type: 'text',
           labelWidth: 4
-        
+
         },
         {
           name: 'date_of_entry',
@@ -95,9 +97,9 @@ let allergiesPageState = {
           label: 'Date of Entry',
           type: 'date',
           labelWidth: 4
-        
+
         }
-      
+
       ]
     },
     update: {
