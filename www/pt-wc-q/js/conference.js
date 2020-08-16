@@ -49,22 +49,28 @@ export function define_conference_page(QEWD){
     let hooks = {
         'ptwq-jitsu': {
             getJitsu: function() {
-               let user = this.context.user;
+                let user = this.context.user;
+                let event = this.context.conference;
 
-
+                console.log(event);
                 this.renderJitsuMeet({}).then((res)=>{
+                    console.group();
                     console.log('console back');
-
-
-
-                    const randomID =
-                        Math.random()
-                            .toString(36)
-                            .substring(2, 8) +
-                        "-" +
-                        Math.random()
-                            .toString(36)
-                            .substring(2, 8);
+                    console.log(event)
+                    console.groupEnd();
+                    let randomID;
+                    if(!event) {
+                         randomID =
+                            Math.random()
+                                .toString(36)
+                                .substring(2, 8) +
+                            "-" +
+                            Math.random()
+                                .toString(36)
+                                .substring(2, 8);
+                    }else{
+                        randomID = btoa(event.id + event.date + event.comments  + event.service)
+                    }
                     console.log("randomID =" + randomID);
                     let block = document.querySelector("#jitsu-meet-window");
                     block.innerHTML = '';

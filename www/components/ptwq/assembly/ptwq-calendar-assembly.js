@@ -422,6 +422,8 @@ export function ptwq_calendar_assembly(QEWD,state){
                 title_value = _this.record[state.detail.title_data_property];
             }
 
+            calendarObj = responseObj.message.record;
+
             let title = card.querySelector('adminui-content-card-button-title');
             title.setState({title: title_value});
             title.showButton();
@@ -721,7 +723,11 @@ export function ptwq_calendar_assembly(QEWD,state){
         'adminui-button': {
 
             startConferenceButton: function () {
+                let _this = this;
+                let conference;
                 let fn = function () {
+                    console.log(_this.context);
+                    _this.context.conference = calendarObj;
                     var root = document.getElementsByTagName('ptwq-root')[0];
                     root.switchToPage('conference');
                 }
