@@ -119,20 +119,20 @@ export function define_conference_page(QEWD){
                         // when host has joined the video conference
                         if (event.role == "moderator") {
                             console.log("this person is a Mod");
-                            api.executeCommand("password", pass);
+                            //api.executeCommand("password", pass);
                         } else {
                             setTimeout(() => {
                                 // why timeout: I got some trouble calling event listeners without setting a timeout :)
 
                                 // when local user is trying to enter in a locked room
                                 api.addEventListener("passwordRequired", () => {
-                                    api.executeCommand("password", pass);
+                                  //  api.executeCommand("password", pass);
                                 });
 
                                 // when local user has joined the video conference
                                 api.addEventListener("videoConferenceJoined", response => {
                                     setTimeout(function() {
-                                        api.executeCommand("password", pass);
+                                       // api.executeCommand("password", pass);
                                     }, 300);
                                 });
                             }, 10);
@@ -157,8 +157,8 @@ export function define_conference_page(QEWD){
 
                     $("#jitsu-meet-start").click(function() {
                         //$("p").slideToggle();
-                        console.log("Setting Password");
-                        api.executeCommand("password", "BBC2");
+                       // console.log("Setting Password");
+                       // api.executeCommand("password", "BBC2");
                     });
                 });
             }
