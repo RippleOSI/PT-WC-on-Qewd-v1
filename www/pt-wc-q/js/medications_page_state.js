@@ -2,6 +2,7 @@ let medicationsPageState = {
     assemblyName: 'medications',
     name: 'medications',
     title: 'Medications',
+    icon: 'prescription-bottle-alt',
     summary: {
       title: 'Current Meds',
       titleColour: 'info',
@@ -57,7 +58,7 @@ let medicationsPageState = {
           type: 'text',
           labelWidth: 4
       },
-      
+
         {
           name: 'description',
           data_property: 'description',
@@ -87,7 +88,7 @@ let medicationsPageState = {
       type: 'date',
       labelWidth: 4
   },
-    
+
       ]
     },
     update: {

@@ -2,6 +2,7 @@ let diagnosisPageState = {
     assemblyName: 'diagnosis',
     name: 'diagnosis',
     title: 'Problems/Diagnosis',
+    icon:'clipboard-list',
     summary: {
       title: 'Current Problems/Diagnoses',
       titleColour: 'info',
@@ -50,8 +51,8 @@ let diagnosisPageState = {
           type: 'date',
           labelWidth: 4
       },
-        
-     
+
+
          {
           name: 'terminology',
           data_property: 'terminology',

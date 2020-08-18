@@ -44,7 +44,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Contacts',
-        icon: 'users',
+        icon: 'phone',
         contentPage: 'contacts'
       },
       hooks: ['navItemHook'],
@@ -53,7 +53,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Events',
-        icon: 'users',
+        icon: 'calendar-alt',
         contentPage: 'events'
       }
     },
@@ -61,7 +61,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Conference',
-        icon: 'users',
+        icon: 'handshake',
         contentPage: 'conference'
       }
     },
@@ -69,7 +69,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Problems/Diagnoses',
-        icon: 'users',
+        icon: 'clipboard-list',
         contentPage: 'diagnosis'
       }
     },
@@ -77,7 +77,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Medications',
-        icon: 'users',
+        icon: 'prescription-bottle-alt',
         contentPage: 'medications'
       }
     },
@@ -85,7 +85,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Allergies',
-        icon: 'users',
+        icon: 'allergies',
         contentPage: 'allergies'
       }
     },
@@ -93,7 +93,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Vaccinations',
-        icon: 'users',
+        icon: 'syringe',
         contentPage: 'vaccinations'
       }
     },
@@ -102,7 +102,7 @@ export function define_sidebar() {
       componentName: 'ptwq-sidebar-nav-item',
       state: {
         title: 'Vitals',
-        icon: 'users',
+        icon: 'notes-medical',
         contentPage: 'vitals'
       }
     },

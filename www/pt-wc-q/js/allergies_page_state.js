@@ -2,7 +2,7 @@ let allergiesPageState = {
     assemblyName: 'allergies',
     name: 'allergies',
     title: 'Allergies',
-    icon: 'hands',
+    icon: 'allergies',
 
     summary: {
       title: 'Current Allergies',
