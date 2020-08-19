@@ -2,6 +2,7 @@ let vitalsPageState = {
     assemblyName: 'vitals',
     name: 'vitals',
     title: 'Vitals Signs',
+    icon: 'notes-medical',
     summary: {
       title: 'Vitals Signs',
       titleColour: 'info',

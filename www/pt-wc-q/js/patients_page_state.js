@@ -3,6 +3,11 @@ let patientsPageState = {
     name: 'patients',
     title: 'Patients',
     patientIdDepends: false,
+    icon: 'users',
+    role: ['admin','staff'],
+    menu:{
+      title: 'Close Patient',
+    },
     summary: {
       title: 'Patients',
       titleColour: 'info',

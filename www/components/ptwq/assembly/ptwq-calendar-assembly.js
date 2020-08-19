@@ -10,7 +10,9 @@ export function ptwq_calendar_assembly(QEWD,state){
      * False if patient_id filtering / adding no needed
      * @type {*|boolean}
      */
-    state.patientIdDepends = state.patientIdDepends || true;
+    if(typeof state.patientIdDepends === 'undefined'){
+        state.patientIdDepends = true;
+    }
     state.summary.headers = state.summary.headers || [];
 
 
