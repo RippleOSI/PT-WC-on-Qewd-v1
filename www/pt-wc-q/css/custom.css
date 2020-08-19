@@ -1,3 +1,188 @@
 adminui-content-card{
     padding-right: 10px;
 }
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:after{
+    display: none;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after{
+   right: 1em;
+}
+
+table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:after{
+    opacity: 1;
+    display: block;
+}
+
+.adminui-crud-summary-block,
+.adminui-crud-event-block,
+.adminui-crud-chart-block{
+    flex-grow: 1;
+    flex: 1;
+}
+.adminui-crud-details-block{
+    flex: 1;
+}
+.adminui-summary-dashboard-block{
+    flex: 1;
+}
+.card-header .col{
+    align-self: center;
+}
+.card-header .text-info,
+.card-header .text-primary{
+    color: white !important;
+}
+
+#bs-admin-topbar {
+    margin-bottom: 0 !important;
+}
+
+.topheader-patient-name{
+    font-weight: bold;
+}
+
+.topheader-block{
+    padding: 15px;
+}
+
+.nav-item a.nav-link{
+    color: black;
+}
+.nav-item:hover{
+    background: #ff5d00
+}
+.nav-item:hover a.nav-link{
+    color: white;
+}
+.nav-item .nav-link{
+    border-bottom: 1px solid #f3f3f3;
+}
+
+ptwq-breadcumps nav ol.breadcrumb{
+    background: white;
+}
+ptwq-breadcumps .breadcrumb-item.active{
+    color: black;
+}
+
+adminui-topbar-navbar{
+    margin-left: auto;
+}
+
+#content{
+    background: url("../img/gray_polygonal4-2.jpg");
+    background-size: contain;
+}
+#loader{
+    position: absolute;
+    z-index: 10000;
+    background: white;
+    width: 100vw;
+    height: 100vh;
+}
+
+@keyframes translating {
+    0%   { transform: rotate(0); }
+    100% { transform: rotate(360deg);}
+}
+
+@keyframes translating-reverse {
+    0%   { transform: rotate(0); }
+    100% { transform: rotate(-360deg);}
+}
+
+.loader-animation-block{
+    width: 100px;
+    transform: rotate(180deg);
+    height: 100px;
+}
+
+.loader-animation-container{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.loader-animation-spinner{
+    border: 10px solid #ff5d00;
+    border-bottom: 10px solid transparent;
+    height: 100%;
+    width: 100%;
+
+    animation: translating 1s linear infinite;
+    border-radius: 50px;
+}
+.loader-animation-spinner-reverse{
+    border: 10px solid #ff5d00;
+    border-bottom: 10px solid transparent;
+    height: 100%;
+    width: 100%;
+    animation: translating-reverse 0.5s linear infinite;
+    border-radius: 50px;
+}
+
+adminui-sidebar-toggler{
+    padding-top: 20px;
+}
+
+.max-width-50{
+    max-width: 50%;
+}
+
+.nav-item.active{
+    background: #ff5d00;
+
+}
+
+.nav-item.active .nav-link{
+    color: white;
+}
+
+.summary-card-item{
+
+}
+
+.summary-card-item__heading{
+    text-align: center;
+}
+.summary-card-item__heading > .icon{
+    font-size: 36px;
+}
+.summary-card-item__items{
+
+}
+.list-group-item+.list-group-item{
+    border-top-width: 1px;
+}
+.summary-card-item__items .list-group-item{
+    width: 300px;
+
+}
+.summary-card-item__items li:hover{
+    background: #ff5d00;
+    color: white;
+    cursor: pointer;
+}
+
+ptwq-summary-element{
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+

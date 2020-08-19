@@ -1,7 +1,7 @@
 export function define_users_page(QEWD) {
 
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     state: {
       name: 'users',
       crud_params: {
@@ -12,7 +12,7 @@ export function define_users_page(QEWD) {
   };
 
   let hooks = {
-    'adminui-content-page': {
+    'ptwq-content-page': {
       use_crud_page: function(_state) {
         let assembly = {
           componentName: 'adminui-crud',

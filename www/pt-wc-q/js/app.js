@@ -2,9 +2,10 @@
 
 import {webComponents} from '../../mg-webComponents.js';
 import {QEWD} from '../../qewd-client.js';
-
+import {cSchemaLookup} from "./utils/cSchemaLookup.js";
 // import the individual component configuration files
 //   they can be maintained independently as a result
+import {context_manager} from './utils/contextManager.js';
 
 import {define_login_modal} from './login-modal.js';
 import {define_logout_modal} from './logout-modal.js';
@@ -28,13 +29,16 @@ import {define_404_page} from './404-page.js';
 import {define_blank_page} from './blank-page.js';
 //import {define_medications_page} from './medications.js'
 import {define_map_page} from './map.js';
+import {define_conference_page} from "./conference.js";
 //import {define_d3_page} from './d3.js';
 import {define_full_calendar_page} from './researching/full-calendar.js';
 
+import {define_selected_patient_bar} from "./selected-patient-bar.js";
 import {crud_assembly} from '../../components/adminui-custom/components/adminui-crud-custom.js';
+import {summary_assembly} from '../../components/ptwq/assembly/ptwq-summary-assembly.js';
+import {ptwq_calendar_assembly} from '../../components/ptwq/assembly/ptwq-calendar-assembly.js';
+import {ptwq_chart_assembly} from '../../components/ptwq/assembly/ptwq-chart-assembly.js';
 
-import {vitals_extended_crud} from "./extended/vitals.js";
-import {events_extended_crud} from "./extended/events.js";
 import {patients_extended_crud} from "./extended/patients.js";
 
 import {userPageState} from './user_state.js';
@@ -70,6 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('initial_sidebar', define_initial_sidebar());
     webComponents.addComponent('sidebar', define_sidebar());
     webComponents.addComponent('topbar', define_topbar(QEWD));
+    webComponents.addComponent('selected_patient', define_selected_patient_bar(QEWD));
+    webComponents.addComponent('conference', define_conference_page(QEWD));
+
     webComponents.addComponent('footer', define_footer());
     webComponents.addComponent('dashboard_page', define_dashboard_page(QEWD));
     webComponents.addComponent('charts_page', define_charts_page(QEWD));
@@ -100,39 +107,58 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('medications', crud_assembly(QEWD, medicationsPageState));
     webComponents.addComponent('allergies', crud_assembly(QEWD, allergiesPageState));
     webComponents.addComponent('vaccinations', crud_assembly(QEWD, vaccinationsPageState));
-    webComponents.addComponent('vitals', vitals_extended_crud(QEWD, vitalsPageState));
-    webComponents.addComponent('events', events_extended_crud(QEWD, eventsPageState));
+    webComponents.addComponent('vitals', ptwq_chart_assembly(QEWD, vitalsPageState));
+    webComponents.addComponent('events', ptwq_calendar_assembly(QEWD, eventsPageState));
+    webComponents.addComponent('psummary', summary_assembly(QEWD,
+          [
+              vitalsPageState,
+              eventsPageState,
+              allergiesPageState,
+              medicationsPageState,
+              contactsPageState,
+              vaccinationsPageState,
+
+          ]));
 
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 /*
     */
 
     // create the context for running the web components
+      let ctx = {
+          paths: {
+              adminui: './components/adminui/',
+              leaflet: './components/leaflet/',
+              fullcalendar: './components/fullcalendar/',
+              ptwq: './components/ptwq/',
+              /// d3: './components/d3'
+          },
+          selectedPatient: null,
+          user: null,
+          latestPage: null,
+          readyEvent: new Event('ready'),
+          schemaLookup: cSchemaLookup,
+      }
 
-    let context = {
-      paths: {
-        adminui: './components/adminui/',
-        leaflet: './components/leaflet/',
-        fullcalendar:'./components/fullcalendar/'
-       /// d3: './components/d3'
-      },
-      readyEvent: new Event('ready'),
-      selectedPatient: null,
+      let context  = context_manager(ctx);
 
-    };
-
-    // this mainview function will be used by the login hook - it will pick it up
+      // this mainview function will be used by the login hook - it will pick it up
     // from the context object
 
     function loadMainView() {
       let body = document.getElementsByTagName('body')[0];
-      let root = webComponents.getComponentByName('adminui-root', 'root');
+      let root = webComponents.getComponentByName('ptwq-root', 'root');
+      root.loaderVisibility(false);
+
       let components = webComponents.components;
       webComponents.loadGroup(components.sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.topbar, root.topbarTarget, context);
-      webComponents.loadGroup(components.dashboard_page, root.contentTarget, context);
+      webComponents.loadGroup(components.selected_patient, root.subheaderTarget, context);
+      webComponents.loadGroup(components.patients, root.contentTarget, context);
       webComponents.loadGroup(components.logout_modal, body, context);
+
     }
+
     context.loadMainView = loadMainView;
 
     webComponents.setLog(true);
@@ -157,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('blank', webComponents.components.blank_page);
     webComponents.register('users', webComponents.components.users);
     webComponents.register('full_calendar_page', webComponents.components.full_calendar_page);
+    webComponents.register('conference', webComponents.components.conference);
 
     webComponents.register('patients', webComponents.components.patients);
 
@@ -170,6 +197,8 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.register('events', webComponents.components.events);
     webComponents.register('map', webComponents.components.map_page);
     webComponents.register('full_calendar', webComponents.components.fullcalendar_page);
+    webComponents.register('psummary', webComponents.components.psummary);
+
 
     // webComponents.register('d3', webComponents.components.d3_page);
 
@@ -184,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //  It is available to the admin-root component via the context object which
     //  includes the ready event object
 
+
     document.addEventListener('ready', function() {
       let modal = webComponents.getComponentByName('adminui-modal-root', 'modal-login');
       modal.show();
@@ -191,24 +221,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // now load up the initial view
 
-    webComponents.loadWebComponent('adminui-root', body, context, function(root) {
+    webComponents.loadWebComponent('ptwq-root', body, context, function(root) {
       let components = webComponents.components;
       root.setState({
         sidebar_colour: 'no-color'
       })
-      /*
-        Forgot about already loaded pages everytime
-       */
-      let contentPageHandler = {
-        get(target, prop) {
-          return null;
-        }
-      };
-      let pagesList = {};
-      let proxy = new Proxy(pagesList,contentPageHandler);
-      root.contentPages = proxy;
-      root.sidebarTarget.classList.remove('sidebar-dark');
+      root.loaderVisibility(true);
 
+
+      root.registerMiddleware(
+          'WHOLE_WEBSITE',
+          'redirect_to_patient_if_patient_not_selected',
+          function(pageName){
+            if(pageName !=='patients' && !context.selectedPatient){
+              return 'patients';
+            }else{
+              return pageName;
+            }
+          });
+
+      root.sidebarTarget.classList.remove('sidebar-dark');
+      root.sidebarTarget.classList.add('d-none');
       webComponents.loadGroup(components.initial_sidebar, root.sidebarTarget, context);
       webComponents.loadGroup(components.login_modal, body, context);
       webComponents.loadGroup(components.footer, root.footerTarget, context);

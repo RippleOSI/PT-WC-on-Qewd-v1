@@ -68,13 +68,27 @@ export function crud_assembly(QEWD, state) {
   }
 
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     assemblyName: state.assemblyName,
     state: {
       name: state.name
     },
     hooks: ['loadModal'],
     children: [
+
+      {
+        componentName: 'ptwq-topheader',
+        state: {
+          name: 'top-header-patient',
+        }
+      },
+      {
+        componentName: 'ptwq-breadcumps',
+        state: {
+          name: 'breadcumps-patient',
+          currentPage: state.title,
+        }
+      },
       {
         componentName: 'adminui-content-page-header',
         state: {
@@ -94,16 +108,39 @@ export function crud_assembly(QEWD, state) {
                 componentName: 'adminui-content-card-header',
                 children: [
                   {
-                    componentName: 'adminui-content-card-button-title',
+                    componentName: 'ptwq-content-card-multibutton-title',
                     state: {
                       title: state.summary.title,
                       title_colour: state.summary.titleColour,
-                      icon: state.summary.btnIcon,
-                      buttonColour: state.summary.btnColour,
-                      tooltip: state.summary.btnTooltip,
-                      hideButton: state.summary.disableAdd
                     },
-                    hooks: ['createNewRecord']
+                    children:[
+                      {
+                        componentName: 'adminui-button',
+                        state: {
+                          title: 'Full screen',
+                          name: state.name + '-summary-full-screen',
+                          title_colour: state.summary.titleColour,
+                          icon: 'expand-alt',
+                          buttonColour: state.summary.btnColour,
+                          tooltip: state.summary.btnTooltip,
+                          hideButton: true,
+                        },
+                        hooks: ['fullScreen']
+                      },
+                      {
+                        componentName: 'adminui-button',
+                        state: {
+                          title: 'Create new record',
+                          title_colour: state.summary.titleColour,
+                          icon: state.summary.btnIcon,
+                          buttonColour: state.summary.btnColour,
+                          tooltip: state.summary.btnTooltip,
+                          hideButton: state.summary.disableAdd
+                        },
+                        hooks: ['createNewRecord']
+
+                      }
+                    ],
                   }
                 ]
               },
@@ -119,15 +156,15 @@ export function crud_assembly(QEWD, state) {
                   }
                 ]
               }
-            ]
+            ],
+            hooks: ['summaryHook']
           },
           {
             componentName: 'adminui-content-card',
             state: {
               name: state.name + '-details-card',
-              hide: true,
-              width: state.detail.cardWidth || '400px'
             },
+            hooks: ['detailsHook'],
             children: [
               {
                 componentName: 'adminui-content-card-header',
@@ -158,7 +195,7 @@ export function crud_assembly(QEWD, state) {
                       name: state.name
                     },
                     hooks: ['addFormFields']
-                  }
+                  },
                 ]
               },
               {
@@ -181,9 +218,10 @@ export function crud_assembly(QEWD, state) {
             ]
           }
         ]
-      }
+      },
     ]
   };
+
 
   let showRecordBtn = {
     componentName: 'adminui-button',
@@ -255,7 +293,7 @@ export function crud_assembly(QEWD, state) {
 
   let hooks = {
 
-    'adminui-content-page': {
+    'ptwq-content-page': {
 
       loadModal: function() {
         let modal = this.getComponentByName('adminui-modal-root', 'confirm-delete-' + state.name);
@@ -265,7 +303,10 @@ export function crud_assembly(QEWD, state) {
         }
 
         let table = this.getComponentByName('adminui-datatables', state.name);
-        let target = table.getParentComponent('adminui-content-card-body');
+        let target = table
+            .getParentComponent('adminui-content-card-body')
+            .querySelector('.card-body');
+
         table.datatable.destroy();
         table.remove();
         let assembly = {
@@ -340,9 +381,12 @@ export function crud_assembly(QEWD, state) {
           if (field.type === 'select') componentName = 'adminui-form-select';
           if (field.type === 'multiselect') componentName = 'adminui-form-select-multiple';
           if (field.type === 'textarea') componentName = 'adminui-form-textarea';
+          if (field.type === 'datepicker') componentName = 'adminui-form-datepicker';
+
           assembly = {
             componentName: componentName,
             state: {
+              ...field,
               name: field.name,
               type: field.type,
               label: field.label,
@@ -514,6 +558,8 @@ export function crud_assembly(QEWD, state) {
         let fn = function() {
           let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
           card.hide();
+          card.classList.add('d-none');
+
           let id = _this.parentNode.id.split('delete-')[1];
           let display = _this.parentNode.getAttribute('data-confirm');
           let header = modalRoot.querySelector('adminui-modal-header');
@@ -552,7 +598,7 @@ export function crud_assembly(QEWD, state) {
             else {
               toastr.info('Record deleted');
               let table = _this.getComponentByName('adminui-datatables', state.name);
-              let target = table.getParentComponent('adminui-content-card-body');
+              let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');;
               table.datatable.destroy();
               table.remove();
               let assembly = {
@@ -613,7 +659,7 @@ export function crud_assembly(QEWD, state) {
             else {
               toastr.info('Record updated successfully');
                 let table = _this.getComponentByName('adminui-datatables', state.name);
-                let target = table.getParentComponent('adminui-content-card-body');
+                let target = table.getParentComponent('adminui-content-card-body').querySelector('.card-body');;
                 if (table) {
                   table.datatable.destroy();
                   table.remove();
@@ -629,6 +675,8 @@ export function crud_assembly(QEWD, state) {
                 _this.loadGroup(assembly, target, _this.context);
               let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
               card.hide();
+              card.classList.add('d-none');
+
             }
           //});
         };
@@ -658,6 +706,8 @@ export function crud_assembly(QEWD, state) {
           });
             if (!responseObj.message.error) {
               card.show();
+              card.classList.remove('d-none');
+
               card.footer.hide();
               _this.record = responseObj.message.record;
               let title_value;
@@ -708,30 +758,11 @@ export function crud_assembly(QEWD, state) {
           //});
         };
         this.addHandler(fn, this.rootElement);
-      }
-    },
-
-    'adminui-content-card-button-title': {
-
-      updateRecord: function() {
-        let _this = this;
-        let fn = function() {
-          let card = _this.getParentComponent('adminui-content-card');
-          let title = card.querySelector('adminui-content-card-button-title');
-          title.hideButton();
-          let form = _this.getComponentByName('adminui-form', state.name);
-          card.footer.show();
-          let field;
-          for (let name in form.field) {
-            field = form.field[name];
-            field.setState({readonly: false});
-          }
-        };
-        this.addHandler(fn, this.button);
       },
 
       createNewRecord: function() {
         let _this = this;
+
         let fn = function() {
           let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
           let title = card.querySelector('adminui-content-card-button-title');
@@ -740,7 +771,10 @@ export function crud_assembly(QEWD, state) {
           let form = _this.getComponentByName('adminui-form', state.name);
           form.recordId = 'new-record';
           card.show();
+          card.classList.remove('d-none');
           card.footer.show();
+
+
           let field;
           for (let name in form.field) {
             field = form.field[name];
@@ -765,6 +799,60 @@ export function crud_assembly(QEWD, state) {
           }
         };
         this.addHandler(fn, this.button);
+      },
+
+      fullScreen: function () {
+        let _this = this;
+
+        let fn = function() {
+
+          let card = _this.getComponentByName(
+              'adminui-content-card',
+              state.name + '-details-card'
+          );
+          card.hide();
+          card.classList.add('d-none');
+
+          card.footer.hide();
+
+          _this.setState({
+            hideButton: true,
+          })
+        }
+        this.addHandler(fn, this.button);
+
+      }
+    },
+
+    'adminui-content-card-button-title': {
+
+      updateRecord: function() {
+        let _this = this;
+        let fn = function() {
+          let card = _this.getParentComponent('adminui-content-card');
+          let title = card.querySelector('adminui-content-card-button-title');
+          title.hideButton();
+          let form = _this.getComponentByName('adminui-form', state.name);
+          card.footer.show();
+          let field;
+          for (let name in form.field) {
+            field = form.field[name];
+            field.setState({readonly: false});
+          }
+        };
+        this.addHandler(fn, this.button);
+      },
+
+    },
+
+    'adminui-content-card': {
+      summaryHook: function(){
+        console.log(this);
+        this.classList.add('adminui-crud-summary-block');
+      },
+      detailsHook: function (){
+        this.classList.add('d-none');
+        this.classList.add('adminui-crud-details-block');
       }
     }
   };

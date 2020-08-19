@@ -1,7 +1,7 @@
 
 
   let contentPage = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     children: [
       {
         componentName: 'adminui-content-page-header',

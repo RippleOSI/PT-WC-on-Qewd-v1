@@ -53,10 +53,17 @@ export function define_logout_modal(QEWD) {
   let hooks = {
     'adminui-button': {
       logout: function() {
+        let ctx = this.context;
+
+
         let fn = async function() { 
           let responseObj = await QEWD.reply({
             type: 'logout'
           });
+
+          ctx.user = null;
+          ctx.selectedPatient = null;
+
           QEWD.disconnectSocket();
         };
         this.addHandler(fn);

@@ -2,14 +2,16 @@ let eventsPageState = {
     assemblyName: 'events',
     name: 'events',
     title: 'Events',
+    icon: 'calendar-alt',
+
     summary: {
       title: 'Current Events',
       titleColour: 'info',
       btnIcon: 'user-plus',
       btnColour: 'success',
       btnTooltip: 'Add a New Event',
-      headers: ['Name', 'Date','Patient ID'],
-      data_properties: ['name', 'date', 'patient_id'],
+      headers: ['Name', 'Date'],
+      data_properties: ['name', 'date'],
       qewd: {
         getSummary: 'getEvents',
         getDetail: 'getEventInfo',
@@ -40,7 +42,9 @@ let eventsPageState = {
             name: 'date',
             data_property: 'date',
             label: 'Date',
-            type: 'text',
+            type: 'datepicker',
+            saveFormat: 'yyyy-mm-dd',
+            displayFormat: 'yyyy-mm-dd',
             labelWidth: 4
         },
         {

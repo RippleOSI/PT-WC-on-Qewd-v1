@@ -1,7 +1,7 @@
 export function define_tables_page(QEWD) {
 
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     state: {
       name: 'tables'
     },
@@ -49,7 +49,7 @@ export function define_tables_page(QEWD) {
         });
           let obj = responseObj.message.data;
           _this.render(obj);
- 
+
           /*
           setTimeout(function() {
             console.log('xxxxx');

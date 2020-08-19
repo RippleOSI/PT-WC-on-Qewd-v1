@@ -1,7 +1,7 @@
 export function define_charts_page(QEWD) {
 
   let component = {
-    componentName: 'adminui-content-page',
+    componentName: 'ptwq-content-page',
     state: {
       name: 'charts'
     },

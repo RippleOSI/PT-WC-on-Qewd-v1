@@ -22,7 +22,7 @@ let patientsPageState = {
       deleteConfirmDisplayColumn: 0
     },
     detail: {
-      cardWidth: '500px',
+      cardWidth: '100%',
       newRecordTitle: 'Enter New Patient',
       titleColour: 'info',
       btnIcon: 'user-cog',
@@ -105,7 +105,7 @@ let patientsPageState = {
           type: 'text',
           labelWidth: 4
         },
-        
+
         {
           name: 'comments',
           data_property: 'comments',
