@@ -258,8 +258,9 @@ export function ptwq_calendar_assembly(QEWD,state){
                                         hooks: ['addFormFields']
                                     },
                                     {
-                                        componentName: 'adminui-button',
+                                        componentName: 'ptwq-link',
                                         state: {
+                                            name: state.name+'-link-conference',
                                             text: 'Start Conference',
                                         },
                                         hooks: ['startConferenceButton']
@@ -394,7 +395,7 @@ export function ptwq_calendar_assembly(QEWD,state){
     let getDetailsActions = async function(id, _this) {
         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
         let form = _this.getComponentByName('adminui-form', state.name);
-
+        let linkButton = _this.getComponentByName('ptwq-link',state.name+'-link-conference')
         form.recordId = id;
 
         /*
@@ -425,6 +426,15 @@ export function ptwq_calendar_assembly(QEWD,state){
             }
 
             calendarObj = responseObj.message.record;
+
+            let randomID = btoa(calendarObj.id + calendarObj.date + calendarObj.comments  + calendarObj.service)
+            let domain = "meet.jit.si";
+            let roomName = "OS-Clinic-Care-SessionID-" + randomID;
+            let link = "https://" + domain + "/" + roomName;
+
+            linkButton.setState({
+                link: link,
+            })
 
             let title = card.querySelector('adminui-content-card-button-title');
             title.setState({title: title_value});

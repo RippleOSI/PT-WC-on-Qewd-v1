@@ -91,6 +91,11 @@ document.addEventListener('DOMContentLoaded', function() {
          vitalsPageState,
          eventsPageState,
          contactsPageState,
+        new SidebarCustomRoute({
+            path: 'conference',
+            title: 'Conference',
+            icon: 'handshake',
+        }),
          new SidebarToggler(),
     ]));
     webComponents.addComponent('topbar', define_topbar(QEWD));
@@ -102,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('charts_page', define_charts_page(QEWD));
     webComponents.addComponent('tables_page', define_tables_page(QEWD));
     webComponents.addComponent('buttons_page', define_buttons_page());
-    webComponents.addComponent('cards_page', define_cards_page());
+    webComponents.addComponent('cards_page', define_cards_page())
     webComponents.addComponent('colours_page', define_colours_page());
     webComponents.addComponent('borders_page', define_borders_page());
     webComponents.addComponent('animations_page', define_animations_page());
