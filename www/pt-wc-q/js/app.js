@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('initial_sidebar', define_initial_sidebar());
     webComponents.addComponent('sidebar', define_sidebar(QEWD,[
          new SidebarCustomRoute({
-           path: 'summary',
-           title: 'Dashboard',
+           path: 'psummary',
+           title: 'Patient Summary',
            icon: 'tachometer-alt',
          }),
          new SidebarDivider(),
