@@ -430,7 +430,9 @@ export function ptwq_calendar_assembly(QEWD,state){
             let randomID = btoa(calendarObj.id + calendarObj.date + calendarObj.comments  + calendarObj.service)
             let domain = "meet.jit.si";
             let roomName = "OS-Clinic-Care-SessionID-" + randomID;
-            let link = "https://" + domain + "/" + roomName;
+
+            let linkHash = roomName + "|" + (this.context.user.name.replace(" ","_"));
+            let link = window.location.href.replace("#",'') + "/conference.html#"+linkHash;
 
             linkButton.setState({
                 link: link,
@@ -737,13 +739,13 @@ export function ptwq_calendar_assembly(QEWD,state){
             startConferenceButton: function () {
                 let _this = this;
                 let conference;
-                let fn = function () {
+               /* let fn = function () {
                     console.log(_this.context);
                     _this.context.conference = calendarObj;
                     var root = document.getElementsByTagName('ptwq-root')[0];
                     root.switchToPage('conference');
                 }
-                this.addHandler(fn)
+                this.addHandler(fn)*/
             },
 
             confirmDelete: function() {
