@@ -373,6 +373,7 @@ export function ptwq_calendar_assembly(QEWD,state){
                     if (context.selectedPatient && state.patientIdDepends) {
                         if (context.selectedPatient.id !== record.patient_id) {
                             return true; // SKIP BY FILTER
+                        }else{
                         }
                     } else {
                         console.log('contextmiss');

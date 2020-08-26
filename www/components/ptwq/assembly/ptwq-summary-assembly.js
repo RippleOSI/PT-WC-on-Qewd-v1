@@ -63,38 +63,51 @@ export function summary_assembly(QEWD, state_array) {
         'ptwq-summary-element':{
            'summaryAssemblyHook':  async function () {
                let sE = this;
-               let responseObj = await QEWD.reply({
-                   type: sE.options.summaryLoader,
-                   params: {
-                       properties: sE.options.data_properties
-                   }
-               });
-               if (!responseObj.message.error) {
-                   let result = {};
-                   let arrayOrRecords = [];
-                   console.log( responseObj.message.summary);
-                   responseObj.message.summary.forEach((record)=>{
-                       let line = [];
 
-                       if (sE.context.selectedPatient && record.patient_id) {
-                           if (sE.context.selectedPatient.id !== record.patient_id) {
-                               return true; // SKIP BY FILTER
+               return new Promise(((resolve, reject) => {
+                   let responseObj =  QEWD.reply({
+                       type: sE.options.summaryLoader,
+                       params: {
+                           properties: sE.options.data_properties
+                       }
+                   }).then(responseObj => {
+                       if (!responseObj.message.error) {
+                           let result = {};
+                           let arrayOrRecords = [];
+                           console.log( responseObj.message.summary);
+                           responseObj.message.summary.forEach((record)=>{
+                               let line = [];
+
+                               if (sE.context.selectedPatient && record.patient_id) {
+                                   if (sE.context.selectedPatient.id !== record.patient_id) {
+                                       return true; // SKIP BY FILTER
+                                   }
+                               }
+
+                               sE.options.data_properties.forEach(function(property) {
+                                   line.push(record[property]);
+                               });
+                               arrayOrRecords.push(line[0]);
+
+                           })
+                           console.log(arrayOrRecords);
+                           if(arrayOrRecords.length) {
+                               sE.setState({
+                                   items: arrayOrRecords,
+                               });
+                               console.log(arrayOrRecords);
+                               console.log('REFRESHED!');
+                           }else{
+                               sE.setState({
+                                   items: ['No records present'],
+                               });
                            }
                        }
+                       resolve({'resolved': true})
+                   });
 
-                       sE.options.data_properties.forEach(function(property) {
-                           line.push(record[property]);
-                       });
-                       arrayOrRecords.push(line[0]);
+               }))
 
-                   })
-                   console.log(arrayOrRecords);
-                   if(arrayOrRecords.length) {
-                       sE.setState({
-                           items: arrayOrRecords,
-                       })
-                   }
-               }
             }
         }
     };
