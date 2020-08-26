@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('logout_modal', define_logout_modal(QEWD));
     webComponents.addComponent('initial_sidebar', define_initial_sidebar());
     webComponents.addComponent('sidebar', define_sidebar(QEWD,[
+         patientsPageState,
          new SidebarCustomRoute({
            path: 'psummary',
            title: 'Patient Summary',
