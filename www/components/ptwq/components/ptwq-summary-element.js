@@ -24,9 +24,8 @@ export function load() {
                     </div>
                 </div>
                 <ul class="list-group list-group-flush summary-card-item__items">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
+                    <li class="list-group-item">No records present</li>
+                
                 </ul>
             </div>
         </div>
