@@ -1,4 +1,14 @@
 function build_summary_card(state) {
+
+    if(typeof state.patientIdDepends === 'undefined'){
+        state.patientIdDepends = true;
+    }
+    if(state.patientIdDepends){
+        state.summary.headers.push('Patient ID');
+        state.summary.data_properties.push('patient_id');
+    }
+
+
     return {
         componentName: 'ptwq-summary-element',
         state: {
@@ -62,15 +72,23 @@ export function summary_assembly(QEWD, state_array) {
                if (!responseObj.message.error) {
                    let result = {};
                    let arrayOrRecords = [];
+                   console.log( responseObj.message.summary);
                    responseObj.message.summary.forEach((record)=>{
                        let line = [];
-                       console.log(record);
+
+                       if (sE.context.selectedPatient && record.patient_id) {
+                           if (sE.context.selectedPatient.id !== record.patient_id) {
+                               return true; // SKIP BY FILTER
+                           }
+                       }
+
                        sE.options.data_properties.forEach(function(property) {
                            line.push(record[property]);
                        });
-                       arrayOrRecords.push(line.join(' / '));
+                       arrayOrRecords.push(line[0]);
 
                    })
+                   console.log(arrayOrRecords);
                    if(arrayOrRecords.length) {
                        sE.setState({
                            items: arrayOrRecords,

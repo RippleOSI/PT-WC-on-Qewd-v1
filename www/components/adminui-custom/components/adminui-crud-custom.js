@@ -472,6 +472,7 @@ export function crud_assembly(QEWD, state) {
               table.data[record.id] = record;
               let row = [];
               state.summary.data_properties.forEach(function(property) {
+                if(property === 'patient_id') return;
                 row.push(record[property]);
               });
               row.push(record.id);
@@ -484,7 +485,11 @@ export function crud_assembly(QEWD, state) {
             let noOfCols = state.summary.headers.length;
 
             state.summary.headers.forEach(function(header) {
-              columns.push({title: header});
+              if(!(header === 'Patient ID'))
+                columns.push({title: header});
+              else{
+                noOfCols = noOfCols - 1;
+              }
             });
             if (state.summary.enableDelete) {
               columns.push({title: 'Delete'});
