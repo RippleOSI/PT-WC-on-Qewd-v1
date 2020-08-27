@@ -45,6 +45,7 @@ export function summary_assembly(QEWD, state_array) {
         state: {
             name: 'psummary'
         },
+        hooks: ['loadModal'],
         children: [
             {
                 componentName: 'adminui-content-page-header',
@@ -54,6 +55,10 @@ export function summary_assembly(QEWD, state_array) {
             },
             {
                 componentName: 'adminui-row',
+                state: {
+                    name: 'psummary-adminui-row',
+
+                },
                 children: componentBlocks,
             }
         ]
@@ -61,6 +66,24 @@ export function summary_assembly(QEWD, state_array) {
     };
 
     let hooks = {
+        'ptwq-content-page':{
+          loadModal: function(){
+              let table = this.getComponentByName('adminui-row','psummary-adminui-row');
+              table.remove();
+
+              let target = this.getComponentByName('ptwq-content-page','psummary');
+              let assembly = {
+                  componentName: 'adminui-row',
+                  state: {
+                      name: 'psummary-adminui-row',
+
+                  },
+                  children: componentBlocks
+              };
+              this.loadGroup(assembly, target, this.context);
+          }
+
+        },
         'ptwq-summary-element':{
            'summaryAssemblyHook':  async function () {
                let sE = this;
