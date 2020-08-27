@@ -18,6 +18,7 @@ function build_summary_card(state) {
             data_properties: state.summary.data_properties,
             icon: state.icon ? state.icon : 'notes-medical',
             page: state.name,
+            patientIdDepends: state.patientIdDepends,
         },
         hooks: ['summaryAssemblyHook'],
     };
@@ -74,11 +75,14 @@ export function summary_assembly(QEWD, state_array) {
                        if (!responseObj.message.error) {
                            let result = {};
                            let arrayOrRecords = [];
-                           console.log( responseObj.message.summary);
                            responseObj.message.summary.forEach((record)=>{
                                let line = [];
 
-                               if (sE.context.selectedPatient && record.patient_id) {
+                               if (
+                                   sE.context.selectedPatient
+                                   &&
+                                   sE.options.patientIdDepends
+                               ) {
                                    if (sE.context.selectedPatient.id !== record.patient_id) {
                                        return true; // SKIP BY FILTER
                                    }
@@ -90,7 +94,6 @@ export function summary_assembly(QEWD, state_array) {
                                arrayOrRecords.push(line[0]);
 
                            })
-                           console.log(arrayOrRecords);
                            if(arrayOrRecords.length) {
                                sE.setState({
                                    items: arrayOrRecords,
