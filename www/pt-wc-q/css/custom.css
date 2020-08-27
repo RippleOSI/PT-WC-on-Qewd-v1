@@ -184,5 +184,13 @@ ptwq-summary-element{
     margin-right: 20px;
     margin-bottom: 20px;
 }
+.adminui-crud-details-block{
+    order: 5;
+
+}
+.adminui-crud-details-block.d-block ~ .adminui-crud-chart-block.d-block{
+    max-width: 50%;
+    order: 1
+}
 
 

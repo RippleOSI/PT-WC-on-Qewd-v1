@@ -195,10 +195,10 @@ export function ptwq_chart_assembly(QEWD, state) {
                             },
                             scales: {
                                 xAxes: [{
-                                    display: true,
+                                    display: false,
                                     scaleLabel: {
-                                        display: true,
-                                        labelString: 'Month'
+                                        display: false,
+                                        labelString: ''
                                     }
                                 }],
                                 yAxes: [{
@@ -251,74 +251,61 @@ export function ptwq_chart_assembly(QEWD, state) {
                     {
                         componentName: 'adminui-content-card',
                         state: {
-                            name: state.name + '-chart-card'
+                            name: state.name + '-details-card',
+                            hide: true,
                         },
+                        hooks: ['detailsHook'],
                         children: [
                             {
                                 componentName: 'adminui-content-card-header',
                                 children: [
                                     {
-                                        componentName: 'ptwq-content-card-multibutton-title',
+                                        componentName: 'adminui-content-card-button-title',
                                         state: {
-                                            title: state.summary.title,
-                                            title_colour: state.summary.titleColour,
+                                            title: state.detail.title,
+                                            title_colour: state.detail.titleColour,
+                                            icon: state.detail.btnIcon,
+                                            buttonColour: state.detail.btnColour,
+                                            tooltip: state.detail.btnTooltip || 'Edit record',
+                                            disableButton: state.detail.disableEdit
                                         },
-                                        children: [
-                                            {
-                                                componentName: 'adminui-button',
-                                                state: {
-                                                    title: 'Show Chart',
-                                                    name: state.name + '-show-chart-button',
-                                                    title_colour: state.summary.titleColour,
-                                                    icon: 'table',
-                                                    buttonColour: state.summary.btnColour,
-                                                    tooltip: state.summary.btnTooltip,
-                                                    hideButton: true,
-                                                },
-                                                hooks: ['showVitals']
-                                            },
-                                            {
-                                                componentName: 'adminui-button',
-                                                state: {
-                                                    title: 'Full screen',
-                                                    name: state.name + '-summary-full-screen',
-                                                    title_colour: state.summary.titleColour,
-                                                    icon: 'expand-alt',
-                                                    buttonColour: state.summary.btnColour,
-                                                    tooltip: state.summary.btnTooltip,
-                                                    hideButton: true,
-                                                },
-                                                hooks: ['fullScreen']
-                                            },
-                                            {
-                                                componentName: 'adminui-button',
-                                                state: {
-                                                    title: 'Create new record',
-                                                    title_colour: state.summary.titleColour,
-                                                    icon: state.summary.btnIcon,
-                                                    buttonColour: state.summary.btnColour,
-                                                    tooltip: state.summary.btnTooltip,
-                                                    hideButton: state.summary.disableAdd
-                                                },
-                                                hooks: ['createNewRecord']
-
-                                            }
-                                        ],
+                                        hooks: ['updateRecord']
                                     }
                                 ]
                             },
                             {
                                 componentName: 'adminui-content-card-body',
+                                state: {
+                                    name: state.name + '-details-card-body'
+                                },
                                 children: [
                                     {
-                                        componentName: 'adminui-chart',
-                                        name: state.name + '-chart',
-                                        hooks: ['getChartData']
+                                        componentName: 'adminui-form',
+                                        state: {
+                                            name: state.name
+                                        },
+                                        hooks: ['addFormFields']
+                                    },
+                                ]
+                            },
+                            {
+                                componentName: 'adminui-content-card-footer',
+                                state: {
+                                    hidden: true
+                                },
+                                children: [
+                                    {
+                                        componentName: 'adminui-button',
+                                        state: {
+                                            text: state.update.btnText || 'Save',
+                                            colour: state.update.btnColour || 'success',
+                                            cls: 'btn-block'
+                                        },
+                                        hooks: ['save']
                                     }
                                 ]
                             }
-                        ],
-                        hooks: ['chartBlockHook']
+                        ]
                     },
                     {
                         componentName: 'adminui-content-card',
@@ -397,62 +384,75 @@ export function ptwq_chart_assembly(QEWD, state) {
                     {
                         componentName: 'adminui-content-card',
                         state: {
-                            name: state.name + '-details-card',
-                            hide: true,
+                            name: state.name + '-chart-card'
                         },
-                        hooks: ['detailsHook'],
                         children: [
                             {
                                 componentName: 'adminui-content-card-header',
                                 children: [
                                     {
-                                        componentName: 'adminui-content-card-button-title',
+                                        componentName: 'ptwq-content-card-multibutton-title',
                                         state: {
-                                            title: state.detail.title,
-                                            title_colour: state.detail.titleColour,
-                                            icon: state.detail.btnIcon,
-                                            buttonColour: state.detail.btnColour,
-                                            tooltip: state.detail.btnTooltip || 'Edit record',
-                                            disableButton: state.detail.disableEdit
+                                            title: state.summary.title,
+                                            title_colour: state.summary.titleColour,
                                         },
-                                        hooks: ['updateRecord']
+                                        children: [
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Show Chart',
+                                                    name: state.name + '-show-chart-button',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'table',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['showVitals']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Full screen',
+                                                    name: state.name + '-summary-full-screen',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: 'expand-alt',
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: true,
+                                                },
+                                                hooks: ['fullScreen']
+                                            },
+                                            {
+                                                componentName: 'adminui-button',
+                                                state: {
+                                                    title: 'Create new record',
+                                                    title_colour: state.summary.titleColour,
+                                                    icon: state.summary.btnIcon,
+                                                    buttonColour: state.summary.btnColour,
+                                                    tooltip: state.summary.btnTooltip,
+                                                    hideButton: state.summary.disableAdd
+                                                },
+                                                hooks: ['createNewRecord']
+
+                                            }
+                                        ],
                                     }
                                 ]
                             },
                             {
                                 componentName: 'adminui-content-card-body',
-                                state: {
-                                    name: state.name + '-details-card-body'
-                                },
                                 children: [
                                     {
-                                        componentName: 'adminui-form',
-                                        state: {
-                                            name: state.name
-                                        },
-                                        hooks: ['addFormFields']
-                                    },
-                                ]
-                            },
-                            {
-                                componentName: 'adminui-content-card-footer',
-                                state: {
-                                    hidden: true
-                                },
-                                children: [
-                                    {
-                                        componentName: 'adminui-button',
-                                        state: {
-                                            text: state.update.btnText || 'Save',
-                                            colour: state.update.btnColour || 'success',
-                                            cls: 'btn-block'
-                                        },
-                                        hooks: ['save']
+                                        componentName: 'adminui-chart',
+                                        name: state.name + '-chart',
+                                        hooks: ['getChartData']
                                     }
                                 ]
                             }
-                        ]
-                    }
+                        ],
+                        hooks: ['chartBlockHook']
+                    },
                 ]
             },
         ]
@@ -962,6 +962,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                     form.recordId = 'new-record';
                     card.show();
                     card.classList.remove('d-none');
+                    card.classList.add('d-block');
 
                     card.footer.show();
                     let field;
@@ -1019,6 +1020,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                     );
                     card.hide();
                     card.classList.add('d-none');
+                    card.classList.remove('d-block');
 
                     card.footer.hide();
 
