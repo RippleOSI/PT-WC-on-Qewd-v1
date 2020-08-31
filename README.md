@@ -1,3 +1,42 @@
+# Open Source Telehealth Solution
+
+
+
+Building on open source technologies;
+
+PulseTile -https://www.pulsetile.com/ Web Component version - based on this library https://github.com/robtweed/wc-admin-ui
+
+QewdJS - https://www.qewdjs.com/
+
+YottaDB https://yottadb.com/ 
+
+Jitsi https://jitsi.org/
+
+
+Video screencast here
+[![Watch the video](https://pbs.twimg.com/media/EgwMBmVXcAAWQ-c?format=jpg)](https://youtu.be/_X_VjLaZez4)
+
+Link to videos/screencast here
+https://www.youtube.com/watch?v=_X_VjLaZez4
+
+Discussion forum here
+https://gitter.im/Ripple-Foundation/Open-Source-TeleHealth
+
+This is work in progress, licensed under Apache 2.0, no warranty
+
+Documentation update will follow
+
+Further collaboration is encouraged via the discussion forum above
+
+Funded by the Ripple Foundation in 2020
+
+
+This solution is served as a dockerised service via the Qewd- Baseline repo - documented here https://github.com/robtweed/qewd-baseline
+
+
+... /// ... 
+
+
 # qewd-baseline: Minimal QEWD Set-up on which to start Application Development
  
 Rob Tweed <rtweed@mgateway.com>
