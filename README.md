@@ -31,10 +31,11 @@ Further collaboration is encouraged via the discussion forum above
 Funded by the Ripple Foundation in 2020
 
 
+... /// ...
+
 This solution is served as a dockerised service via the Qewd- Baseline repo - documented here https://github.com/robtweed/qewd-baseline
 
 
-... /// ... 
 
 
 # qewd-baseline: Minimal QEWD Set-up on which to start Application Development
