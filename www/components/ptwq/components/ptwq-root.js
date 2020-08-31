@@ -91,12 +91,18 @@ export function load() {
     getContentPage(pageName) {
       let children = [...this.contentTarget.childNodes];
       let child;
+      let result;
       for (var i = 0; i < children.length; i++) {
         child = children[i];
         if (child.tagName === 'PTWQ-CONTENT-PAGE' && child.name === pageName) {
-          return child;
+          result =  child;
+        }else{
+          child.remove();
         }
       }
+      return result;
+      //console.log('not exists');
+
     }
 
     setPageActive(pageName) {

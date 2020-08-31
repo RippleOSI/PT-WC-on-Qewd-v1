@@ -3,6 +3,11 @@
 import {webComponents} from '../../mg-webComponents.js';
 import {QEWD} from '../../qewd-client.js';
 import {cSchemaLookup} from "./utils/cSchemaLookup.js";
+
+import {SidebarDivider} from "./utils/sidebar-divider.js";
+import {SidebarToggler} from "./utils/sidebar-toggler.js";
+import {SidebarCustomRoute} from "./utils/sidebar-custom-route.js";
+
 // import the individual component configuration files
 //   they can be maintained independently as a result
 import {context_manager} from './utils/contextManager.js';
@@ -72,7 +77,28 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('login_modal', define_login_modal(QEWD));
     webComponents.addComponent('logout_modal', define_logout_modal(QEWD));
     webComponents.addComponent('initial_sidebar', define_initial_sidebar());
-    webComponents.addComponent('sidebar', define_sidebar());
+    webComponents.addComponent('sidebar', define_sidebar(QEWD,[
+         patientsPageState,
+         new SidebarCustomRoute({
+           path: 'psummary',
+           title: 'Patient Summary',
+           icon: 'tachometer-alt',
+         }),
+         new SidebarDivider(),
+         diagnosisPageState,
+         medicationsPageState,
+         allergiesPageState,
+         vaccinationsPageState,
+         vitalsPageState,
+         eventsPageState,
+         contactsPageState,
+        new SidebarCustomRoute({
+            path: 'conference',
+            title: 'Conference',
+            icon: 'handshake',
+        }),
+         new SidebarToggler(),
+    ]));
     webComponents.addComponent('topbar', define_topbar(QEWD));
     webComponents.addComponent('selected_patient', define_selected_patient_bar(QEWD));
     webComponents.addComponent('conference', define_conference_page(QEWD));
@@ -82,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('charts_page', define_charts_page(QEWD));
     webComponents.addComponent('tables_page', define_tables_page(QEWD));
     webComponents.addComponent('buttons_page', define_buttons_page());
-    webComponents.addComponent('cards_page', define_cards_page());
+    webComponents.addComponent('cards_page', define_cards_page())
     webComponents.addComponent('colours_page', define_colours_page());
     webComponents.addComponent('borders_page', define_borders_page());
     webComponents.addComponent('animations_page', define_animations_page());
@@ -110,15 +136,13 @@ document.addEventListener('DOMContentLoaded', function() {
     webComponents.addComponent('vitals', ptwq_chart_assembly(QEWD, vitalsPageState));
     webComponents.addComponent('events', ptwq_calendar_assembly(QEWD, eventsPageState));
     webComponents.addComponent('psummary', summary_assembly(QEWD,
-          [
-              vitalsPageState,
-              eventsPageState,
-              allergiesPageState,
-              medicationsPageState,
-              contactsPageState,
-              vaccinationsPageState,
-
-          ]));
+        [
+          diagnosisPageState,
+          medicationsPageState,
+          allergiesPageState,
+          eventsPageState,
+          contactsPageState,
+        ]));
 
     // when invoking addComponent for crud_assembly - use the name from the assemblyName aspect of the State
 /*

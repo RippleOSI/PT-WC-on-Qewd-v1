@@ -10,7 +10,9 @@ export function ptwq_calendar_assembly(QEWD,state){
      * False if patient_id filtering / adding no needed
      * @type {*|boolean}
      */
-    state.patientIdDepends = state.patientIdDepends || true;
+    if(typeof state.patientIdDepends === 'undefined'){
+        state.patientIdDepends = true;
+    }
     state.summary.headers = state.summary.headers || [];
 
 
@@ -256,8 +258,9 @@ export function ptwq_calendar_assembly(QEWD,state){
                                         hooks: ['addFormFields']
                                     },
                                     {
-                                        componentName: 'adminui-button',
+                                        componentName: 'ptwq-link',
                                         state: {
+                                            name: state.name+'-link-conference',
                                             text: 'Start Conference',
                                         },
                                         hooks: ['startConferenceButton']
@@ -370,6 +373,7 @@ export function ptwq_calendar_assembly(QEWD,state){
                     if (context.selectedPatient && state.patientIdDepends) {
                         if (context.selectedPatient.id !== record.patient_id) {
                             return true; // SKIP BY FILTER
+                        }else{
                         }
                     } else {
                         console.log('contextmiss');
@@ -392,7 +396,7 @@ export function ptwq_calendar_assembly(QEWD,state){
     let getDetailsActions = async function(id, _this) {
         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
         let form = _this.getComponentByName('adminui-form', state.name);
-
+        let linkButton = _this.getComponentByName('ptwq-link',state.name+'-link-conference')
         form.recordId = id;
 
         /*
@@ -423,6 +427,17 @@ export function ptwq_calendar_assembly(QEWD,state){
             }
 
             calendarObj = responseObj.message.record;
+
+            let randomID = btoa(calendarObj.id + calendarObj.date + calendarObj.comments  + calendarObj.service)
+            let domain = "meet.jit.si";
+            let roomName = "OS-Clinic-Care-SessionID-" + randomID;
+
+            let linkHash = roomName + "|" + (this.context.user.name.replace(" ","_"));
+            let link = window.location.href.replace("#",'') + "/conference.html#"+linkHash;
+
+            linkButton.setState({
+                link: link,
+            })
 
             let title = card.querySelector('adminui-content-card-button-title');
             title.setState({title: title_value});
@@ -639,6 +654,7 @@ export function ptwq_calendar_assembly(QEWD,state){
                         table.data[record.id] = record;
                         let row = [];
                         state.summary.data_properties.forEach(function(property) {
+                            if(property === 'patient_id') return;
                             row.push(record[property]);
                         });
                         row.push(record.id);
@@ -651,7 +667,11 @@ export function ptwq_calendar_assembly(QEWD,state){
                     let noOfCols = state.summary.headers.length;
 
                     state.summary.headers.forEach(function(header) {
+                        if(!(header === 'Patient ID'))
                         columns.push({title: header});
+                        else{
+                            noOfCols= noOfCols - 1;
+                        }
                     });
                     if (state.summary.enableDelete) {
                         columns.push({title: 'Delete'});
@@ -725,13 +745,13 @@ export function ptwq_calendar_assembly(QEWD,state){
             startConferenceButton: function () {
                 let _this = this;
                 let conference;
-                let fn = function () {
+               /* let fn = function () {
                     console.log(_this.context);
                     _this.context.conference = calendarObj;
                     var root = document.getElementsByTagName('ptwq-root')[0];
                     root.switchToPage('conference');
                 }
-                this.addHandler(fn)
+                this.addHandler(fn)*/
             },
 
             confirmDelete: function() {

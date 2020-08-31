@@ -40,8 +40,11 @@ export function crud_assembly(QEWD, state) {
      * False if patient_id filtering / adding no needed
      * @type {*|boolean}
      */
-  state.patientIdDepends = state.patientIdDepends || true;
+  if(typeof state.patientIdDepends === 'undefined'){
+    state.patientIdDepends = true;
+  }
   state.summary.headers = state.summary.headers || [];
+
 
 
   state.summary.data_properties = state.summary.data_properties || [];
@@ -438,6 +441,9 @@ export function crud_assembly(QEWD, state) {
         let table = this;
         let context = this.context;
 
+        var root = document.getElementsByTagName('ptwq-root')[0];
+        root.loaderVisibility(true);
+
         /*
         QEWD.send({
           type: state.summary.qewd.getSummary,
@@ -455,8 +461,9 @@ export function crud_assembly(QEWD, state) {
           if (!responseObj.message.error) {
             table.data = {};
             let data = [];
+            root.loaderVisibility(false);
+
             responseObj.message.summary.forEach(function(record) {
-              console.log('there234');
               if ( context.selectedPatient && state.patientIdDepends) {
                 if ( context.selectedPatient.id !== record.patient_id ) {
                   return true; // SKIP BY FILTER
@@ -465,6 +472,7 @@ export function crud_assembly(QEWD, state) {
               table.data[record.id] = record;
               let row = [];
               state.summary.data_properties.forEach(function(property) {
+                if(property === 'patient_id') return;
                 row.push(record[property]);
               });
               row.push(record.id);
@@ -477,7 +485,11 @@ export function crud_assembly(QEWD, state) {
             let noOfCols = state.summary.headers.length;
 
             state.summary.headers.forEach(function(header) {
-              columns.push({title: header});
+              if(!(header === 'Patient ID'))
+                columns.push({title: header});
+              else{
+                noOfCols = noOfCols - 1;
+              }
             });
             if (state.summary.enableDelete) {
               columns.push({title: 'Delete'});

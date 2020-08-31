@@ -1,4 +1,14 @@
 function build_summary_card(state) {
+
+    if(typeof state.patientIdDepends === 'undefined'){
+        state.patientIdDepends = true;
+    }
+    if(state.patientIdDepends){
+        state.summary.headers.push('Patient ID');
+        state.summary.data_properties.push('patient_id');
+    }
+
+
     return {
         componentName: 'ptwq-summary-element',
         state: {
@@ -8,6 +18,7 @@ function build_summary_card(state) {
             data_properties: state.summary.data_properties,
             icon: state.icon ? state.icon : 'notes-medical',
             page: state.name,
+            patientIdDepends: state.patientIdDepends,
         },
         hooks: ['summaryAssemblyHook'],
     };
@@ -34,6 +45,7 @@ export function summary_assembly(QEWD, state_array) {
         state: {
             name: 'psummary'
         },
+        hooks: ['loadModal'],
         children: [
             {
                 componentName: 'adminui-content-page-header',
@@ -43,6 +55,10 @@ export function summary_assembly(QEWD, state_array) {
             },
             {
                 componentName: 'adminui-row',
+                state: {
+                    name: 'psummary-adminui-row',
+
+                },
                 children: componentBlocks,
             }
         ]
@@ -50,33 +66,74 @@ export function summary_assembly(QEWD, state_array) {
     };
 
     let hooks = {
+        'ptwq-content-page':{
+          loadModal: function(){
+              let table = this.getComponentByName('adminui-row','psummary-adminui-row');
+              table.remove();
+
+              let target = this.getComponentByName('ptwq-content-page','psummary');
+              let assembly = {
+                  componentName: 'adminui-row',
+                  state: {
+                      name: 'psummary-adminui-row',
+
+                  },
+                  children: componentBlocks
+              };
+              this.loadGroup(assembly, target, this.context);
+          }
+
+        },
         'ptwq-summary-element':{
            'summaryAssemblyHook':  async function () {
                let sE = this;
-               let responseObj = await QEWD.reply({
-                   type: sE.options.summaryLoader,
-                   params: {
-                       properties: sE.options.data_properties
-                   }
-               });
-               if (!responseObj.message.error) {
-                   let result = {};
-                   let arrayOrRecords = [];
-                   responseObj.message.summary.forEach((record)=>{
-                       let line = [];
-                       console.log(record);
-                       sE.options.data_properties.forEach(function(property) {
-                           line.push(record[property]);
-                       });
-                       arrayOrRecords.push(line.join(' / '));
 
-                   })
-                   if(arrayOrRecords.length) {
-                       sE.setState({
-                           items: arrayOrRecords,
-                       })
-                   }
-               }
+               return new Promise(((resolve, reject) => {
+                   let responseObj =  QEWD.reply({
+                       type: sE.options.summaryLoader,
+                       params: {
+                           properties: sE.options.data_properties
+                       }
+                   }).then(responseObj => {
+                       if (!responseObj.message.error) {
+                           let result = {};
+                           let arrayOrRecords = [];
+                           responseObj.message.summary.forEach((record)=>{
+                               let line = [];
+
+                               if (
+                                   sE.context.selectedPatient
+                                   &&
+                                   sE.options.patientIdDepends
+                               ) {
+                                   if (sE.context.selectedPatient.id !== record.patient_id) {
+                                       return true; // SKIP BY FILTER
+                                   }
+                               }
+
+                               sE.options.data_properties.forEach(function(property) {
+                                   line.push(record[property]);
+                               });
+                               arrayOrRecords.push(line[0]);
+
+                           })
+                           if(arrayOrRecords.length) {
+                               sE.setState({
+                                   items: arrayOrRecords,
+                               });
+                               console.log(arrayOrRecords);
+                               console.log('REFRESHED!');
+                           }else{
+                               sE.setState({
+                                   items: ['No records present'],
+                               });
+                           }
+                       }
+                       resolve({'resolved': true})
+                   });
+
+               }))
+
             }
         }
     };
