@@ -1,17 +1,19 @@
-# qewd-baseline: Minimal QEWD Set-up on which to start Application Development
+# PTWQ - Open Source Telehealth Solution by the Ripple Foundation
+
+Open Source Telehealth Solution developed by the the Ripple Foundation - featuring PulseTile, Qewd, YottaDB and Jitsi open source technologies.
+For any related code/information/discussion/questions/issues please visit this related discussion forum which is open to all;
+
+[Visit Discussion](https://gitter.im/Ripple-Foundation/Open-Source-TeleHealth)
  
-Rob Tweed <rtweed@mgateway.com>
-4 December 2019, M/Gateway Developments Ltd [http://www.mgateway.com](http://www.mgateway.com)  
+### Contributors 
 
-Twitter: @rtweed
+[![](https://github.com/tony-shannon.png?size=50)](https://github.com/tony-shannon) [![](https://github.com/yudin-s.png?size=50)](https://github.com/yudin-s)
 
-Google Group for discussions, support, advice etc: [http://groups.google.co.uk/group/enterprise-web-developer-community](http://groups.google.co.uk/group/enterprise-web-developer-community)
 
 
 # About this Repository
 
-This repository provides a pre-configured, minimal set-up on which you can begin
-developing your APIs and/or back-end logic/message handlers for your interactive applications.
+This repository provides a Open Source Telehealth app based on QEWD framework that allow dynamically extending and modifying 
 
 It supports two modes of operation:
 
@@ -22,32 +24,10 @@ It supports two modes of operation:
 
 This repository also contains in-depth tutorials that will teach you how to build QEWD-based:
 
+- [QEWD](./QEWD.md) 
 - [REST APIs](./REST.md)
 - [interactive WebSocket-based applications](./INTERACTIVE.md)
 
-# What is QEWD?
-
-QEWD is a 100% Node.js-based, integrated system on which you can build the back-end logic for
-both REST APIs and interactive, browser-based or Native applications.  The pre-installated 
-and pre-configured components that constitute QEWD include:
-
-- the [Express](https://www.npmjs.com/package/express) web server
-- the [socket.io](https://www.npmjs.com/package/socket.io) nodule for WebSocket support
-- the [ewd-qoper8](https://www.npmjs.com/package/ewd-qoper8) Queue/Worker Pool management system
-- [QEWD-jsdb](https://github.com/robtweed/qewd-jsdb): an in-process multi-model database
-- the [QEWD-transform-json](https://github.com/robtweed/qewd-transform-json) JSON transformation module
-
-QEWD provides and supports Session management using either server-side Session storage (using
-QEWD-JSdb) or JSON Web Tokens (JWT).
-
-QEWD can be run either natively or as a [Dockerised version](https://hub.docker.com/repository/docker/rtweed/qewd-server)
-and can be configured to support either single monolithic applications or 
-applications built as MicroServices (each of which will run on its own QEWD instance).
-
-QEWD also includes [ewd-client](https://github.com/robtweed/ewd-client), a client JavaScript library 
-which allows browser or Native front-ends to communicate securely over WebSockets with 
-QEWD's *socket-io* interface.  *ewd-client* can be used and easily integrated with any 
-JavaScript framework.
 
 # Getting Started
 
@@ -59,8 +39,8 @@ any Linux system or even on a Raspberry Pi.
 Just type these commands in a Linux system or Raspberry Pi:
 
         cd ~
-        git clone https://github.com/robtweed/qewd-baseline
-        cd qewd-baseline
+        git clone https://github.com/RippleOSI/OS-TeleHealth
+        cd OS-TeleHealth
         source install.sh
 
 Simply answer the questions and within a few minutes you'll have it all ready to run.
@@ -73,13 +53,13 @@ When the installer has completed you have two options for starting the QEWD Dock
 
 - without database persistence between Container restarts:
 
-        cd ~/qewd-baseline
+        cd ~/OS-TeleHealth
         ./start
 
 - with database persistence between Container restarts:
 
 
-        cd ~/qewd-baseline
+        cd ~/OS-TeleHealth
         ./start_p
 
 
@@ -91,38 +71,39 @@ To stop the Docker Container, you should always use the command:
 This cleanly and safely shuts down the database-connected QEWD Worker Processes
 
 
-The QEWD-baseline Folder Structure
+## The OS-TeleHealth Folder and File Structure
 
-You'll see the following folders in your QEWD-baseline directory:
+Website Structure 
 
-- apis: used for your REST API handler logic
-- configuration: this is where your QEWD system is configured, and where your REST API routes are defined
-- qewd-apps: used for your interactive applications' message handlers
-- utils: used for any of your utility modules on which your REST or interactive application handler are 
-dependent
-- www: used as the QEWD Express web Server root path, and therefore the home for the front-end
-markup, JavaScript and CSS resources of your applications
+- www/pt-wc-q/ : Main Folder with website pages and components structure. 
+- www/pt-wc-q/app.js : Entity point of project building and execution 
+- www/pt-wc-q/css : Global Stylesheet files. We are using https://startbootstrap.com/themes/sb-admin-2/ as main template. 
 
-If you're running the Containerised version of QEWD, you'll also see a folder named
-*yottadb*.  If you run the QEWD Container in persistent mode, this folder contains
-the host files for the YottaDB database.  They are mapped for use by YottaDB within the
-Container.  You should not change or move this folder or its contents, but you should back them
-up regularly.
+#### Inside www/pt-wc-q/js 
 
-You'll also see a folder named *iris-aws*.  This contains versions of key files which 
-are used if you are running on IRIS
+- utils - Helper functions and classes 
+- researching - Examples and samples of the component building processes 
+- pages - static pages mgWebComponents object 
+ 
+#### File naming rules 
+
+`[page name]-page.js ` File with custom mgWebComponents page structure
+`[page name]_page_state.js ` File with schema for CRUD page builder (see adminui/components/adminui-crud.js to understand how building is happens) 
+`[page name]_modal.js ` File that is uses adminui-modal.js from adminui component section 
 
 
-# Developing REST APIs
+### About core framework 
+
+[Click Here](QEWD.md) to learn about QEWD 
+
+### Developing REST APIs
 
 [Click here](./REST.md) to learn how to create REST APIs on your QEWD system
 
-
-# Developing Interactive Applications
+### Developing Interactive Applications
 
 [Click here](./INTERACTIVE.md) to learn how to create interactive applications, the
-back-end of which will run on your QEWD system
-
+back-end of which will run on your QEWD system for got better understanding how project was builded. 
 
 ## License
 
@@ -145,3 +126,4 @@ back-end of which will run on your QEWD system
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
   See the License for the specific language governing permissions and      
    limitations under the License.      
+
