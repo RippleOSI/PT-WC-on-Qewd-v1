@@ -1,3 +1,9 @@
+/**
+ * Sub-assembly function that is prepare card-object for dashboard based on global State object data.
+ * @param state CRUD object definition.
+ * @see www/pt-wc-q/js/events_page_state.js to got detailed information about state information contains
+ * @returns {{componentName: string, state: {patientIdDepends: boolean, data_properties: *, name: string, summaryLoader: *, icon: string, page: *, title: *}, hooks: [string]}}
+ */
 function build_summary_card(state) {
 
     if(typeof state.patientIdDepends === 'undefined'){
@@ -25,7 +31,7 @@ function build_summary_card(state) {
 }
 
 /***
- *
+ * Assembly function that is used for prepare dashboard page schema
  * @param QEWD
  * @param state_array array of default CRUD state (adminui_crud) what need to be shown at crud
  * @returns {{component: {assemblyName: *, children: [{componentName: string, state: {title: *}}, {children: [], componentName: string}], componentName: string, state: {name: *}, hooks: [string]}, hooks: {}}}
@@ -85,7 +91,7 @@ export function summary_assembly(QEWD, state_array) {
 
         },
         'ptwq-summary-element':{
-           'summaryAssemblyHook':  async function () {
+            summaryAssemblyHook:  async function () {
                let sE = this;
 
                return new Promise(((resolve, reject) => {
