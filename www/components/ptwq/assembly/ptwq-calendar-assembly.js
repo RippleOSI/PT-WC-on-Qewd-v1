@@ -1,3 +1,12 @@
+/**
+ * Assembly function for page with calendar data
+ * This assembly uses component fullcalendar from www/components/fullcalendar/components/fullcalendar-root.js
+ * @see fullcalendar.js library (https://fullcalendar.io)  for figure out more options and
+ * @param QEWD required - Main object from QEWD framework
+ * @param state default crud options (@see www/pt-wc-q/js/events_page_state.js)
+ * @returns
+ *
+ */
 export function ptwq_calendar_assembly(QEWD,state){
 
     state = state || {};
@@ -357,6 +366,7 @@ export function ptwq_calendar_assembly(QEWD,state){
             }
         ]
     };
+
     let calendarObj;
 
     let getFullCalendarData = async function(_this, context){

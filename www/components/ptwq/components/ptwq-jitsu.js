@@ -1,4 +1,6 @@
-
+/**
+ * Component that is integrated Jitsu Meet ( https://jitsi.org ) with QEWD
+ */
 export function load() {
 
     let componentName = 'ptwq-jitsu';

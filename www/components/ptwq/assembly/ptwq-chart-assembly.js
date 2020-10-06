@@ -1,3 +1,10 @@
+/**
+ * Assembly with chart support
+ * Uses chart.js (https://www.chartjs.org)  lib and chart component as swap targets
+ * @param QEWD required - Main object from QEWD framework
+ * @param state default crud options (@see www/pt-wc-q/js/events_page_state.js)
+ * @returns {{component: {assemblyName: *, children: [{componentName: string, state: {name: string}}, {componentName: string, state: {name: string, currentPage: *}}, {componentName: string, state: {title: *}}, {children: [{children: [{children: [{componentName: string, state: {disableButton: *, title_colour: *, icon: *, tooltip, buttonColour: *, title: *}, hooks: [string]}], componentName: string}, {children: [{componentName: string, state: {name: *}, hooks: [string]}], componentName: string, state: {name: string}}, {children: [{componentName: string, state: {colour, text, cls: string}, hooks: [string]}], componentName: string, state: {hidden: boolean}}], componentName: string, state: {hide: boolean, name: string}, hooks: [string]}, {children: [{children: [{children: [{componentName: string, state: {title_colour: *, name: string, icon: string, tooltip: *, buttonColour: *, title: string, hideButton: boolean}, hooks: [string]}, {componentName: string, state: {title_colour: *, name: string, icon: string, tooltip: *, buttonColour: *, title: string, hideButton: boolean}, hooks: [string]}, {componentName: string, state: {title_colour: *, icon: *, tooltip: *, buttonColour: *, title: string, hideButton: *}, hooks: [string]}], componentName: string, state: {title_colour: *, title: *}}], componentName: string}, {children: [{componentName: string, state: {name: *}, hooks: [string]}], componentName: string}], componentName: string, state: {name: string}, hooks: [string]}, {children: [{children: [{children: [{componentName: string, state: {title_colour: *, name: string, icon: string, tooltip: *, buttonColour: *, title: string, hideButton: boolean}, hooks: [string]}, {componentName: string, state: {title_colour: *, name: string, icon: string, tooltip: *, buttonColour: *, title: string, hideButton: boolean}, hooks: [string]}, {componentName: string, state: {title_colour: *, icon: *, tooltip: *, buttonColour: *, title: string, hideButton: *}, hooks: [string]}], componentName: string, state: {title_colour: *, title: *}}], componentName: string}, {children: [{name: string, componentName: string, hooks: [string]}], componentName: string}], componentName: string, state: {name: string}, hooks: [string]}], componentName: string}], componentName: string, state: {name: *}}, hooks: {"adminui-chart": {getChartData: hooks.adminui-chart.getChartData}, "adminui-form": {addFormFields: hooks.adminui-form.addFormFields}, "adminui-content-card": {detailsHook: hooks.adminui-content-card.detailsHook, chartBlockHook: hooks.adminui-content-card.chartBlockHook, summaryHook: hooks.adminui-content-card.summaryHook}, "adminui-content-card-button-title": {updateRecord: hooks.adminui-content-card-button-title.updateRecord}, "adminui-form-select-multiple": {displayOptions: hooks.adminui-form-select-multiple.displayOptions}, "ptwq-content-page": {loadModal: hooks.ptwq-content-page.loadModal}, "adminui-form-select": {displayOptions: hooks.adminui-form-select.displayOptions}, "adminui-datatables": {retrieveRecordSummary: (function(): Promise<void>)}, "adminui-button": {showVitals: hooks.adminui-button.showVitals, getDetail: hooks.adminui-button.getDetail, save: hooks.adminui-button.save, showChart: hooks.adminui-button.showChart, delete: hooks.adminui-button.delete, createNewRecord: hooks.adminui-button.createNewRecord, confirmDelete: hooks.adminui-button.confirmDelete, fullScreen: hooks.adminui-button.fullScreen}}}}
+ */
 export function ptwq_chart_assembly(QEWD, state) {
 
     state = state || {};
@@ -41,20 +48,18 @@ export function ptwq_chart_assembly(QEWD, state) {
     }
 
 
+    /**
+     * Callback async function that is refresh data by action happening - create, update, delete
+     * @param id
+     * @param _this
+     * @returns {Promise<void>}
+     */
     let getDetailsActions = async function(id, _this) {
         let card = _this.getComponentByName('adminui-content-card', state.name + '-details-card');
         let form = _this.getComponentByName('adminui-form', state.name);
 
         form.recordId = id;
 
-        /*
-        QEWD.send({
-          type: state.summary.qewd.getDetail,
-          params: {
-            id: id
-          }
-        }, function(responseObj) {
-        */
         let responseObj = await QEWD.reply({
             type: state.summary.qewd.getDetail,
             params: {
@@ -108,9 +113,14 @@ export function ptwq_chart_assembly(QEWD, state) {
                 }
             }
         }
-        //});
     };
 
+    /**
+     * Function that is prepare data to place inside chart.js
+     * @param context object with global user options by repository pattern @see QEWD.context
+     * @returns {Promise<Object>}
+     * TODO: Move process of prepare patient lifetime health state out of assembly function
+     */
     let chartConfigGenerator = async function(context){
         return new Promise((resolve, reject)=> {
             QEWD.reply({
@@ -218,6 +228,7 @@ export function ptwq_chart_assembly(QEWD, state) {
                 });
         });
     }
+
     let component = {
         componentName: 'ptwq-content-page',
         assemblyName: state.assemblyName,
@@ -687,12 +698,6 @@ export function ptwq_chart_assembly(QEWD, state) {
                     }
                 }, function (responseObj) {
 
-                    /*let responseObj = await QEWD.reply({
-                        type: state.summary.qewd.getSummary,
-                        params: {
-                            properties: state.summary.data_properties
-                        }
-                    });*/
                     if (!responseObj.message.error) {
                         table.data = {};
                         let data = [];

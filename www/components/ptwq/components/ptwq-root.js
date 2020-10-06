@@ -1,4 +1,4 @@
-/*
+/**
 
  ----------------------------------------------------------------------------
  | admin-ui: SB2-Admin UI Theme WebComponents Library                        |
@@ -25,6 +25,26 @@
  ----------------------------------------------------------------------------
 
  17 April 2020
+
+_________
+
+More about ptwq-root
+
+This component used as main page schema with four areas of content placement
+Basically it's works as adminui-root (www/components/adminui/components/adminui-root.js) with special additionals
+such as:
+
+- Middleware processing by simple callbacks
+- More areas that you can use
+
+## Areas of content:
+
+ - rootElement: main DIV element
+ - sidebarTarget: left sidebar area (menu is placed here)
+ - topbarTarget: top area where is search, notification and logout button placed.
+ - contentTarget: area where is main content placed including CRUD containers and datatables.
+ - footerTarget: not used for now, copyright area where you can place anything.
+ - loader: full size and overflow element that is used for show loader.
 
 */
 
@@ -111,7 +131,13 @@ export function load() {
       page.setState({show: true});
     }
 
+    /**
+     * Core and main routing function for swap pages by
+     * navbar item click or by other reasons
+     * @param pageName route to switch
+     */
     switchToPage(pageName) {
+
       if(this.middlewareArray['WHOLE_WEBSITE']){
         for (const [key, callback] of Object.entries(this.middlewareArray['WHOLE_WEBSITE'])) {
 
